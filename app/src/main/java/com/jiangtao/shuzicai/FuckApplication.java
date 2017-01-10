@@ -8,12 +8,12 @@ import com.jiangtao.shuzicai.basic.app.BaseApp;
  * app对象
  */
 
-public class PlayerApplication extends BaseApp {
+public class FuckApplication extends BaseApp {
 
     //静态获取实例
-    public static PlayerApplication getApp() {
+    public static FuckApplication getApp() {
         // 单例模式获取唯一的MyApplication实例
-        return (PlayerApplication)mInstance;
+        return (FuckApplication)mInstance;
     }
 
 
