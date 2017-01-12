@@ -16,7 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.jiangtao.shuzicai.R;
-import com.jiangtao.shuzicai.basic.app.BaseApp;
+import com.jiangtao.shuzicai.basic.app.BasicApp;
 
 import java.security.MessageDigest;
 import java.text.ParseException;
@@ -190,7 +190,7 @@ public class CommonUtils {
      * @return
      */
     public static boolean isZh() {
-        Locale locale = BaseApp.getInstance().getResources().getConfiguration().locale;
+        Locale locale = BasicApp.getInstance().getResources().getConfiguration().locale;
         String language = locale.getLanguage();
         return language.startsWith("zh");
     }

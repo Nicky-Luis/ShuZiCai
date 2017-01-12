@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.WindowManager;
 
-import com.jiangtao.shuzicai.basic.app.BaseApp;
+import com.jiangtao.shuzicai.basic.app.BasicApp;
 
 
 /**
@@ -17,7 +17,7 @@ public class PixelUtil {
     /**
      * The context.
      */
-    private static Context mContext = BaseApp.getInstance();
+    private static Context mContext = BasicApp.getInstance();
 
     /**
      * 获取屏幕宽度

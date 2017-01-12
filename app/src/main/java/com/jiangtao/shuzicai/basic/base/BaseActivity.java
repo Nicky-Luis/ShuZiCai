@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.blankj.utilcode.utils.Utils;
 import com.jiangtao.shuzicai.basic.manager.ActivityManager;
 import com.jiangtao.shuzicai.basic.widget.CustomConfirmDialog;
 
@@ -39,10 +40,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        //Butter Knife初始化
-        ButterKnife.bind(this);
-
-
         ActivityManager.getAppManager().addActivity(mActivity.get());
         int id = setLayoutId();
         if (0 == id) {
@@ -52,16 +49,20 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
                     .printStackTrace();
         } else {
             setContentView(id);
-            LayoutInflater inflater = (LayoutInflater) getSystemService
-                    (LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
             //获取更布局
             View rootView = inflater.inflate(id, null);
             loadLayout(rootView);
             //检测是否有内存泄露
-            // RefWatcher refWatcher = BaseApp.getRefWatcher(this);
+            // RefWatcher refWatcher = BasicApp.getRefWatcher(this);
             // refWatcher.watch(this);
         }
+        //初始化BUtterKnife框架
+        ButterKnife.bind(this);
+        //utils初始化
+        Utils.init(this);
+
         initPresenter();
         onInitialize();
     }
@@ -69,8 +70,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //解除绑定
-        ButterKnife.unbind(this);
     }
 
     /**

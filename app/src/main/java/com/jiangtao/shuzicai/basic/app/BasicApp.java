@@ -12,10 +12,10 @@ import java.util.Locale;
  *
  * @author Ht
  */
-public abstract class BaseApp extends Application {
+public abstract class BasicApp extends Application {
 
     //app对象
-    protected static BaseApp mInstance;
+    protected static BasicApp mInstance;
     //检测内存泄露
    // private RefWatcher refWatcher;
     // 屏幕宽度
@@ -25,22 +25,26 @@ public abstract class BaseApp extends Application {
     // 屏幕密度
     public static float screenDensity;
 
-    public BaseApp() {
+    public BasicApp() {
     }
 
+    //获取程序的名字
     public abstract String getApplicationName();
+    //程序初始化
+    public abstract void onApplicationInit();
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        onApplicationInit();
         //检测内存泄露
         //refWatcher = LeakCanary.install(this);
         initScreenSize();
     }
 
     //获取实例
-    public static BaseApp getInstance() {
+    public static BasicApp getInstance() {
         return mInstance;
     }
 

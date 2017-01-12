@@ -1,7 +1,7 @@
 package com.jiangtao.shuzicai.basic.database;
 
 
-import com.jiangtao.shuzicai.PlayerApplication;
+import com.jiangtao.shuzicai.FuckApplication;
 import com.jiangtao.shuzicai.basic.app.BaseGlobal;
 import com.litesuits.orm.LiteOrm;
 
@@ -21,7 +21,7 @@ public class DBManager {
 
     private DBManager() {
         if (liteOrm == null) {
-            liteOrm = LiteOrm.newSingleInstance(PlayerApplication.getApp(), BaseGlobal
+            liteOrm = LiteOrm.newSingleInstance(FuckApplication.getApp(), BaseGlobal
                     .DATABASE_NAME);
         }
         // open the log

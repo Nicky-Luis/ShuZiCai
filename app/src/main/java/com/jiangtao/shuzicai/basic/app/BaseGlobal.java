@@ -17,7 +17,7 @@ public class BaseGlobal {
     /**
      * 应用程序名
      */
-    public static final String APPNAME = BaseApp.getAppName();
+    public static final String APPNAME = BasicApp.getAppName();
 
     /**
      * 主数据库的名称

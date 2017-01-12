@@ -54,7 +54,7 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
                 //获取更布局
                 View rootView = inflater.inflate(viewId, null);
                 //检测是否有内存泄露
-               // RefWatcher refWatcher = BaseApp.getRefWatcher(getActivity());
+               // RefWatcher refWatcher = BasicApp.getRefWatcher(getActivity());
                // refWatcher.watch(this);
                 loadLayout(rootView);
             }
