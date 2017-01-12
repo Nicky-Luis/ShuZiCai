@@ -97,8 +97,7 @@ public class Configure {
      */
     public static String getUserPassword() {
         BaseSetting setting = new BaseSetting(FuckApplication.getApp()
-                .getApplicationContext(),
-                USER_LOGIN_STATUS_SP);
+                .getApplicationContext(), USER_LOGIN_STATUS_SP);
         try {
             String secretPassword = setting.loadString(USER_LOGIN_PASSWORD);
             return Base64Util.decrypt(secretPassword);
