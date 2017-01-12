@@ -27,8 +27,19 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/lite-orm-1.9.2.jar')
 
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:design:25.0.1'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
+    //所需要的依赖包
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:converter-scalars:2.0.0-beta4'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
     compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'  //必须要有，不然会出问题
+    //utils工具依赖
+    compile 'com.blankj:utilcode:1.3.5'
 }
