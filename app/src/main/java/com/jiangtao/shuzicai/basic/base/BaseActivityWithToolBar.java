@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.jiangtao.shuzicai.MainActivity;
+import com.jiangtao.shuzicai.model.main.MainActivity;
 import com.jiangtao.shuzicai.R;
 
 

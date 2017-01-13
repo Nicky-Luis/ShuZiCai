@@ -2,7 +2,7 @@ package com.jiangtao.shuzicai.basic.network;
 
 import android.util.Log;
 
-import com.jiangtao.shuzicai.FuckApplication;
+import com.jiangtao.shuzicai.Application;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -41,7 +41,7 @@ public class NetworkRequest {
      * 创建 RetrofitManage 服务
      */
     public static <T> T getRetrofitClient(final Class<T> clss) {
-        String baseURL = FuckApplication.getUserURl() + "/";
+        String baseURL = Application.getUserURl() + "/";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())

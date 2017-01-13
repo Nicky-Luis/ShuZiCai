@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 
+import com.jiangtao.shuzicai.model.main.MainActivity;
+
 /**
  * this is splash activity
  */

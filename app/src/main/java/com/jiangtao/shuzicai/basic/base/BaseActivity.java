@@ -48,11 +48,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
                             ".layout.cr_news_fragment_layout")
                     .printStackTrace();
         } else {
-            setContentView(id);
-            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-
-            //获取更布局
-            View rootView = inflater.inflate(id, null);
+            // layout注入
+            View rootView = LayoutInflater.from(this).inflate(id, null);
+            setContentView(rootView);
             loadLayout(rootView);
             //检测是否有内存泄露
             // RefWatcher refWatcher = BasicApp.getRefWatcher(this);

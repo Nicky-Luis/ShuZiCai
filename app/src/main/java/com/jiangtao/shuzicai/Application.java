@@ -9,12 +9,12 @@ import com.jiangtao.shuzicai.basic.network.APIInteractive;
  * app对象
  */
 
-public class FuckApplication extends BasicApp {
+public class Application extends BasicApp {
 
     //静态获取实例
-    public static FuckApplication getApp() {
+    public static Application getApp() {
         // 单例模式获取唯一的MyApplication实例
-        return (FuckApplication) mInstance;
+        return (Application) mInstance;
     }
 
     //获取比目所有APP信息

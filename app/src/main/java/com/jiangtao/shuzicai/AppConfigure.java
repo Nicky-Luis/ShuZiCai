@@ -9,7 +9,7 @@ import com.jiangtao.shuzicai.basic.utils.Base64Util;
  * 保存APP的配置信息
  */
 
-public class Configure {
+public class AppConfigure {
     //用户登录信息
     private final static String USER_LOGIN_STATUS_SP = "user_login_status";
     private final static String IS_USER_LOGIN = "is_user_login";
@@ -22,7 +22,7 @@ public class Configure {
      * @return boolean 结果
      */
     public static boolean userIsLogin() {
-        BaseSetting setting = new BaseSetting(FuckApplication.getApp(), USER_LOGIN_STATUS_SP);
+        BaseSetting setting = new BaseSetting(Application.getApp(), USER_LOGIN_STATUS_SP);
         return setting.loadBoolean(IS_USER_LOGIN);
     }
 
@@ -32,7 +32,7 @@ public class Configure {
      * @param isLogin 状态
      */
     public static void saveLoginStatue(Boolean isLogin) {
-        BaseSetting setting = new BaseSetting(FuckApplication.getApp(), USER_LOGIN_STATUS_SP);
+        BaseSetting setting = new BaseSetting(Application.getApp(), USER_LOGIN_STATUS_SP);
         setting.saveBoolean(IS_USER_LOGIN, isLogin);
     }
 
@@ -43,7 +43,7 @@ public class Configure {
      * @return boolean 结果
      */
     public static boolean saveUserName(String name) {
-        BaseSetting setting = new BaseSetting(FuckApplication.getApp(),
+        BaseSetting setting = new BaseSetting(Application.getApp(),
                 USER_LOGIN_STATUS_SP);
         try {
             String secretName = Base64Util.encrypt(name);
@@ -62,7 +62,7 @@ public class Configure {
      * @return boolean 结果
      */
     public static boolean saveUserPassword(String password) {
-        BaseSetting setting = new BaseSetting(FuckApplication.getApp(),
+        BaseSetting setting = new BaseSetting(Application.getApp(),
                 USER_LOGIN_STATUS_SP);
         try {
             String secretPassword = Base64Util.encrypt(password);
@@ -80,7 +80,7 @@ public class Configure {
      * @return String 结果
      */
     public static String getUserName() {
-        BaseSetting setting = new BaseSetting(FuckApplication.getApp(), USER_LOGIN_STATUS_SP);
+        BaseSetting setting = new BaseSetting(Application.getApp(), USER_LOGIN_STATUS_SP);
         try {
             String secretName = setting.loadString(USER_LOGIN_NAME);
             return Base64Util.decrypt(secretName);
@@ -96,7 +96,7 @@ public class Configure {
      * @return String 结果
      */
     public static String getUserPassword() {
-        BaseSetting setting = new BaseSetting(FuckApplication.getApp()
+        BaseSetting setting = new BaseSetting(Application.getApp()
                 .getApplicationContext(), USER_LOGIN_STATUS_SP);
         try {
             String secretPassword = setting.loadString(USER_LOGIN_PASSWORD);

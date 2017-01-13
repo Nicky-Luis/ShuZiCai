@@ -43,19 +43,15 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
                              Bundle savedInstanceState) {
         viewId = setLayoutId();
         if (0 == viewId) {
-            new Exception(
-                    "Please return the layout id in setLayoutId method,as simple as R" +
-                            ".layout.cr_news_fragment_layout")
-                    .printStackTrace();
+            new Exception("Please return the layout id in setLayoutId method,as simple as R" +
+                    ".layout.cr_news_fragment_layout").printStackTrace();
             return super.onCreateView(inflater, container, savedInstanceState);
         } else {
             if (rootView == null) {
-
-                //获取更布局
-                View rootView = inflater.inflate(viewId, null);
+                rootView = inflater.inflate(viewId, null);
                 //检测是否有内存泄露
-               // RefWatcher refWatcher = BasicApp.getRefWatcher(getActivity());
-               // refWatcher.watch(this);
+                // RefWatcher refWatcher = BasicApp.getRefWatcher(getActivity());
+                // refWatcher.watch(this);
                 loadLayout(rootView);
             }
             ViewGroup parent = (ViewGroup) rootView.getParent();
