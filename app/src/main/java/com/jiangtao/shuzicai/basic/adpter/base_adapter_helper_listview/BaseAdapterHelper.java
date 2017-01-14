@@ -83,7 +83,7 @@ public class BaseAdapterHelper {
     }
 
     /**
-     * This method is the only entry point to get a BaseAdapterHelper.
+     * This method is the only model point to get a BaseAdapterHelper.
      *
      * @param context     The current context.
      * @param convertView The convertView arg passed to the getView() method.

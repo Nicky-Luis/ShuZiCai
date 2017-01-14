@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/offset_2dp"
+              android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/view_billboard_img"
+        android:layout_width="@dimen/offset_18dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/view_billboard_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/offset_2dp"
+        android:gravity="center"
+        android:text="标头"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_size_small"/>
+
+
+</LinearLayout>

@@ -2,11 +2,15 @@ package com.jiangtao.shuzicai.model.main;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.manager.ActivityManager;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -71,5 +75,15 @@ public class MainActivity extends BaseActivityWithToolBar {
                 break;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    /**
+     * 主线程处理接收到的数据
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEventMainThread(String event) {
+        Log.e("event MainThread", "消息： " + event + "  thread: " + Thread.currentThread().getName());
     }
 }

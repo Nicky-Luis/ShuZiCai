@@ -17,9 +17,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.blankj.utilcode.utils.Utils;
 import com.jiangtao.shuzicai.basic.manager.ActivityManager;
 import com.jiangtao.shuzicai.basic.widget.CustomConfirmDialog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
 
@@ -43,10 +44,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         ActivityManager.getAppManager().addActivity(mActivity.get());
         int id = setLayoutId();
         if (0 == id) {
-            new Exception(
-                    "Please return the layout id in setLayoutId method,as simple as R" +
-                            ".layout.cr_news_fragment_layout")
-                    .printStackTrace();
+            new Exception("Please return the layout id in setLayoutId method,as simple as R" +
+                    ".layout.cr_news_fragment_layout").printStackTrace();
         } else {
             // layout注入
             View rootView = LayoutInflater.from(this).inflate(id, null);
@@ -58,8 +57,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         }
         //初始化BUtterKnife框架
         ButterKnife.bind(this);
-        //utils初始化
-        Utils.init(this);
+        //注册event bus
+        EventBus.getDefault().register(this);
 
         initPresenter();
         onInitialize();
@@ -67,6 +66,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
 
     @Override
     protected void onDestroy() {
+        //注册event bus
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 

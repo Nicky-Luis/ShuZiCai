@@ -12,6 +12,12 @@ import android.widget.TextView;
 
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
+import com.jiangtao.shuzicai.model.game.GameFragment;
+import com.jiangtao.shuzicai.model.home.HomeFragment;
+import com.jiangtao.shuzicai.model.mall.MallFragment;
+import com.jiangtao.shuzicai.model.user.PersonFragment;
+
+import java.lang.reflect.Method;
 
 
 /**
@@ -28,15 +34,26 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     private Context context;
     //fragmentManager
     private FragmentManager fragmentManager;
+    //各个fragment 类
+    private Class[] clas = {HomeFragment.class, GameFragment.class, MallFragment.class, PersonFragment.class};
+    //工厂类
+    private FragmentFactory fragmentFactory;
     //各个fragment
     private BaseFragment[] mContentFragments;
 
+    /***
+     * 构造
+     *
+     * @param fm
+     * @param context
+     */
     public MainFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.fragmentManager = fm;
         this.context = context;
+        this.fragmentFactory = new FragmentFactory();
         //获取title资源
-        titles = context.getResources().getStringArray(R.array.main_tab_titles);
+        this.titles = context.getResources().getStringArray(R.array.main_tab_titles);
         //获取图片资源
         getResId();
         if (titles.length > 0) {
@@ -47,7 +64,7 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (null == mContentFragments[position]) {
-            mContentFragments[position] = BlankFragment.newInstance(position + 1);
+            mContentFragments[position] = fragmentFactory.createProduct(clas[position], position + 1);
         }
         return mContentFragments[position];
     }
@@ -88,5 +105,31 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
         ImageView img = (ImageView) v.findViewById(R.id.tab_main_img);
         img.setImageResource(titleImages[position]);
         return v;
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // 抽象的工厂类，定义了其子类必须实现的createProduct()方法
+    private abstract class Factory {
+        //运用了Java 中的泛型和反射技术
+        public abstract <T extends BaseFragment> T createProduct(Class<T> c, int args);
+    }
+
+    /**
+     * fragment 工厂类
+     */
+    private class FragmentFactory extends Factory {
+        public <T extends BaseFragment> T createProduct(Class<T> c, int args) {
+            T product = null;
+            try {
+                //product = (T) Class.forName(c.getName()).newInstance();
+                //反射获取
+                Class<?> threadClazz = Class.forName(c.getName());
+                Method method = threadClazz.getMethod("newInstance", int.class);
+                product = (T) method.invoke(null, args);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return product;
+        }
     }
 }

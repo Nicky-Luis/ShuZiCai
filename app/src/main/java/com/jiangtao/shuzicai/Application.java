@@ -1,6 +1,7 @@
 package com.jiangtao.shuzicai;
 
 
+import com.blankj.utilcode.utils.Utils;
 import com.jiangtao.shuzicai.basic.app.BasicApp;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
 
@@ -29,6 +30,9 @@ public class Application extends BasicApp {
 
     @Override
     public void onApplicationInit() {
+        //初始化retrofit
         APIInteractive.initRetrofit();
+        //utils初始化
+        Utils.init(this);
     }
 }

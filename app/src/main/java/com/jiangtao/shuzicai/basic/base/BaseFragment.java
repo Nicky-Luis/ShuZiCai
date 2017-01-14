@@ -7,11 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
+import butterknife.ButterKnife;
+
 
 public abstract class BaseFragment extends Fragment implements IBaseView {
     private BaseActivity mActivity;
     private int viewId;
-    private View rootView;
+    private View mRootView;
 
     /**
      * 初始化布局
@@ -36,30 +40,39 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onGetArgument();
+        // Register
+        EventBus.getDefault().register(this);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewId = setLayoutId();
         if (0 == viewId) {
             new Exception("Please return the layout id in setLayoutId method,as simple as R" +
                     ".layout.cr_news_fragment_layout").printStackTrace();
             return super.onCreateView(inflater, container, savedInstanceState);
         } else {
-            if (rootView == null) {
-                rootView = inflater.inflate(viewId, null);
+            if (mRootView == null) {
+                mRootView = inflater.inflate(viewId, null);
+                ButterKnife.bind(this,mRootView);//绑定framgent
                 //检测是否有内存泄露
                 // RefWatcher refWatcher = BasicApp.getRefWatcher(getActivity());
                 // refWatcher.watch(this);
-                loadLayout(rootView);
+                loadLayout(mRootView);
             }
-            ViewGroup parent = (ViewGroup) rootView.getParent();
+            ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (parent != null) {
-                parent.removeView(rootView);
+                parent.removeView(mRootView);
             }
-            return rootView;
+            return mRootView;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Unregister
+        EventBus.getDefault().unregister(this);
     }
 
     /**
