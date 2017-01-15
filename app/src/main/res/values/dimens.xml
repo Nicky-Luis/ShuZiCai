@@ -29,6 +29,7 @@
     <dimen name="offset_16dp">16dp</dimen>
     <dimen name="offset_18dp">18dp</dimen>
     <dimen name="offset_20dp">20dp</dimen>
+    <dimen name="offset_22dp">22dp</dimen>
     <dimen name="offset_24dp">24dp</dimen>
     <dimen name="offset_28dp">28dp</dimen>
     <dimen name="offset_32dp">32dp</dimen>
@@ -38,9 +39,12 @@
     <dimen name="offset_48dp">48dp</dimen>
     <dimen name="offset_55dp">55dp</dimen>
     <dimen name="offset_64dp">64dp</dimen>
+    <dimen name="offset_68dp">68dp</dimen>
     <dimen name="offset_72dp">72dp</dimen>
     <dimen name="offset_88dp">88dp</dimen>
     <dimen name="offset_100dp">100dp</dimen>
+    <dimen name="offset_200dp">200dp</dimen>
+    <dimen name="offset_300dp">300dp</dimen>
 
 
 </resources>

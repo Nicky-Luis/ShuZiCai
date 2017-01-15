@@ -1,6 +1,5 @@
 package com.jiangtao.shuzicai.common.view.billboard_view.model;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.jiangtao.shuzicai.R;
 
 import java.util.Date;
@@ -89,7 +88,7 @@ public class ScrollMessage {
                 res = "用户" + personName + "投注了" + value + unit;
                 break;
         }
-        LogUtils.i("数据=" + res);
+      //  LogUtils.i("数据=" + res);
         return res;
     }
 }

@@ -17,8 +17,6 @@ import com.jiangtao.shuzicai.common.view.billboard_view.model.ScrollMessage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by Nicky on 2017/1/14.
@@ -30,7 +28,7 @@ public class BillboardView extends RelativeLayout {
     //handler key
     private final static int Handler_Key = 0;
     //滚动时间2s
-    private final static int Scroll_Time = 1000 * 2;
+    private final static int Scroll_Time = 1000 /** 2*/;
     //滚动条数
     private final static int Scroll_Count = 3;
     //列表
@@ -39,8 +37,6 @@ public class BillboardView extends RelativeLayout {
     private QuickAdapter<ScrollMessage> adapter;
     //mContext
     private Context mContext;
-    //显示数据队列
-    private Queue<ScrollMessage> viewDataQueue;
     //所有的数据源
     private List<ScrollMessage> scrollDataList;
     //周期值
@@ -77,22 +73,16 @@ public class BillboardView extends RelativeLayout {
      * 滚动view
      */
     private void setScrollData() {
-        LogUtils.i("---------setScrollData ：" + periodCount);
-        if (viewDataQueue == null) {
-            viewDataQueue = new ConcurrentLinkedQueue<>();
-        }
-        if (!viewDataQueue.isEmpty() && viewDataQueue.size() > Scroll_Count) {
-            viewDataQueue.poll();
+        //LogUtils.i("---------setScrollData ：" + periodCount);
+        if (adapter.getCount() >= Scroll_Count) {
+            adapter.remove(0);
         }
         //添加下一个
-        viewDataQueue.add(scrollDataList.get(periodCount));
-        int orgDataLength = scrollDataList.size();
+        adapter.add(scrollDataList.get(periodCount));
         periodCount++;
-        if (periodCount >= orgDataLength) {
+        if (periodCount >= scrollDataList.size()) {
             periodCount = 0;
         }
-        //把数据置入到list中
-        adapter.replaceAll(new ArrayList<>(viewDataQueue));
     }
 
     /**

@@ -1,17 +1,112 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="首页 "/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <!--趋势图-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-    <com.jiangtao.shuzicai.common.view.billboard_view.BillboardView
-        android:id="@+id/mainBillboardView"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"/>
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="上证指数"/>
 
-</FrameLayout>
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="沪深300"/>
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="深圳城指"/>
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="创业板指"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/offset_68dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2017-01-04"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView1"
+                android:text="3110.15"
+                android:textSize="@dimen/font_size_large"/>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textView2"
+                android:layout_toRightOf="@+id/textView2"
+                android:text="TextView"/>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView2"
+                android:text="TextView"/>
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textView4"
+                android:layout_toRightOf="@+id/textView4"
+                android:text="TextView"/>
+        </RelativeLayout>
+
+        <com.jiangtao.shuzicai.common.view.trend_view.TrendView
+            android:id="@+id/mainTrendView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </com.jiangtao.shuzicai.common.view.trend_view.TrendView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/offset_68dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="首页 "/>
+        </LinearLayout>
+
+        <!--公布栏-->
+        <com.jiangtao.shuzicai.common.view.billboard_view.BillboardView
+            android:id="@+id/mainBillboardView"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/offset_68dp"
+            android:background="@color/khaki"/>
+    </LinearLayout>
+</ScrollView>
