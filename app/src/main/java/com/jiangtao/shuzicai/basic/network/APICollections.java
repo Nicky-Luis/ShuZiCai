@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Created by nicky on 2016/12/29.
@@ -25,8 +26,15 @@ public interface APICollections {
 
     /**
      * 获取所有APP的信息
-     *
      */
     @GET("apps")
     Call<ResponseBody> getApps();
+
+
+    /**
+     * 获取所有APP的信息
+     */
+    @GET("classes/StockIndex")
+    Call<ResponseBody> getIndexDate(@Query("where") String where);
+
 }

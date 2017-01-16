@@ -7,99 +7,132 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!--趋势图-->
-        <LinearLayout
+        <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_margin="@dimen/offset_4dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="上证指数"/>
+            <RadioButton
+                android:id="@+id/homeIndexSSEBtn"
+                style="@style/style_main_index_radio_btn"
+                android:checked="true"
+                android:text="@string/kHomeIndexSSE"/>
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="沪深300"/>
+            <RadioButton
+                android:id="@+id/homeIndexCISBtn"
+                style="@style/style_main_index_radio_btn"
+                android:text="@string/kHomeIndexCIS"/>
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="深圳城指"/>
+            <RadioButton
+                android:id="@+id/homeIndexSCIBtn"
+                style="@style/style_main_index_radio_btn"
+                android:text="@string/kHomeIndexSCI"/>
 
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="创业板指"/>
-        </LinearLayout>
+            <RadioButton
+                android:id="@+id/homeIndexGEIBtn"
+                style="@style/style_main_index_radio_btn"
+                android:text="@string/kHomeIndexGEI"/>
+
+        </RadioGroup>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/offset_68dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/offset_4dp"
+            android:background="@color/seagreen"
+            android:orientation="vertical"
+            android:padding="@dimen/offset_8dp">
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/homeIndexTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2017-01-04"/>
+                android:text="2017-01-04"
+                android:textColor="@color/white"/>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/homeIndexMainData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textView1"
+                android:layout_below="@+id/homeIndexTime"
+                android:layout_marginLeft="@dimen/offset_4dp"
+                android:layout_marginTop="@dimen/offset_6dp"
                 android:text="3110.15"
-                android:textSize="@dimen/font_size_large"/>
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_xlarge_high"
+                android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/homeIndexTransaction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/textView2"
-                android:layout_toRightOf="@+id/textView2"
-                android:text="TextView"/>
+                android:layout_alignBaseline="@+id/homeIndexMainData"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/offset_4dp"
+                android:text="成交：111"
+                android:textColor="@color/white"/>
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/homeIndexChange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textView2"
-                android:text="TextView"/>
+                android:layout_alignRight="@+id/homeIndexMainData"
+                android:layout_below="@+id/homeIndexMainData"
+                android:layout_marginTop="@dimen/offset_4dp"
+                android:text="-29.4    -2%"
+                android:textColor="@color/white"/>
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/homeIndexTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/textView4"
-                android:layout_toRightOf="@+id/textView4"
-                android:text="TextView"/>
+                android:layout_alignBaseline="@+id/homeIndexChange"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/offset_4dp"
+                android:text="成交：1235亿"
+                android:textColor="@color/white"/>
         </RelativeLayout>
 
         <com.jiangtao.shuzicai.common.view.trend_view.TrendView
             android:id="@+id/mainTrendView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-        </com.jiangtao.shuzicai.common.view.trend_view.TrendView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/offset_68dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/offset_4dp"
+            android:background="@color/peru"
+            android:orientation="horizontal"
+            android:padding="@dimen/offset_4dp">
 
             <TextView
+                android:id="@+id/homeMyMoney"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="首页 "/>
+                android:text="我的资产"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_large"/>
+
+            <TextView
+                android:id="@+id/homeMyGold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="金币 300"/>
+
+            <TextView
+                android:id="@+id/homeMySilver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="银币 300"/>
         </LinearLayout>
 
         <!--公布栏-->

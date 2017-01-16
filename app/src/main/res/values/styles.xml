@@ -79,4 +79,19 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <!--启动图的样式-->
+    <style name="style_main_index_radio_btn">
+        <item name="android:windowBackground">@mipmap/loading</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/offset_40dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/selector_main_index_radio_btn</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+
+
 </resources>

@@ -1,6 +1,8 @@
 package com.jiangtao.shuzicai;
 
 
+import android.content.Context;
+
 import com.blankj.utilcode.utils.Utils;
 import com.jiangtao.shuzicai.basic.app.BasicApp;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
@@ -12,15 +14,12 @@ import com.jiangtao.shuzicai.basic.network.APIInteractive;
 
 public class Application extends BasicApp {
 
-    //静态获取实例
-    public static Application getApp() {
-        // 单例模式获取唯一的MyApplication实例
-        return (Application) mInstance;
-    }
+    //全局上下文
+    public static Context APPContext;
 
     //获取比目所有APP信息
     public static String getUserURl() {
-        return "https://api.bmob.cn/1/";
+        return getStringRes(Application.APPContext, R.string.Bmob_URL);
     }
 
     @Override
@@ -29,7 +28,13 @@ public class Application extends BasicApp {
     }
 
     @Override
+    public String getApplicationNameId() {
+        return getResources().getString(R.string.app_name_id);
+    }
+
+    @Override
     public void onApplicationInit() {
+        Application.APPContext = this;
         //初始化retrofit
         APIInteractive.initRetrofit();
         //utils初始化

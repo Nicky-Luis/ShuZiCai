@@ -1,6 +1,7 @@
 package com.jiangtao.shuzicai.basic.app;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.DisplayMetrics;
@@ -30,6 +31,8 @@ public abstract class BasicApp extends Application {
 
     //获取程序的名字
     public abstract String getApplicationName();
+    //获取程序的名字代号
+    public abstract String getApplicationNameId();
     //程序初始化
     public abstract void onApplicationInit();
 
@@ -78,7 +81,16 @@ public abstract class BasicApp extends Application {
      * @return 名称
      */
     public static String getAppName() {
-        return mInstance.getApplicationName();
+        return mInstance.getApplicationNameId();
+    }
+
+    /**
+     * 获取字符串资源值
+     *
+     * @return 名称
+     */
+    public static String getStringRes(Context context,int res) {
+        return context.getResources().getString(res);
     }
 
 

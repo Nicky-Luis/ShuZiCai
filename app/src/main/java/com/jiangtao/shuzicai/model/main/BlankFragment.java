@@ -30,6 +30,11 @@ public class BlankFragment extends BaseFragment {
     }
 
     @Override
+    public void initPresenter() {
+
+    }
+
+    @Override
     public int setLayoutId() {
         return R.layout.fragment_blank;
     }

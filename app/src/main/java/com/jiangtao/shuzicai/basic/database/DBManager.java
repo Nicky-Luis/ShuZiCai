@@ -21,7 +21,7 @@ public class DBManager {
 
     private DBManager() {
         if (liteOrm == null) {
-            liteOrm = LiteOrm.newSingleInstance(Application.getApp(), BaseGlobal
+            liteOrm = LiteOrm.newSingleInstance(Application.APPContext, BaseGlobal
                     .DATABASE_NAME);
         }
         // open the log

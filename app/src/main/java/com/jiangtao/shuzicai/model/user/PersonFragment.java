@@ -36,6 +36,11 @@ public class PersonFragment extends BaseFragment {
     }
 
     @Override
+    public void initPresenter() {
+
+    }
+
+    @Override
     public int setLayoutId() {
         return R.layout.fragment_person;
     }

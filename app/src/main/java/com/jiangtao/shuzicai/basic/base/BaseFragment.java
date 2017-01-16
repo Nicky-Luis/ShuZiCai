@@ -22,6 +22,7 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
      */
     public abstract void onGetArgument();
 
+    public abstract void initPresenter();
     /**
      * 获取layout的id
      *
@@ -59,6 +60,7 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
                 // RefWatcher refWatcher = BasicApp.getRefWatcher(getActivity());
                 // refWatcher.watch(this);
                 loadLayout(mRootView);
+                initPresenter();
             }
             ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (parent != null) {

@@ -12,6 +12,8 @@ import com.jiangtao.shuzicai.common.view.billboard_view.model.MessageTools;
 import com.jiangtao.shuzicai.common.view.billboard_view.model.ScrollMessage;
 import com.jiangtao.shuzicai.common.view.trend_view.TrendView;
 import com.jiangtao.shuzicai.common.view.trend_view.model.DataTools;
+import com.jiangtao.shuzicai.model.home.interfaces.IHomeFragmentPresenter;
+import com.jiangtao.shuzicai.model.home.presenter.HomeFragmentPresenter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -30,6 +32,8 @@ public class HomeFragment extends BaseFragment {
     private int mPage;
     //binding对象
     List<ScrollMessage> scrollDataList;
+    //页数
+    private IHomeFragmentPresenter presenter;
     //趋势图
     @BindView(R.id.mainTrendView)
     TrendView mainTrendView;
@@ -50,6 +54,12 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onGetArgument() {
         mPage = getArguments().getInt(ARGS_PAGE);
+    }
+
+    @Override
+    public void initPresenter() {
+        presenter = new HomeFragmentPresenter();
+        presenter.getIndexData();
     }
 
     @Override

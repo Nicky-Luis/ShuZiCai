@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">数字连连猜</string>
+    <string name="app_name_id">ShuZiCai</string>
+    <!--===============APP相关的配置====================-->
+    <string name="Bmob_URL">https://api.bmob.cn/1/</string>
+    <!--===============APP相关的配置====================-->
 
     <string name="title_activity_splash">SplashActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -14,4 +18,11 @@
 
     <string name="MainActivity_key_back_text">再按一次退出程序</string>
     <string name="MainActivity_login_register">登录/注册</string>
+
+    <!--首页-->
+    <string name="kHomeIndexSSE">上证指数</string>
+    <string name="kHomeIndexCIS">沪深300</string>
+    <string name="kHomeIndexGEI">创业板指</string>
+    <string name="kHomeIndexSCI">深证成指</string>
+
 </resources>

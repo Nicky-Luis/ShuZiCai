@@ -14,9 +14,12 @@
     <dimen name="font_size_small">12sp</dimen>
     <dimen name="font_size_normal">14sp</dimen>
     <dimen name="font_size_normal_high">16sp</dimen>
-    <dimen name="font_size_large">18sp</dimen>
-    <dimen name="font_size_large_high">20sp</dimen>
-    <dimen name="font_size_xlarge_high">22sp</dimen>
+    <dimen name="font_size_middle">18sp</dimen>
+    <dimen name="font_size_large">20sp</dimen>
+    <dimen name="font_size_large_high">22sp</dimen>
+    <dimen name="font_size_xlarge_high">25sp</dimen>
+    <dimen name="font_size_huge">28sp</dimen>
+
 
     <!--常用的尺寸-->
     <dimen name="offset_2dp">2dp</dimen>
