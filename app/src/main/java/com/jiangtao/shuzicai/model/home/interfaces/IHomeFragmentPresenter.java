@@ -6,5 +6,9 @@ package com.jiangtao.shuzicai.model.home.interfaces;
 
 public interface IHomeFragmentPresenter {
 
+    //获取指数
     void getIndexData();
+
+    //设置指数类型
+    void setIndexType(int type);
 }

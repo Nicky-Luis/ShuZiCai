@@ -35,7 +35,7 @@ public class TrendView extends RelativeLayout {
     //mContext
     private Context mContext;
     //所有的数据源
-    private List<TrendModel> scrollDataList;
+    private List<TrendModel> trendModels;
     //曲线图对象
     private LineChart trendView;
     //表的名字
@@ -97,12 +97,12 @@ public class TrendView extends RelativeLayout {
         xAxis.setAxisLineColor(Color.BLACK);//X轴的颜色
         xAxis.setDrawLabels(true);//X轴的坐标标签
         xAxis.setAxisLineWidth(1f);//X轴的轴宽
-        xAxis.setAxisMinimum(1);
-        xAxis.setLabelCount(5, true);
+        xAxis.setAxisMinimum(DataTools.getEarliestData(trendModels));
+        xAxis.setLabelCount(trendModels.size(), true);
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return DataTools.getDataLable(scrollDataList, value);
+                return DataTools.getDataLable(trendModels, value);
             }
         });
     }
@@ -112,8 +112,8 @@ public class TrendView extends RelativeLayout {
      */
     private void initYAxisLine() {
         YAxis leftAxis = trendView.getAxisLeft();
-        leftAxis.setAxisMinimum(DataTools.getMinData(scrollDataList));
-        leftAxis.setAxisMaximum(DataTools.getMaxData(scrollDataList));
+        leftAxis.setAxisMinimum(DataTools.getMinData(trendModels));
+        leftAxis.setAxisMaximum(DataTools.getMaxData(trendModels));
         leftAxis.setSpaceTop(10f);
         leftAxis.setLabelCount(5, true);
         leftAxis.setDrawZeroLine(false);//不画轴
@@ -130,9 +130,9 @@ public class TrendView extends RelativeLayout {
      * @param values
      */
     private void initData(List<Entry> values) {
-        //先清除一下
-        if (null != trendView) {
-            trendView.clear();
+        trendView.clear();
+        if (null == values || values.size() <= 0) {
+            return;
         }
         LineDataSet set1 = new LineDataSet(values, name);
         set1.enableDashedHighlightLine(10f, 5f, 0f);  //点击某个点时显示的线条
@@ -177,7 +177,7 @@ public class TrendView extends RelativeLayout {
      * @param values
      */
     public void bindTrendData(List<TrendModel> values) {
-        this.scrollDataList = values;
+        this.trendModels = values;
 
         List<Entry> datas = new ArrayList<>();
         for (TrendModel data : values) {

@@ -12,13 +12,6 @@ import java.util.Calendar;
 
 public class TrendModel {
 
-    //对应的时间
-    public final static float Mon = 1.0f;
-    public final static float Tues = 2.0f;
-    public final static float Wed = 3.0f;
-    public final static float Thur = 4.0f;
-    public final static float Fri = 5.0f;
-
     //日期列表
     private Calendar date;
     //数据
@@ -31,6 +24,7 @@ public class TrendModel {
     //星期
 
     public TrendModel(Calendar date, float weekValue, float yValue) {
+        LogUtils.i("weekValue:" + weekValue + " --- yValue:" + yValue);
         this.date = date;
         this.value = new Entry(weekValue, yValue);
     }
@@ -54,7 +48,7 @@ public class TrendModel {
         int month = date.get(Calendar.MONTH) + 1;
         //得到天
         int day = date.get(Calendar.DAY_OF_MONTH);
-        LogUtils.i("------" + month + "月" + day + "日------");
+        //LogUtils.i("------" + month + "月" + day + "日------");
         return month + "月" + day + "日";
     }
 

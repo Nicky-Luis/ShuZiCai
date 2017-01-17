@@ -38,17 +38,15 @@ public class APIInteractive {
     /**
      * 获取指数信息
      *
+     * @param where
      * @param callback
      */
-    public static void getIndexData(final INetworkResponse callback) {
+    public static void getIndexData(String where, final INetworkResponse callback) {
         if (null == request) {
             initRetrofit();
         }
 
-        BmobQueryUtils utils = BmobQueryUtils.newInstance();
-        String value = utils.setValue("stock_type").GreaterThan(1).buildUrlString();
-
-        Call<ResponseBody> call = request.getIndexDate(value);
+        Call<ResponseBody> call = request.getIndexDate(where);
         NetworkRequest.netRequest(call, callback);
     }
 }

@@ -1,8 +1,13 @@
 package com.jiangtao.shuzicai.common.view.trend_view.model;
 
+import com.jiangtao.shuzicai.model.home.entry.StockIndex;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,11 +24,13 @@ public class DataTools {
      * @return
      */
     public static float getMinData(List<TrendModel> datas) {
-        if (null == datas) {
+        if (null == datas || datas.size() <= 0) {
             return 1000f;
         }
+
         List<Float> nums = new ArrayList<>();
         for (TrendModel data : datas) {
+            //LogUtils.i("-----:" + data.getYValue());
             nums.add(data.getYValue());
         }
         return Collections.min(nums) - 10;
@@ -36,7 +43,7 @@ public class DataTools {
      * @return
      */
     public static float getMaxData(List<TrendModel> datas) {
-        if (null == datas) {
+        if (null == datas || datas.size() <= 0) {
             return 2000f;
         }
         List<Float> nums = new ArrayList<>();
@@ -46,6 +53,22 @@ public class DataTools {
         return Collections.max(nums) + 10;
     }
 
+    /**
+     * 获取最早的日期
+     *
+     * @param datas
+     * @return
+     */
+    public static float getEarliestData(List<TrendModel> datas) {
+        if (null == datas || datas.size() <= 0) {
+            return 2000f;
+        }
+        List<Float> nums = new ArrayList<>();
+        for (TrendModel data : datas) {
+            nums.add(data.getXValue());
+        }
+        return Collections.min(nums);
+    }
 
     /**
      * 获取X轴的lable
@@ -59,6 +82,8 @@ public class DataTools {
             return result;
         }
         for (TrendModel data : datas) {
+            //LogUtils.i("data.getXValue()=" + data.getXValue());
+            // LogUtils.i("value=" + value);
             if (data.getXValue() == value) {
                 return data.getXValueLabel();
             }
@@ -66,34 +91,66 @@ public class DataTools {
         return result;
     }
 
+    /**
+     * 数据解析
+     *
+     * @param type
+     * @param retList
+     * @return
+     */
+    public static List<TrendModel> getTrendDatas(int type, List<StockIndex> retList) {
+        //交易数据
+        List<TrendModel> trendModels = new ArrayList<>();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        try {
+            //解析数据
+            for (StockIndex data : retList) {
+                if (data.getStock_type() == type) {
+                    Calendar calendar = Calendar.getInstance();
+                    Date date = sdf.parse(data.getDate().getIso());
+                    calendar.setTime(date);
+                    float day = calendar.get(Calendar.DAY_OF_MONTH);
+                    TrendModel model = new TrendModel(calendar, day, data.getStock_value());
+                    trendModels.add(model);
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return trendModels;
+    }
+
+
     //测试数据数据
     public static List<TrendModel> getTrendDatas() {
+
         List<TrendModel> trendDatas = new ArrayList<>();
-        Calendar date1 = Calendar.getInstance();
+       /* Calendar date1 = Calendar.getInstance();
         date1.set(2017, 1, 1, 0, 0, 0);
-        TrendModel model1 = new TrendModel(date1, TrendModel.Mon, 3366.852f);
+        TrendModel model1 = new TrendModel(date1, 3366.852f);
         trendDatas.add(model1);
 
         Calendar date2 = Calendar.getInstance();
         date2.set(2017, 1, 2, 0, 0, 0);
-        TrendModel model2 = new TrendModel(date2, TrendModel.Tues, 3345.748f);
+        TrendModel model2 = new TrendModel(date2, 3345.748f);
         trendDatas.add(model2);
 
         Calendar date3 = Calendar.getInstance();
         date3.set(2017, 1, 3, 0, 0, 0);
-        TrendModel model3 = new TrendModel(date3, TrendModel.Wed, 3361.639f);
+        TrendModel model3 = new TrendModel(date3, 3361.639f);
         trendDatas.add(model3);
 
         Calendar date4 = Calendar.getInstance();
         date4.set(2017, 1, 4, 0, 0, 0);
-        TrendModel model4 = new TrendModel(date4, TrendModel.Thur, 3355.801f);
+        TrendModel model4 = new TrendModel(date4, 3355.801f);
         trendDatas.add(model4);
 
         Calendar date5 = Calendar.getInstance();
         date5.set(2017, 1, 5, 0, 0, 0);
-        TrendModel model5 = new TrendModel(date5, TrendModel.Fri, 3332.686f);
+        TrendModel model5 = new TrendModel(date5, 3332.686f);
         trendDatas.add(model5);
-
+*/
         return trendDatas;
     }
 }
