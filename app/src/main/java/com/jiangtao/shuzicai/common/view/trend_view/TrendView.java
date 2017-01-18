@@ -17,7 +17,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.jiangtao.shuzicai.R;
-import com.jiangtao.shuzicai.common.view.trend_view.model.DataTools;
+import com.jiangtao.shuzicai.common.view.trend_view.model.TrendDataTools;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendModel;
 
 import java.util.ArrayList;
@@ -97,12 +97,12 @@ public class TrendView extends RelativeLayout {
         xAxis.setAxisLineColor(Color.BLACK);//X轴的颜色
         xAxis.setDrawLabels(true);//X轴的坐标标签
         xAxis.setAxisLineWidth(1f);//X轴的轴宽
-        xAxis.setAxisMinimum(DataTools.getEarliestData(trendModels));
+        xAxis.setAxisMinimum(TrendDataTools.getEarliestData(trendModels));
         xAxis.setLabelCount(trendModels.size(), true);
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return DataTools.getDataLable(trendModels, value);
+                return TrendDataTools.getDataLable(trendModels, value);
             }
         });
     }
@@ -112,8 +112,8 @@ public class TrendView extends RelativeLayout {
      */
     private void initYAxisLine() {
         YAxis leftAxis = trendView.getAxisLeft();
-        leftAxis.setAxisMinimum(DataTools.getMinData(trendModels));
-        leftAxis.setAxisMaximum(DataTools.getMaxData(trendModels));
+        leftAxis.setAxisMinimum(TrendDataTools.getMinData(trendModels));
+        leftAxis.setAxisMaximum(TrendDataTools.getMaxData(trendModels));
         leftAxis.setSpaceTop(10f);
         leftAxis.setLabelCount(5, true);
         leftAxis.setDrawZeroLine(false);//不画轴

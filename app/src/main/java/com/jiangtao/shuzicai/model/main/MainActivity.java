@@ -4,6 +4,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
@@ -32,11 +34,46 @@ public class MainActivity extends BaseActivityWithToolBar {
         return R.layout.activity_main;
     }
 
+
     @Override
     protected void onInitialize() {
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(
                 getBaseFragmentManager(), getContext());
         mainViewPager.setAdapter(adapter);
+        //监听滑动的页面
+        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // position :当前页面，及你点击滑动的页面；positionOffset:当前页面偏移的百分比；positionOffsetPixels:当前页面偏移的像素位置
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                MenuItem item = getMenuItem(R.id.action_more);
+                item.setVisible(position == 3);
+                // arg0是当前选中的页面的Position
+                if (position == 0) {
+                    setTitle("数字连连猜");
+                } else if (position == 1) {
+                    setTitle("游戏");
+                } else if (position == 2) {
+                    setTitle("商城");
+                } else if (position == 3) {
+                    setTitle("个人中心");
+                    item.setIcon(null);
+                    TextView txt= new TextView(MainActivity.this);
+                    txt.setText("设置");
+                    txt.setTextColor(getResources().getColor(R.color.white));
+                    txt.setPadding(10,10,10,10);
+                    item.setActionView(txt);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                //state ==1的时表示正在滑动，state==2的时表示滑动完毕了，state==0的时表示什么都没做
+            }
+        });
         mainTabs.setupWithViewPager(mainViewPager);
         initTabView(adapter);
     }

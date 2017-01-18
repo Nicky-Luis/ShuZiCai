@@ -14,6 +14,8 @@ import com.jiangtao.shuzicai.R;
 public abstract class BaseActivityWithToolBar extends BaseActivity {
     //toolbar
     private Toolbar mToolbar;
+    //菜单
+    private Menu menu;
 
     @Override
     protected void loadLayout(View view) {
@@ -29,6 +31,11 @@ public abstract class BaseActivityWithToolBar extends BaseActivity {
         }
     }
 
+    @Override
+    public void setTitle(CharSequence title) {
+        getSupportActionBar().setTitle(title);
+        super.setTitle(title);
+    }
 
     //监听
     private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar
@@ -45,6 +52,7 @@ public abstract class BaseActivityWithToolBar extends BaseActivity {
         }
     };
 
+
     //toolbar的菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,6 +61,22 @@ public abstract class BaseActivityWithToolBar extends BaseActivity {
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        this.menu = menu;
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+
+    //获取菜单
+    public Menu getMenu() {
+        return menu;
+    }
+
+    //获取item
+    public MenuItem  getMenuItem(int res){
+        return menu.findItem(res);
+    }
     /**
      * 跳转到首页
      */

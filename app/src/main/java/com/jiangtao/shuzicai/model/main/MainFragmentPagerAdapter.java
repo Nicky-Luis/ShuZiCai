@@ -75,11 +75,13 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
 
+
     @Override
     public CharSequence getPageTitle(int position) {
         return titles[position];
     }
 
+    ///////////////////////////////////////////////
     /**
      * 获取图片tab资源
      */

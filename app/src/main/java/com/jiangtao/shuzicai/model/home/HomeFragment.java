@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
 import com.jiangtao.shuzicai.common.view.billboard_view.BillboardView;
-import com.jiangtao.shuzicai.common.view.billboard_view.model.MessageTools;
-import com.jiangtao.shuzicai.common.view.billboard_view.model.ScrollMessage;
+import com.jiangtao.shuzicai.common.view.billboard_view.model.BillboardMessage;
 import com.jiangtao.shuzicai.common.view.trend_view.TrendView;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendModel;
 import com.jiangtao.shuzicai.model.home.entry.StockIndex;
@@ -21,6 +21,8 @@ import com.jiangtao.shuzicai.model.home.view.IHomeFragmentView;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,7 +36,7 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
     //页数
     private int mPage;
     //binding对象
-    List<ScrollMessage> scrollDataList;
+    List<BillboardMessage> billboardMessages;
     //页数
     private IHomeFragmentPresenter presenter;
     //趋势图
@@ -46,6 +48,21 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
     //公告栏
     @BindView(R.id.indexRadioGroup)
     RadioGroup indexRadioGroup;
+    //时间
+    @BindView(R.id.homeIndexTime)
+    TextView homeIndexTime;
+    //指数值
+    @BindView(R.id.homeIndexMainData)
+    TextView homeIndexMainData;
+    //成交
+    @BindView(R.id.homeIndexTransaction)
+    TextView homeIndexTransaction;
+    //变化
+    @BindView(R.id.homeIndexChange)
+    TextView homeIndexChange;
+    //总计
+    @BindView(R.id.homeIndexTotal)
+    TextView homeIndexTotal;
 
     //对象实例化
     public static HomeFragment newInstance(int page) {
@@ -65,7 +82,9 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
     @Override
     public void initPresenter() {
         presenter = new HomeFragmentPresenter(getContext(), this);
+        //查询数据
         presenter.getIndexData();
+        presenter.getBillboardData();
     }
 
     @Override
@@ -76,17 +95,7 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
 
     @Override
     public void loadLayout(View rootView) {
-        //广播数据
-        scrollDataList = MessageTools.getMessageDatas();
-        //绑定数据
-        mainBillboardView.setScrollDataList(scrollDataList).startScrollView();
-        initView();
-    }
-
-    /**
-     * 初始化view
-     */
-    private void initView() {
+        //点击事件
         indexRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
@@ -121,24 +130,13 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
         if (isVisibleToUser) {
             LogUtils.i("---------显示----------");
             if (null != mainBillboardView) {
-                mainBillboardView.setScrollDataList(scrollDataList).startScrollView();
+                mainBillboardView.setScrollDataList(billboardMessages).startScrollView();
             }
         } else {
             LogUtils.i("---------隐藏----------");
             if (null != mainBillboardView) {
                 mainBillboardView.stopScrollView();
             }
-        }
-    }
-
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-
-        } else {
-
         }
     }
 
@@ -156,5 +154,51 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
     public void onUpdateIndexData(List<TrendModel> datas) {
         //交易数据
         mainTrendView.bindTrendData(datas);
+    }
+
+    @Override
+    public void bindIndexData(StockIndex indexData) {
+        resetIndexViewValue();
+        if (null == indexData) {
+            return;
+        }
+        homeIndexTime.setText(indexData.getDate().getIso().substring(0, 9));
+        //构造方法的字符格式这里如果小数不足2位,会以0补足.
+        DecimalFormat decimalFormat = new DecimalFormat(".00");
+        String date = decimalFormat.format(indexData.getStock_value());
+        homeIndexMainData.setText(date);
+
+        //成交量
+        String volume = "成交额(万元):" + decimalFormat.format(indexData.getTurnover_volume());
+        homeIndexTransaction.setText(volume);
+        //成交笔数
+        String count = "成交量(万手):" + decimalFormat.format(indexData.getTurnover_count());
+        homeIndexTotal.setText(count);
+
+        //成交笔数
+        String changeValue = decimalFormat.format(indexData.getChange_value());
+        String changePercent = decimalFormat.format(indexData.getChange_percent()) + "%";
+        homeIndexChange.setText(changeValue + "   " + changePercent);
+    }
+
+    @Override
+    public void bindBillboardData(List<BillboardMessage> datas) {
+        LogUtils.i("---------绑定公告数据："+datas.size());
+        //广播数据
+        billboardMessages = datas;
+        //绑定数据
+        mainBillboardView.setScrollDataList(datas).startScrollView();
+    }
+
+    //清除数据
+    private void resetIndexViewValue() {
+        Calendar calendar = Calendar.getInstance();
+        homeIndexTime.setText(calendar.get(Calendar.YEAR) + "-" +
+                (calendar.get(Calendar.MONTH) + 1) + "-" +
+                calendar.get(Calendar.DAY_OF_MONTH));
+        homeIndexMainData.setText("--");
+        homeIndexTransaction.setText("成交额(万元)--");
+        homeIndexTotal.setText("成交量(万手)--");
+        homeIndexChange.setText("--");
     }
 }

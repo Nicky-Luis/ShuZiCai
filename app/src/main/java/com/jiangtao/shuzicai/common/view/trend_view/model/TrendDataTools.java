@@ -15,7 +15,7 @@ import java.util.List;
  * 工具
  */
 
-public class DataTools {
+public class TrendDataTools {
 
     /**
      * 获取最小的值
@@ -92,7 +92,7 @@ public class DataTools {
     }
 
     /**
-     * 数据解析
+     * 数据解析，将股票数据转化为图表数据
      *
      * @param type
      * @param retList
@@ -119,6 +119,25 @@ public class DataTools {
             e.printStackTrace();
         }
         return trendModels;
+    }
+
+    /**
+     * 数据解析，将股票数据转化为图表数据
+     *
+     * @param type
+     * @param retList
+     * @return
+     */
+    public static StockIndex getNewestDatas(int type, List<StockIndex> retList) {
+        if (null == retList || retList.size() == 0) {
+            return null;
+        }
+        for (int index = retList.size() - 1; index >= 0; index--) {
+            if (retList.get(index).getStock_type() == type) {
+                return retList.get(index);
+            }
+        }
+        return null;
     }
 
 

@@ -8,19 +8,18 @@
     <!--app:showAsAction="never" />-->
 
     <!--<item-->
-        <!--android:id="@+id/action_search"-->
-        <!--android:icon="@mipmap/ic_search_white_24dp"-->
-        <!--android:orderInCategory="80"-->
-        <!--android:title="search"-->
-        <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
-        <!--app:showAsAction="ifRoom"/>-->
+    <!--android:id="@+id/action_search"-->
+    <!--android:icon="@mipmap/ic_search_white_24dp"-->
+    <!--android:orderInCategory="80"-->
+    <!--android:title="search"-->
+    <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
+    <!--app:showAsAction="ifRoom"/>-->
 
     <item
         android:id="@+id/action_more"
         android:icon="@mipmap/ic_more_vert_white_24dp"
         android:orderInCategory="100"
         android:title="more"
-        app:showAsAction="ifRoom"
-    />
+        app:showAsAction="ifRoom"/>
 
 </menu>

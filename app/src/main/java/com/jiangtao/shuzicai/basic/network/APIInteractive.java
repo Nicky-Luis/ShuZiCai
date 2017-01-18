@@ -49,4 +49,20 @@ public class APIInteractive {
         Call<ResponseBody> call = request.getIndexDate(where);
         NetworkRequest.netRequest(call, callback);
     }
+
+    /**
+     * 获取指数信息
+     *
+     * @param callback
+     */
+    public static void getBillboardData(final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+
+        Call<ResponseBody> call = request.getBillboardData(10, 0);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+
 }

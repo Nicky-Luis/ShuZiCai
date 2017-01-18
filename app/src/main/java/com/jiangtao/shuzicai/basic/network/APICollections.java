@@ -32,9 +32,21 @@ public interface APICollections {
 
 
     /**
-     * 获取所有APP的信息
+     * 获取指数数据
+     *
+     * @param where 条件
+     * @return
      */
     @GET("classes/StockIndex")
     Call<ResponseBody> getIndexDate(@Query("where") String where);
 
+    /**
+     * 获取公告数据
+     * @param limit 数量
+     * @param skip 开始位置
+     * @return
+     */
+    @GET("classes/BillboardMessage")
+    Call<ResponseBody> getBillboardData(@Query("limit") int limit,
+                                        @Query("skip") int skip);
 }
