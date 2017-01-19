@@ -658,7 +658,7 @@ public class MyStringUtils {
 	 */
 	public static boolean isPhoneNumberValid(String phoneNumber) {
 		phoneNumber = trimmy(phoneNumber);
-		NumberUtils mobile = new NumberUtils(phoneNumber);
+		PhoneUtils mobile = new PhoneUtils(phoneNumber);
 		return mobile.isLawful();
 	}
 

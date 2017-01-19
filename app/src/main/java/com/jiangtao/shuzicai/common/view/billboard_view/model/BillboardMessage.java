@@ -1,6 +1,5 @@
 package com.jiangtao.shuzicai.common.view.billboard_view.model;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.common.BmobDate;
 
@@ -140,7 +139,7 @@ public class BillboardMessage {
                 content = "用户" + UserName + "投注了" + BillboardValue + "银元";
                 break;
         }
-        LogUtils.i("数据=" + content);
+        // LogUtils.i("数据=" + content);
         return content;
     }
 }

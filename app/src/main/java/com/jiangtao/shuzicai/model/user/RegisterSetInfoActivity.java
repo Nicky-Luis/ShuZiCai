@@ -1,8 +1,6 @@
 package com.jiangtao.shuzicai.model.user;
 
-import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
@@ -10,27 +8,11 @@ import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import butterknife.OnClick;
-
-public class LoginActivity extends BaseActivityWithToolBar {
-
-
-    //设置点击事件
-    @OnClick({R.id.loginToRegisterTxt})
-    public void OnClick(View view) {
-        switch (view.getId()) {
-
-            case R.id.loginToRegisterTxt:
-                Intent intent = new Intent(LoginActivity.this, RegisterSetPhoneActivity.class);
-                startActivity(intent);
-                break;
-
-        }
-    }
+public class RegisterSetInfoActivity extends BaseActivityWithToolBar {
 
     @Override
     public int setLayoutId() {
-        return R.layout.activity_login;
+        return R.layout.activity_register_set_info;
     }
 
     @Override

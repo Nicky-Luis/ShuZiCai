@@ -2,6 +2,7 @@ package com.jiangtao.shuzicai.basic.network;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.jiangtao.shuzicai.Application;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -32,6 +34,8 @@ public class NetworkRequest {
     private static final String TAG = "NetworkRequest";
     //超时5秒
     private static final int DEFAULT_TIMEOUT = 5;
+    //
+    private static Retrofit retrofit;
 
     //构造方法私有
     private NetworkRequest() {
@@ -42,7 +46,7 @@ public class NetworkRequest {
      */
     public static <T> T getRetrofitClient(final Class<T> clss) {
         String baseURL = Application.getUserURl() + "/";
-        Retrofit retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getOkHttpClient())//使用自己创建的OkHttp
@@ -87,6 +91,18 @@ public class NetworkRequest {
         });
     }
 
+    /**
+     * 创建bean对象
+     *
+     * @param bean
+     * @return
+     */
+    public static RequestBody createJsonString(Object bean) {
+        Gson gson = new Gson();
+        //通过Gson将Bean转化为Json字符串形式
+        String route = gson.toJson(bean);
+        return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), route);
+    }
     ////////////////////////////////////private method/////////////////////////////////////
 
     /**

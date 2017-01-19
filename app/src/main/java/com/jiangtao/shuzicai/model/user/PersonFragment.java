@@ -1,14 +1,19 @@
 package com.jiangtao.shuzicai.model.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /***
  * 个人中心fragment
@@ -19,6 +24,21 @@ public class PersonFragment extends BaseFragment {
     //页数
     private int mPage;
     //binding对象
+    @BindView(R.id.loginViewLayout)
+    LinearLayout loginLayout;
+
+    //设置点击事件
+    @OnClick({R.id.loginViewLayout})
+    public void OnClick(View view) {
+        switch (view.getId()) {
+
+            case R.id.loginViewLayout:
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                break;
+
+        }
+    }
 
     //对象实例化
     public static PersonFragment newInstance(int page) {

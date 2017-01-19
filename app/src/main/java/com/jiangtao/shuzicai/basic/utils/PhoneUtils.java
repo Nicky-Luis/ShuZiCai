@@ -4,7 +4,7 @@ package com.jiangtao.shuzicai.basic.utils;
  * @author Ht
  *
  */
-public class NumberUtils
+public class PhoneUtils
 {
 	/**
 	 * 中国移动拥有号码段为:139,138,137,136,135,134,159,158,157(3G),151,150,188(3G),187(3G
@@ -24,7 +24,7 @@ public class NumberUtils
 	private boolean isLawful = false;
 	private boolean is3G = false;
 
-	public NumberUtils(String mobile)
+	public PhoneUtils(String mobile)
 	{
 		this.setMobile(mobile);
 	}
@@ -37,48 +37,48 @@ public class NumberUtils
 		}
 		/** */
 		/** 第一步判断中国移动 */
-		if (mobile.matches(NumberUtils.mRegMobileStr))
+		if (mobile.matches(PhoneUtils.mRegMobileStr))
 		{
 			this.mobile = mobile;
 			this.setFacilitatorType(0);
 			this.setLawful(true);
-			if (mobile.matches(NumberUtils.mRegMobile3GStr))
+			if (mobile.matches(PhoneUtils.mRegMobile3GStr))
 			{
 				this.setIs3G(true);
 			}
 		}
 		/** */
 		/** 第二步判断中国联通 */
-		else if (mobile.matches(NumberUtils.mRegUnicomStr))
+		else if (mobile.matches(PhoneUtils.mRegUnicomStr))
 		{
 			this.mobile = mobile;
 			this.setFacilitatorType(1);
 			this.setLawful(true);
-			if (mobile.matches(NumberUtils.mRegUnicom3GStr))
+			if (mobile.matches(PhoneUtils.mRegUnicom3GStr))
 			{
 				this.setIs3G(true);
 			}
 		}
 		/** */
 		/** 第三步判断中国电信 */
-		else if (mobile.matches(NumberUtils.mRegTelecomStr))
+		else if (mobile.matches(PhoneUtils.mRegTelecomStr))
 		{
 			this.mobile = mobile;
 			this.setFacilitatorType(2);
 			this.setLawful(true);
-			if (mobile.matches(NumberUtils.mRegTelocom3GStr))
+			if (mobile.matches(PhoneUtils.mRegTelocom3GStr))
 			{
 				this.setIs3G(true);
 			}
 		}
 		/** */
 		/** 第四步判断座机 */
-		if (mobile.matches(NumberUtils.mRegPhoneString))
+		if (mobile.matches(PhoneUtils.mRegPhoneString))
 		{
 			this.mobile = mobile;
 			this.setFacilitatorType(0);
 			this.setLawful(true);
-			if (mobile.matches(NumberUtils.mRegMobile3GStr))
+			if (mobile.matches(PhoneUtils.mRegMobile3GStr))
 			{
 				this.setIs3G(true);
 			}

@@ -1,11 +1,33 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/gray">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/loginViewLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="个人中心"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/offset_8dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/offset_8dp"
+        android:paddingLeft="@dimen/offset_48dp">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="@dimen/offset_8dp"
+            android:text="登陆/注册"/>
+    </LinearLayout>
+
+
+</LinearLayout>

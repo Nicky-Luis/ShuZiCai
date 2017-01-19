@@ -79,7 +79,7 @@ public class BillboardView extends RelativeLayout {
         }
         //添加下一个
         BillboardMessage message =scrollDataList.get(periodCount);
-        LogUtils.i("---------绑定的 ：" + message.toString());
+        //LogUtils.i("---------绑定的 ：" + message.toString());
         adapter.add(message);
         periodCount++;
         if (periodCount >= scrollDataList.size()) {
