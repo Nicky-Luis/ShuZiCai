@@ -1,33 +1,26 @@
 package com.jiangtao.shuzicai.basic.base;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.jiangtao.shuzicai.model.main.MainActivity;
 import com.jiangtao.shuzicai.R;
+import com.jiangtao.shuzicai.model.main.MainActivity;
 
 
 public abstract class BaseActivityWithToolBar extends BaseActivity {
     //toolbar
     private Toolbar mToolbar;
-    //菜单
-    private Menu menu;
 
     @Override
     protected void loadLayout(View view) {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
-            //在setSupportActionBar(toolbar);之后，不然就报错了
-            getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-            // getSupportActionBar().setSubtitle("副标题");
-            // getSupportActionBar().setLogo(R.drawable.ic_launcher);
-            // 菜单回调
-            mToolbar.setOnMenuItemClickListener(onMenuItemClickListener);
+            setLeftTitle(getResources().getString(R.string.app_name), null);
         }
     }
 
@@ -37,46 +30,124 @@ public abstract class BaseActivityWithToolBar extends BaseActivity {
         super.setTitle(title);
     }
 
-    //监听
-    private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar
-            .OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
+    /**
+     * 重置
+     */
+    public void resetToolView() {
+        TextView leftTitle = (TextView) mToolbar.findViewById(R.id.toolBarLeftTxt);
+        ImageView leftImage = (ImageView) mToolbar.findViewById(R.id.toolBarLeftImg);
+        TextView rightTitle = (TextView) mToolbar.findViewById(R.id.toolBarRightTxt);
+        ImageView rightImage = (ImageView) mToolbar.findViewById(R.id.toolBarRightImg);
+        TextView title = (TextView) mToolbar.findViewById(R.id.toolBarCenterTxt);
 
-                case R.id.action_more:
-                    Snackbar.make(mToolbar, "Click More", Snackbar.LENGTH_SHORT).show();
-                    break;
-            }
-            return true;
+        leftTitle.setText("");
+        title.setText("");
+        rightTitle.setText("");
+
+        leftTitle.setVisibility(View.GONE);
+        leftImage.setVisibility(View.GONE);
+        rightTitle.setVisibility(View.GONE);
+        rightImage.setVisibility(View.GONE);
+        title.setVisibility(View.GONE);
+    }
+
+    /**
+     * 左边标题
+     *
+     * @param content
+     */
+    public void setLeftTitle(String content) {
+        TextView leftTitle = (TextView) mToolbar.findViewById(R.id.toolBarLeftTxt);
+        leftTitle.setVisibility(View.VISIBLE);
+        leftTitle.setText(content);
+        ImageView leftImage = (ImageView) mToolbar.findViewById(R.id.toolBarLeftImg);
+        leftImage.setVisibility(View.GONE);
+    }
+
+    /**
+     * 左边标题
+     *
+     * @param content
+     */
+    public void setLeftTitle(String content, View.OnClickListener listner) {
+        TextView leftTitle = (TextView) mToolbar.findViewById(R.id.toolBarLeftTxt);
+        leftTitle.setVisibility(View.VISIBLE);
+        leftTitle.setText(content);
+        if (null != listner) {
+            leftTitle.setOnClickListener(listner);
         }
-    };
+        ImageView leftImage = (ImageView) mToolbar.findViewById(R.id.toolBarLeftImg);
+        leftImage.setVisibility(View.GONE);
+    }
+
+    /**
+     * 左边图标
+     *
+     * @param res
+     */
+    public void setLeftImage(int res, View.OnClickListener listner) {
+        ImageView leftImage = (ImageView) mToolbar.findViewById(R.id.toolBarLeftImg);
+        leftImage.setVisibility(View.VISIBLE);
+        leftImage.setImageResource(res);
+        if (null != listner) {
+            leftImage.setOnClickListener(listner);
+        }
+        TextView leftTitle = (TextView) mToolbar.findViewById(R.id.toolBarLeftTxt);
+        leftTitle.setVisibility(View.GONE);
+    }
+
+    /**
+     * 左边标题
+     *
+     * @param content
+     */
+    public void setRightTitle(String content, View.OnClickListener listner) {
+        TextView rightTitle = (TextView) mToolbar.findViewById(R.id.toolBarRightTxt);
+        rightTitle.setVisibility(View.VISIBLE);
+        rightTitle.setText(content);
+        if (null != listner) {
+            rightTitle.setOnClickListener(listner);
+        }
+        ImageView rightImage = (ImageView) mToolbar.findViewById(R.id.toolBarRightImg);
+        rightImage.setVisibility(View.GONE);
+    }
+
+    /**
+     * 左边图标
+     *
+     * @param res
+     */
+    public void setRightImage(int res, View.OnClickListener listner) {
+        ImageView rightImage = (ImageView) mToolbar.findViewById(R.id.toolBarRightImg);
+        rightImage.setVisibility(View.VISIBLE);
+        rightImage.setImageResource(res);
+        if (null != listner) {
+            rightImage.setOnClickListener(listner);
+        }
+        TextView rightTitle = (TextView) mToolbar.findViewById(R.id.toolBarRightTxt);
+        rightTitle.setVisibility(View.GONE);
+    }
+
+    /**
+     * 标题
+     *
+     * @param content
+     */
+    public void setCenterTitle(String content) {
+        TextView title = (TextView) mToolbar.findViewById(R.id.toolBarCenterTxt);
+        title.setVisibility(View.VISIBLE);
+        title.setText(content);
+    }
 
 
     //toolbar的菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // 為了讓 Toolbar 的 Menu 有作用，這邊的程式不可以拿掉
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        this.menu = menu;
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-
-    //获取菜单
-    public Menu getMenu() {
-        return menu;
-    }
-
-    //获取item
-    public MenuItem  getMenuItem(int res){
-        return menu.findItem(res);
-    }
     /**
      * 跳转到首页
      */

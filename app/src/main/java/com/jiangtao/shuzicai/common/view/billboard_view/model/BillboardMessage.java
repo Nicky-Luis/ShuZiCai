@@ -1,7 +1,7 @@
 package com.jiangtao.shuzicai.common.view.billboard_view.model;
 
 import com.jiangtao.shuzicai.R;
-import com.jiangtao.shuzicai.common.BmobDate;
+import com.jiangtao.shuzicai.common.entity.BmobDate;
 
 /**
  * Created by Nicky on 2017/1/14.

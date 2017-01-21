@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- 上面都是测试用的颜色 下面是正常UI配色 -->
+    <!-- 主黄色 -->
+    <color name="main_yellow">#ffc400</color>
+    <!-- 主褐色 -->
+    <color name="main_brown">#86542f</color>
+    <!-- 主橘色 -->
+    <color name="main_orange">#ff8400</color>
+    <!-- 纯白色 -->
+    <color name="main_deep_white">#FFFFFF</color>
+    <!-- 微白色 -->
+    <color name="main_thin_white">#e0e0e0</color>
+    <!-- 浅白色 -->
+    <color name="main_light_white">#ebebeb</color>
+    <!-- 主深黑 -->
+    <color name="main_deep_black">#4d4d4d</color>
+    <!-- 主浅黑 -->
+    <color name="main_light_black">#7c7c7c</color>
+
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="cl_default">#424242</color>
     <color name="cl_error">#ffffff</color>
+    <color name="transparent">#00000000</color>
 
     <color name="black_overlay">#66000000</color>
 

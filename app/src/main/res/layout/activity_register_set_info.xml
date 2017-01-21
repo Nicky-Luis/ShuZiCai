@@ -1,13 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/activity_register_set_info"
+<LinearLayout
+    android:id="@+id/activity_register_set_password"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context="com.jiangtao.shuzicai.model.user.RegisterSetInfoActivity">
+
 
     <!--toolbar-->
     <include layout="@layout/toolbar"/>
 
-</RelativeLayout>
+    <ImageView
+        android:id="@+id/uerHeadImg"
+        android:layout_width="@dimen/offset_88dp"
+        android:layout_height="@dimen/offset_88dp"
+        android:layout_margin="@dimen/offset_48dp"
+        app:srcCompat="@mipmap/ic_launcher"/>
+
+    <EditText
+        android:id="@+id/phoneNumberEdt"
+        android:layout_width="@dimen/offset_300dp"
+        android:layout_height="@dimen/offset_40dp"
+        android:layout_marginTop="@dimen/offset_48dp"
+        android:background="@color/whitesmoke"
+        android:hint="昵称"
+        android:maxEms="20"
+        android:padding="@dimen/offset_4dp"/>
+
+    <TextView
+        android:id="@+id/cityTxt"
+        android:layout_width="@dimen/offset_300dp"
+        android:layout_height="@dimen/offset_40dp"
+        android:layout_marginTop="@dimen/offset_8dp"
+        android:gravity="center_vertical"
+        android:background="@color/whitesmoke"
+        android:padding="@dimen/offset_4dp"
+        android:text="所在城市"/>
+
+    <TextView
+        android:id="@+id/sexTxt"
+        android:layout_width="@dimen/offset_300dp"
+        android:layout_height="@dimen/offset_40dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/offset_8dp"
+        android:background="@color/whitesmoke"
+        android:padding="@dimen/offset_4dp"
+        android:text="男"/>
+
+
+</LinearLayout>

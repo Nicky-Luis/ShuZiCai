@@ -21,7 +21,7 @@ public class LoginActivity extends BaseActivityWithToolBar {
         switch (view.getId()) {
 
             case R.id.loginToRegisterTxt:
-                Intent intent = new Intent(LoginActivity.this, RegisterSetPhoneActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterSetInfoActivity.class);
                 startActivity(intent);
                 break;
 

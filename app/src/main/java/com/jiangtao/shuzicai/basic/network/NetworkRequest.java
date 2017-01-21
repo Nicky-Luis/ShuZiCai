@@ -3,16 +3,21 @@ package com.jiangtao.shuzicai.basic.network;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jiangtao.shuzicai.Application;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,24 +64,56 @@ public class NetworkRequest {
     }
 
 
+    public static void test(Call<JsonObject> call, final INetworkResponse callback) {
+        //请求
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                try {
+                    Log.v(TAG, " response.isSuccessful()：" + response.isSuccessful());
+                    Log.v(TAG, " response.body()：" + response.body());
+                    Log.v(TAG, " response.message()：" + response.message());
+                    Log.v(TAG, " response.errorBody()：" + response.errorBody());
+                    Log.v(TAG, " response.raw()：" + response.raw().code());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                //网络问题会走该回调
+                if (t instanceof SocketTimeoutException) {
+                    Log.w(TAG, "请求超时");
+                } else if (t instanceof ConnectException) {
+                    Log.w(TAG, "连接错误");
+                } else if (t instanceof RuntimeException) {
+                    Log.w(TAG, "错误");
+                }
+                Log.w(TAG, "Net Request Failure," + t.getMessage());
+            }
+        });
+    }
+
     /**
      * 通用的网络请求模块
      *
      * @param call     请求call
      * @param callback 回调
      */
-    public static void netRequest(Call<ResponseBody> call, final INetworkResponse callback) {
-        call.enqueue(new Callback<ResponseBody>() {
+    public static void netRequest(Call<JsonObject> call, final INetworkResponse callback) {
+        //请求
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (null == response || response.body() == null) {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body() == null) {
                     Log.e(TAG, "data is null");
                     callback.onFailure(INetworkResponse.ERR_ANALYSIS_DATA);
                 } else {
                     try {
-                        String result = response.body().string();
-                        callback.onSucceed(result);
-                    } catch (IOException e) {
+                        JSONObject jsonObject = new JSONObject(response.body().toString());
+                        callback.onSucceed(jsonObject);
+                    } catch (JSONException e) {
                         e.printStackTrace();
                         callback.onFailure(INetworkResponse.ERR_ANALYSIS_DATA);
                     }
@@ -84,7 +121,15 @@ public class NetworkRequest {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                //网络问题会走该回调
+                if (t instanceof SocketTimeoutException) {
+                    Log.w(TAG, "请求超时");
+                } else if (t instanceof ConnectException) {
+                    Log.w(TAG, "连接错误");
+                } else if (t instanceof RuntimeException) {
+                    Log.w(TAG, "错误");
+                }
                 Log.w(TAG, "Net Request Failure," + t.getMessage());
                 callback.onFailure(INetworkResponse.ERR_RESULT_FAILURE);
             }

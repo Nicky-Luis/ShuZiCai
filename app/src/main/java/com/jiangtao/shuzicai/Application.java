@@ -6,6 +6,7 @@ import android.content.Context;
 import com.blankj.utilcode.utils.Utils;
 import com.jiangtao.shuzicai.basic.app.BasicApp;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
+import com.jiangtao.shuzicai.basic.utils.AppCrashUtils;
 
 /**
  * Created by Nicky on 2016/11/26.
@@ -39,5 +40,7 @@ public class Application extends BasicApp {
         APIInteractive.initRetrofit();
         //utils初始化
         Utils.init(this);
+        //初始化全局异常处理
+        AppCrashUtils.getInstance().init(this);
     }
 }

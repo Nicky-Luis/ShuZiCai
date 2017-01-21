@@ -90,8 +90,30 @@
         <item name="android:background">@drawable/selector_main_index_radio_btn</item>
         <item name="android:button">@null</item>
         <item name="android:textColor">@color/white</item>
-
     </style>
 
+
+    <!-- 自定item的dialog的样式 -->
+    <style name="item_dialog" parent="android:style/Theme.Dialog">
+
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">false</item>
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@color/transparent</item>
+        <!-- 模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <!-- 相册部分 弹出框动画 -->
+    <style name="anim_popup_dir">
+        <item name="android:windowEnterAnimation">@anim/gallery_slide_in</item>
+        <item name="android:windowExitAnimation">@anim/gallery_slide_out</item>
+    </style>
 
 </resources>

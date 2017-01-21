@@ -17,51 +17,71 @@
 
     <EditText
         android:id="@+id/phoneNumberEdt"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/offset_48dp"
-        android:layout_marginTop="@dimen/offset_48dp"
+        android:layout_width="@dimen/offset_300dp"
+        android:layout_height="@dimen/offset_40dp"
+        android:layout_marginTop="@dimen/offset_88dp"
         android:background="@color/gray"
-        android:hint="输入手机号"
+        android:hint="输入手机号..."
         android:inputType="phone"
         android:maxEms="11"
         android:padding="@dimen/offset_4dp"/>
 
     <!--验证码-->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/offset_300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/offset_24dp"
+        android:gravity="end"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/verifyCodeEdt"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/offset_48dp"
+            android:layout_width="@dimen/offset_88dp"
+            android:layout_height="@dimen/offset_40dp"
             android:background="@color/gray"
-            android:inputType="textPersonName"
+            android:hint="验证码"
+            android:inputType="number"
             android:maxEms="6"
-            android:padding="@dimen/offset_4dp"
-            android:text="Name"/>
+            android:padding="@dimen/offset_4dp"/>
 
         <Button
             android:id="@+id/VerifyCodeBtn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/offset_40dp"
             android:layout_marginLeft="@dimen/offset_16dp"
             android:background="@color/peru"
             android:text="获取验证码"/>
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/passwordEdt"
+        android:layout_width="@dimen/offset_300dp"
+        android:layout_height="@dimen/offset_40dp"
+        android:layout_marginTop="@dimen/offset_24dp"
+        android:background="@color/gray"
+        android:hint="输入密码..."
+        android:inputType="textPassword"
+        android:maxEms="11"
+        android:padding="@dimen/offset_4dp"/>
+
+    <EditText
+        android:id="@+id/invitationCodeEdt"
+        android:layout_width="@dimen/offset_300dp"
+        android:layout_height="@dimen/offset_40dp"
+        android:layout_marginTop="@dimen/offset_24dp"
+        android:background="@color/gray"
+        android:hint="输入邀请码..."
+        android:inputType="phone"
+        android:maxEms="11"
+        android:padding="@dimen/offset_4dp"/>
 
     <Button
         android:id="@+id/registerBtn"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/offset_300dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/offset_28dp"
-        android:layout_marginRight="@dimen/offset_28dp"
-        android:layout_marginTop="@dimen/offset_28dp"
+        android:layout_marginTop="@dimen/offset_40dp"
         android:background="@color/peru"
-        android:text="下一步"/>
+        android:text="注册"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

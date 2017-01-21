@@ -32,6 +32,23 @@ public class BmobQueryUtils {
         return this;
     }
 
+
+    /**
+     * 小于
+     *
+     * @param value
+     * @return
+     */
+    public String equal(String value) {
+        JSONObject resultObject = new JSONObject();
+        try {
+            resultObject.put(this.kayValue, value);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resultObject.toString();
+    }
+
     /**
      * 小于
      *

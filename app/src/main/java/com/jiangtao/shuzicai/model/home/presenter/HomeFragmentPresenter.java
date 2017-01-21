@@ -17,7 +17,6 @@ import com.jiangtao.shuzicai.model.home.entry.StockIndex;
 import com.jiangtao.shuzicai.model.home.interfaces.IHomeFragmentPresenter;
 import com.jiangtao.shuzicai.model.home.view.IHomeFragmentView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
@@ -63,14 +62,13 @@ public class HomeFragmentPresenter implements IHomeFragmentPresenter {
             }
 
             @Override
-            public void onSucceed(String result) {
+            public void onSucceed(JSONObject result) {
                 //LogUtils.i("result = " + result);
                 try {
-                    JSONObject myJsonObject = new JSONObject(result);
-                    String jArray = myJsonObject.optString("results");
+                    String jArray = result.optString("results");
                     stockIndices = new Gson().fromJson(jArray, new TypeToken<List<StockIndex>>() {
                     }.getType());
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return;
                 }
@@ -99,14 +97,13 @@ public class HomeFragmentPresenter implements IHomeFragmentPresenter {
             }
 
             @Override
-            public void onSucceed(String result) {
+            public void onSucceed(JSONObject result) {
                 LogUtils.i("result = " + result);
                 try {
-                    JSONObject myJsonObject = new JSONObject(result);
-                    String jArray = myJsonObject.optString("results");
+                    String jArray = result.optString("results");
                     billboardMessages = new Gson().fromJson(jArray, new TypeToken<List<BillboardMessage>>() {
                     }.getType());
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return;
                 }

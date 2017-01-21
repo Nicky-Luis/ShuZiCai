@@ -1,5 +1,6 @@
 package com.jiangtao.shuzicai.model.user;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +9,8 @@ import android.widget.EditText;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
+import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
+import com.jiangtao.shuzicai.basic.utils.PhoneUtils;
 import com.jiangtao.shuzicai.common.tools.CountDownTimer;
 import com.jiangtao.shuzicai.model.user.interfaces.IRegisterPhoneView;
 import com.jiangtao.shuzicai.model.user.interfaces.IRegisterPresenter;
@@ -24,16 +27,30 @@ public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements
     //获取验证码
     @BindView(R.id.VerifyCodeBtn)
     Button VerifyCodeBtn;
-    //获取验证码
+    //手机
     @BindView(R.id.phoneNumberEdt)
     EditText phoneNumberEdt;
-    //获取验证码
+    //验证码
     @BindView(R.id.verifyCodeEdt)
     EditText verifyCodeEdt;
+    //密码
+    @BindView(R.id.passwordEdt)
+    EditText passwordEdt;
+    //邀请码
+    @BindView(R.id.invitationCodeEdt)
+    EditText invitationCodeEdt;
 
+    //手机号
+    private String mPhoneNumber;
+    //验证码
+    private String mVerifyCode;
+    //密码
+    private String mPassword;
+    //邀请码
+    private String mInviteeCode;
 
     //设置点击事件
-    @OnClick({R.id.VerifyCodeBtn})
+    @OnClick({R.id.VerifyCodeBtn, R.id.registerBtn})
     public void OnClick(View view) {
         switch (view.getId()) {
 
@@ -42,6 +59,10 @@ public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements
                 getVerifyCode();
                 break;
 
+            //注册按钮
+            case R.id.registerBtn:
+                startRegister();
+                break;
         }
     }
 
@@ -67,31 +88,93 @@ public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements
      * 获取验证码
      */
     private void getVerifyCode() {
-        registerPresenter.getVerifyCode(phoneNumberEdt.getText().toString().trim());
-        CountDownTimer timer = new CountDownTimer(1000 * 60, 1000) {
+        if (EditTextUtils.isEmpty(phoneNumberEdt)) {
+            ToastUtils.showLongToast("手机号码不能为空");
+            return;
+        }
 
-            @Override
-            public void onTick(long millisUntilFinished) {
-                if (!VerifyCodeBtn.isEnabled()) {
-                    VerifyCodeBtn.setEnabled(false);
+        mPhoneNumber = EditTextUtils.getContent(phoneNumberEdt);
+        PhoneUtils phoneUtils = new PhoneUtils(mPhoneNumber);
+        if (!phoneUtils.isLawful()) {
+            ToastUtils.showLongToast("手机号码无效");
+        } else {
+            registerPresenter.getVerifyCode(mPhoneNumber);
+            //开始倒计时
+            new CountDownTimer(1000 * 60, 1000) {
+
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    if (!VerifyCodeBtn.isEnabled()) {
+                        VerifyCodeBtn.setEnabled(false);
+                    }
+                    String still = millisUntilFinished / 1000 + "秒";
+                    VerifyCodeBtn.setText(still);
                 }
-                String still = millisUntilFinished / 1000 + "秒";
-                VerifyCodeBtn.setText(still);
-            }
 
-            @Override
-            public void onFinish() {
-                VerifyCodeBtn.setEnabled(true);
-                VerifyCodeBtn.setText("发送验证码");
-            }
-        };
+                @Override
+                public void onFinish() {
+                    VerifyCodeBtn.setEnabled(true);
+                    VerifyCodeBtn.setText("发送验证码");
+                }
+            }.start();
+        }
+    }
+
+    /**
+     * 开始注册
+     */
+    private void startRegister() {
+        if (EditTextUtils.isEmpty(phoneNumberEdt)) {
+            ToastUtils.showLongToast("手机号码不能为空");
+            return;
+        } else if (!EditTextUtils.isLengthMatch(phoneNumberEdt, 11)) {
+            ToastUtils.showLongToast("手机号码产长度不正确");
+            return;
+        } else if (EditTextUtils.isEmpty(verifyCodeEdt)) {
+            ToastUtils.showLongToast("验证码不能为空");
+            return;
+        } else if (!EditTextUtils.isLengthMatch(verifyCodeEdt, 6)) {
+            ToastUtils.showLongToast("验证码长度不正确");
+            return;
+        } else if (EditTextUtils.isEmpty(passwordEdt)) {
+            ToastUtils.showLongToast("密码不能为空");
+            return;
+        } else if (EditTextUtils.isEmpty(invitationCodeEdt)) {
+            ToastUtils.showLongToast("邀请码不能为空");
+            return;
+        }
+
+        //获取信息
+        mVerifyCode = EditTextUtils.getContent(verifyCodeEdt);
+        mPhoneNumber = EditTextUtils.getContent(phoneNumberEdt);
+        mPassword = EditTextUtils.getContent(passwordEdt);
+        mInviteeCode = EditTextUtils.getContent(invitationCodeEdt);
+
+        showProgress("注册中...");
+        registerPresenter.startRegister(mPhoneNumber, mVerifyCode, mPassword, mInviteeCode);
     }
 
     @Override
-    public void onPhoneErr() {
-        ToastUtils.showLongToast("号码无效");
+    public void onGetVeryCode(String ssid) {
+        //获取验证码状态
+        registerPresenter.getSmsStatue(ssid);
     }
 
+    @Override
+    public void onRegisterSucceed() {
+        hideProgress();
+        ToastUtils.showLongToast("注册成功，请完善个人信息");
+        //跳转到设置密码页面
+        Intent intent = new Intent(RegisterSetPhoneActivity.this, RegisterSetInfoActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onRegisterFailed() {
+        hideProgress();
+        ToastUtils.showLongToast("注册失败，请重新注册");
+    }
 
     /**
      * 主线程处理接收到的数据

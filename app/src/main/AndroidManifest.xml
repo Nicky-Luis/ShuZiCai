@@ -33,14 +33,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".model.main.MainActivity"/>
-        <activity android:name=".model.user.LoginActivity">
-        </activity>
-        <activity android:name=".model.user.RegisterSetPhoneActivity">
-        </activity>
-        <activity android:name=".model.user.RegisterSetPasswordActivity">
-        </activity>
-        <activity android:name=".model.user.RegisterSetInfoActivity">
-        </activity>
+        <activity android:name=".model.user.LoginActivity"/>
+        <activity android:name=".model.user.RegisterSetPhoneActivity"/>
+        <activity android:name=".model.user.RegisterSetInfoActivity"/>
+        <activity android:name=".model.setting.SettingActivity"/>
+        <activity android:name=".common.view.photo_gallery.imageloader.GalleyActivity"/>
     </application>
 
 </manifest>

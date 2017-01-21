@@ -1,15 +1,16 @@
 package com.jiangtao.shuzicai.model.main;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
 
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.manager.ActivityManager;
+import com.jiangtao.shuzicai.model.setting.SettingActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -49,23 +50,23 @@ public class MainActivity extends BaseActivityWithToolBar {
 
             @Override
             public void onPageSelected(int position) {
-                MenuItem item = getMenuItem(R.id.action_more);
-                item.setVisible(position == 3);
+                resetToolView();
                 // arg0是当前选中的页面的Position
                 if (position == 0) {
-                    setTitle("数字连连猜");
+                    setLeftTitle("数字连连猜");
                 } else if (position == 1) {
-                    setTitle("游戏");
+                    setLeftTitle("游戏");
                 } else if (position == 2) {
-                    setTitle("商城");
+                    setLeftTitle("商城");
                 } else if (position == 3) {
-                    setTitle("个人中心");
-                    item.setIcon(null);
-                    TextView txt= new TextView(MainActivity.this);
-                    txt.setText("设置");
-                    txt.setTextColor(getResources().getColor(R.color.white));
-                    txt.setPadding(10,10,10,10);
-                    item.setActionView(txt);
+                    setLeftTitle("个人中心");
+                    setRightTitle("设置", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //跳转至设置页面
+                            startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                        }
+                    });
                 }
             }
 

@@ -1,4 +1,4 @@
-package com.jiangtao.shuzicai.common;
+package com.jiangtao.shuzicai.common.entity;
 
 /**
  * Created by Nicky on 2017/1/17.

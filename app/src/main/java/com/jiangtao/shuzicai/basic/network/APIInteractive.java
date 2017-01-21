@@ -1,10 +1,11 @@
 package com.jiangtao.shuzicai.basic.network;
 
 
+import com.google.gson.JsonObject;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
+import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
 
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 /**
@@ -33,7 +34,7 @@ public class APIInteractive {
         if (null == request) {
             initRetrofit();
         }
-        Call<ResponseBody> call = request.getApps();
+        Call<JsonObject> call = request.getApps();
         NetworkRequest.netRequest(call, callback);
     }
 
@@ -49,7 +50,7 @@ public class APIInteractive {
             initRetrofit();
         }
 
-        Call<ResponseBody> call = request.getIndexDate(where);
+        Call<JsonObject> call = request.getIndexDate(where);
         NetworkRequest.netRequest(call, callback);
     }
 
@@ -63,7 +64,7 @@ public class APIInteractive {
             initRetrofit();
         }
 
-        Call<ResponseBody> call = request.getBillboardData(10, 0);
+        Call<JsonObject> call = request.getBillboardData(10, 0);
         NetworkRequest.netRequest(call, callback);
     }
 
@@ -79,7 +80,7 @@ public class APIInteractive {
             initRetrofit();
         }
 
-        Call<ResponseBody> call = request.requestSmsCode(body);
+        Call<JsonObject> call = request.requestSmsCode(body);
         NetworkRequest.netRequest(call, callback);
     }
 
@@ -95,7 +96,8 @@ public class APIInteractive {
             initRetrofit();
         }
 
-        Call<ResponseBody> call = request.verifySmsCode(code, phone);
+        SmsCodeVerifyBean bean = new SmsCodeVerifyBean(phone);
+        Call<JsonObject> call = request.verifySmsCode(code, bean);
         NetworkRequest.netRequest(call, callback);
     }
 
@@ -110,7 +112,7 @@ public class APIInteractive {
             initRetrofit();
         }
 
-        Call<ResponseBody> call = request.querySms(ssid);
+        Call<JsonObject> call = request.querySms(ssid);
         NetworkRequest.netRequest(call, callback);
     }
 
@@ -125,7 +127,22 @@ public class APIInteractive {
             initRetrofit();
         }
 
-        Call<ResponseBody> call = request.register(bean);
+        Call<JsonObject> call = request.register(bean);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+    /**
+     * 查询验证码是否存在
+     *
+     * @param where
+     * @param callback
+     */
+    public static void getVerifyCodeExist(String where, final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+
+        Call<JsonObject> call = request.isInvitationCodeExist(where);
         NetworkRequest.netRequest(call, callback);
     }
 

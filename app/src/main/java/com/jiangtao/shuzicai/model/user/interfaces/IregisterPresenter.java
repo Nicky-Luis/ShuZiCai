@@ -9,6 +9,9 @@ public interface IRegisterPresenter {
     //获取验证码
     void getVerifyCode(String phone);
 
-    //验证
-    void verifySmsCode(String code, String phone);
+    //获取验证码状态
+    void getSmsStatue(String ssid);
+
+    //开始注册
+    void startRegister(String phoen, String smsCode, String password, String inviteeCode);
 }

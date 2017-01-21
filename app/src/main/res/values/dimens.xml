@@ -39,6 +39,7 @@
     <dimen name="offset_36dp">36dp</dimen>
     <dimen name="offset_38dp">38dp</dimen>
     <dimen name="offset_40dp">40dp</dimen>
+    <dimen name="offset_45dp">45dp</dimen>
     <dimen name="offset_48dp">48dp</dimen>
     <dimen name="offset_55dp">55dp</dimen>
     <dimen name="offset_64dp">64dp</dimen>

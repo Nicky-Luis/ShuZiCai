@@ -1,13 +1,13 @@
 package com.jiangtao.shuzicai.basic.network;
 
 
+import com.google.gson.JsonObject;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
+import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
 
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -27,13 +27,13 @@ public interface APICollections {
      * @param body 数据表单
      */
     @POST("g_version_match.php")
-    Call<ResponseBody> getFirmwareVersion(@Body String body);
+   Call<JsonObject> getFirmwareVersion(@Body String body);
 
     /**
      * 获取所有APP的信息
      */
     @GET("apps")
-    Call<ResponseBody> getApps();
+   Call<JsonObject> getApps();
 
 
     /**
@@ -43,7 +43,7 @@ public interface APICollections {
      * @return
      */
     @GET("classes/StockIndex")
-    Call<ResponseBody> getIndexDate(@Query("where") String where);
+   Call<JsonObject> getIndexDate(@Query("where") String where);
 
     /**
      * 获取公告数据
@@ -53,7 +53,7 @@ public interface APICollections {
      * @return
      */
     @GET("classes/BillboardMessage")
-    Call<ResponseBody> getBillboardData(@Query("limit") int limit,
+   Call<JsonObject> getBillboardData(@Query("limit") int limit,
                                         @Query("skip") int skip);
 
     /**
@@ -63,7 +63,7 @@ public interface APICollections {
      * @return
      */
     @POST("requestSmsCode")
-    Call<ResponseBody> requestSmsCode(@Body RequestBody mobilePhoneNumber);
+   Call<JsonObject> requestSmsCode(@Body RequestBody mobilePhoneNumber);
 
 
     /**
@@ -73,17 +73,16 @@ public interface APICollections {
      * @return
      */
     @POST("verifySmsCode/{smsCode}")
-    Call<ResponseBody> verifySmsCode(@Path("smsCode") String smsCode,
-                                     @Field("mobilePhoneNumber") String mobilePhoneNumber);
+   Call<JsonObject> verifySmsCode(@Path("smsCode") String smsCode,
+                                     @Body SmsCodeVerifyBean mobilePhoneNumber);
 
     /**
      * 查询短信状态
      *
-     * @param smsId
      * @return
      */
-    @POST("querySms/:{smsId}")
-    Call<ResponseBody> querySms(@Path("smsId") String smsId);
+    @GET("querySms/{smsId}")
+   Call<JsonObject> querySms(@Path("smsId") String smsId);
 
 
     /**
@@ -93,6 +92,15 @@ public interface APICollections {
      * @return
      */
     @POST("users")
-    Call<ResponseBody> register(@Body RegisterBean bean);
+   Call<JsonObject> register(@Body RegisterBean bean);
+
+    /**
+     * 判断邀请码是否存在
+     *
+     * @param where
+     * @return
+     */
+    @GET("users")
+    Call<JsonObject> isInvitationCodeExist(@Query("where") String where);
 
 }

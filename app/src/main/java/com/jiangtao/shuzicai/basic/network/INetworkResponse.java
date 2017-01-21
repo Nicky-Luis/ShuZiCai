@@ -1,5 +1,7 @@
 package com.jiangtao.shuzicai.basic.network;
 
+import org.json.JSONObject;
+
 /**
  * Created by nicky on 2016/12/29.
  * 通用的网络请求回调
@@ -16,5 +18,5 @@ public interface INetworkResponse {
 
     void onFailure(int code);
 
-    void onSucceed(String result);
+    void onSucceed(JSONObject result);
 }

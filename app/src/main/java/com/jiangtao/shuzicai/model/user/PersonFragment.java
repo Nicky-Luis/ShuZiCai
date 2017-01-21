@@ -40,6 +40,7 @@ public class PersonFragment extends BaseFragment {
         }
     }
 
+
     //对象实例化
     public static PersonFragment newInstance(int page) {
         Bundle args = new Bundle();

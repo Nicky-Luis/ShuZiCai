@@ -1,6 +1,6 @@
 package com.jiangtao.shuzicai.model.home.entry;
 
-import com.jiangtao.shuzicai.common.BmobDate;
+import com.jiangtao.shuzicai.common.entity.BmobDate;
 
 /**
  * Created by Nicky on 2017/1/16.
