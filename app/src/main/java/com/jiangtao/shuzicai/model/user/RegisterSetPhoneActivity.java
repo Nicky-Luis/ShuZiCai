@@ -12,9 +12,9 @@ import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.basic.utils.PhoneUtils;
 import com.jiangtao.shuzicai.common.tools.CountDownTimer;
-import com.jiangtao.shuzicai.model.user.interfaces.IRegisterPhoneView;
-import com.jiangtao.shuzicai.model.user.interfaces.IRegisterPresenter;
-import com.jiangtao.shuzicai.model.user.presenter.RegisterPresenter;
+import com.jiangtao.shuzicai.model.user.interfaces.IRegisterSetPhoneView;
+import com.jiangtao.shuzicai.model.user.interfaces.IRegisterSetPresenter;
+import com.jiangtao.shuzicai.model.user.presenter.RegisterSetPhonePresenter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -22,7 +22,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements IRegisterPhoneView {
+public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements IRegisterSetPhoneView {
 
     //获取验证码
     @BindView(R.id.VerifyCodeBtn)
@@ -67,7 +67,7 @@ public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements
     }
 
     //注册
-    private IRegisterPresenter registerPresenter;
+    private IRegisterSetPresenter registerPresenter;
 
     @Override
     public int setLayoutId() {
@@ -76,12 +76,20 @@ public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements
 
     @Override
     protected void onInitialize() {
-
+        //返回
+        setLeftImage(R.mipmap.ic_arrow_back_white_24dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        //标头
+        setCenterTitle("注册");
     }
 
     @Override
     public void initPresenter() {
-        this.registerPresenter = new RegisterPresenter(this, this);
+        this.registerPresenter = new RegisterSetPhonePresenter(this, this);
     }
 
     /**
@@ -165,7 +173,7 @@ public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements
         hideProgress();
         ToastUtils.showLongToast("注册成功，请完善个人信息");
         //跳转到设置密码页面
-        Intent intent = new Intent(RegisterSetPhoneActivity.this, RegisterSetInfoActivity.class);
+        Intent intent = new Intent(RegisterSetPhoneActivity.this, UserInfoActivity.class);
         startActivity(intent);
         finish();
     }

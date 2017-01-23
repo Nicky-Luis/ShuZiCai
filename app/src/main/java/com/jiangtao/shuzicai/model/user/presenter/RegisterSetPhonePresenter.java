@@ -4,13 +4,15 @@ import android.content.Context;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
+import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.network.INetworkResponse;
 import com.jiangtao.shuzicai.basic.network.NetworkRequest;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.RequestVerifyCodeBean;
-import com.jiangtao.shuzicai.model.user.interfaces.IRegisterPhoneView;
-import com.jiangtao.shuzicai.model.user.interfaces.IRegisterPresenter;
+import com.jiangtao.shuzicai.model.user.entry.UserModel;
+import com.jiangtao.shuzicai.model.user.interfaces.IRegisterSetPhoneView;
+import com.jiangtao.shuzicai.model.user.interfaces.IRegisterSetPresenter;
 import com.jiangtao.shuzicai.model.user.utils.ShareCodeUtil;
 
 import org.json.JSONObject;
@@ -19,14 +21,14 @@ import org.json.JSONObject;
  * Created by Nicky on 2017/1/19.
  */
 
-public class RegisterPresenter implements IRegisterPresenter {
+public class RegisterSetPhonePresenter implements IRegisterSetPresenter {
 
     //上下文
     private Context mContext;
     //view对象
-    private IRegisterPhoneView registerPhoneView;
+    private IRegisterSetPhoneView registerPhoneView;
 
-    public RegisterPresenter(Context mContext, IRegisterPhoneView registerPhoneView) {
+    public RegisterSetPhonePresenter(Context mContext, IRegisterSetPhoneView registerPhoneView) {
         this.mContext = mContext;
         this.registerPhoneView = registerPhoneView;
     }
@@ -114,6 +116,7 @@ public class RegisterPresenter implements IRegisterPresenter {
 
     /**
      * 注册
+     *
      * @param bean
      */
     private void register(RegisterBean bean) {
@@ -128,6 +131,18 @@ public class RegisterPresenter implements IRegisterPresenter {
             @Override
             public void onSucceed(JSONObject result) {
                 LogUtils.i("注册成功,result:" + result);
+                String username = result.optString("username");
+                String mobilePhoneNumber = result.optString("mobilePhoneNumber");
+                String objectId = result.optString("objectId");
+                String sessionToken = result.optString("sessionToken");
+
+                if (null == Application.userInstance) {
+                    Application.userInstance = new UserModel();
+                }
+                Application.userInstance.setMobilePhoneNumber(mobilePhoneNumber);
+                Application.userInstance.setObjectId(objectId);
+                Application.userInstance.setToken(sessionToken);
+
                 registerPhoneView.onRegisterSucceed();
             }
         });

@@ -1,8 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:fresco="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/gray">
+              android:background="@color/main_light_white"
+              android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/loginViewLayout"
@@ -13,20 +15,86 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/offset_8dp"
-        android:paddingLeft="@dimen/offset_48dp">
+        android:paddingLeft="@dimen/offset_48dp"
+        android:visibility="visible">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_launcher"/>
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_width="@dimen/offset_72dp"
+            android:layout_height="@dimen/offset_72dp"
+            android:layout_margin="@dimen/offset_2dp"
+            android:background="@color/main_light_white"
+            android:scaleType="centerCrop"
+            app:placeholderImage="@mipmap/add_head"
+            fresco:roundAsCircle="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/offset_18dp"
             android:gravity="center"
-            android:paddingLeft="@dimen/offset_8dp"
             android:text="登陆/注册"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userInfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/offset_8dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/offset_12dp"
+        android:paddingLeft="@dimen/offset_48dp">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/userHeadImg"
+            android:layout_width="@dimen/offset_72dp"
+            android:layout_height="@dimen/offset_72dp"
+            android:layout_margin="@dimen/offset_2dp"
+            android:scaleType="centerCrop"
+            app:placeholderImage="@mipmap/add_head"
+            fresco:roundAsCircle="true"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/offset_18dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/userNameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/offset_8dp"
+                android:text="用户名"
+                android:textSize="@dimen/font_size_large"/>
+
+            <ImageView
+                android:id="@+id/userSexTxt"
+                android:layout_width="@dimen/offset_32dp"
+                android:layout_height="@dimen/offset_32dp"
+                android:layout_below="@+id/userNameTxt"
+                android:adjustViewBounds="true"
+                android:paddingTop="@dimen/offset_10dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/man"/>
+
+            <TextView
+                android:id="@+id/userLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/userSexTxt"
+                android:layout_marginLeft="@dimen/offset_8dp"
+                android:layout_toRightOf="@+id/userSexTxt"
+                android:gravity="center"
+                android:text="广东"
+                android:textSize="@dimen/font_size_normal"/>
+
+
+        </RelativeLayout>
+
     </LinearLayout>
 
 

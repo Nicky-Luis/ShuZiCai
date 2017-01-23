@@ -2,7 +2,7 @@
     <string name="app_name">数字连连猜</string>
     <string name="app_name_id">ShuZiCai</string>
     <!--===============APP相关的配置====================-->
-    <string name="Bmob_URL">https://api.bmob.cn/1/</string>
+    <string name="Bmob_URL">https://api.bmob.cn/</string>
     <!--===============APP相关的配置====================-->
 
     <string name="title_activity_splash">SplashActivity</string>

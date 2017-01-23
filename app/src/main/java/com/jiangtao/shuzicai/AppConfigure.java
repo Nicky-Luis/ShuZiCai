@@ -2,7 +2,7 @@ package com.jiangtao.shuzicai;
 
 
 import com.jiangtao.shuzicai.basic.app.BaseSetting;
-import com.jiangtao.shuzicai.basic.utils.Base64Util;
+import com.jiangtao.shuzicai.basic.utils.EncryptUtils;
 
 /**
  * Created by Nicky on 2016/11/26.
@@ -46,7 +46,7 @@ public class AppConfigure {
         BaseSetting setting = new BaseSetting(Application.APPContext,
                 USER_LOGIN_STATUS_SP);
         try {
-            String secretName = Base64Util.encrypt(name);
+            String secretName = EncryptUtils.encoderJson(name);
             setting.saveString(USER_LOGIN_NAME, secretName);
             return true;
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class AppConfigure {
         BaseSetting setting = new BaseSetting(Application.APPContext,
                 USER_LOGIN_STATUS_SP);
         try {
-            String secretPassword = Base64Util.encrypt(password);
+            String secretPassword =  EncryptUtils.encoderJson(password);
             setting.saveString(USER_LOGIN_PASSWORD, secretPassword);
             return true;
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class AppConfigure {
         BaseSetting setting = new BaseSetting(Application.APPContext, USER_LOGIN_STATUS_SP);
         try {
             String secretName = setting.loadString(USER_LOGIN_NAME);
-            return Base64Util.decrypt(secretName);
+            return EncryptUtils.decoderJson(secretName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,7 +100,7 @@ public class AppConfigure {
                 .getApplicationContext(), USER_LOGIN_STATUS_SP);
         try {
             String secretPassword = setting.loadString(USER_LOGIN_PASSWORD);
-            return Base64Util.decrypt(secretPassword);
+            return EncryptUtils.decoderJson(secretPassword);
         } catch (Exception e) {
             e.printStackTrace();
         }

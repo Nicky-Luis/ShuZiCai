@@ -5,4 +5,12 @@ package com.jiangtao.shuzicai.model.user.interfaces;
  */
 
 public interface IRegisterSetInfoView {
+
+    void onHeadImgPostSucceed(String imageUrl);
+
+    void onHeadImgPostFailed();
+
+    void onUpdateInfoFailed();
+
+    void onUpdateInfoSucceed();
 }

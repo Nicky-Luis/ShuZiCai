@@ -1,8 +1,9 @@
-package com.jiangtao.shuzicai.basic.network.utils;
+package com.jiangtao.shuzicai.basic.utils;
 
 import android.util.Base64;
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.jiangtao.shuzicai.basic.network.utils.RC4;
 
 
 /**
@@ -12,7 +13,7 @@ import com.blankj.utilcode.utils.LogUtils;
 public class EncryptUtils {
 
     public static final String TAG = "EncryptUtils";
-    public static String RC4_KEY = "Goolink2014";
+    public static String RC4_KEY = "jiangtao2016";
 
     public static String encoderJson(String json) {
         LogUtils.v(TAG, "encoderJson " + json);

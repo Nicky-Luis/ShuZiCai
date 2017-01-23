@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_light_white"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.jiangtao.shuzicai.model.user.LoginActivity">
@@ -15,40 +16,54 @@
 
     <EditText
         android:id="@+id/loginPhoneEdt"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/offset_48dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/offset_40dp"
+        android:layout_marginLeft="@dimen/offset_20dp"
+        android:layout_marginRight="@dimen/offset_20dp"
         android:layout_marginTop="@dimen/offset_48dp"
-        android:background="@color/gray"
+        android:textColor="@color/main_deep_black"
+        android:background="@color/white"
         android:ems="11"
+        android:hint="输入用户名..."
         android:inputType="textPersonName"
-        android:padding="@dimen/offset_4dp"
-        android:text="Name"/>
+        android:padding="@dimen/offset_4dp"/>
 
     <EditText
         android:id="@+id/loginPasswordEdt"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/offset_48dp"
-        android:layout_marginTop="@dimen/offset_4dp"
-        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/offset_40dp"
+        android:layout_marginLeft="@dimen/offset_20dp"
+        android:layout_marginRight="@dimen/offset_20dp"
+        android:textColor="@color/main_deep_black"
+        android:layout_marginTop="@dimen/offset_2dp"
+        android:background="@color/white"
         android:ems="11"
+        android:hint="输入密码..."
         android:inputType="textPassword"
-        android:padding="@dimen/offset_4dp"
-        android:text="Name"/>
+        android:padding="@dimen/offset_4dp"/>
 
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/offset_16dp"
+        android:layout_marginLeft="@dimen/offset_20dp"
+        android:layout_marginRight="@dimen/offset_20dp"
         android:layout_marginTop="@dimen/offset_18dp"
         android:background="@color/peru"
         android:text="登录"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+    </LinearLayout>
 
     <TextView
         android:id="@+id/loginToRegisterTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/offset_48dp"
+        android:padding="@dimen/offset_20dp"
         android:text="注册"/>
 
 </LinearLayout>

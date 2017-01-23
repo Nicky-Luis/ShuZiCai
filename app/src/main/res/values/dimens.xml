@@ -22,6 +22,7 @@
 
 
     <!--常用的尺寸-->
+    <dimen name="offset_1dp">1dp</dimen>
     <dimen name="offset_2dp">2dp</dimen>
     <dimen name="offset_4dp">4dp</dimen>
     <dimen name="offset_6dp">6dp</dimen>

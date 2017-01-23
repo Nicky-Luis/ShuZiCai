@@ -1,9 +1,14 @@
 package com.jiangtao.shuzicai.basic.network;
 
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.JsonObject;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
+import com.jiangtao.shuzicai.model.user.entry.UpdateInfoBean;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -146,4 +151,82 @@ public class APIInteractive {
         NetworkRequest.netRequest(call, callback);
     }
 
+    /**
+     * 修改用户信息
+     *
+     * @param objectId
+     * @param bean
+     * @param callback
+     */
+    public static void updateUserInfo(String token, String objectId, UpdateInfoBean bean, final INetworkResponse
+            callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+
+        Call<JsonObject> call = request.updateUserInfo(token, objectId, bean);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+    /**
+     * 登录
+     *
+     * @param account
+     * @param password
+     * @param callback
+     */
+    public static void startLogin(String account, String password, final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonObject> call = request.login(account, password);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+    /**
+     * 获取当前用户信息
+     * @param objectID
+     * @param callback
+     */
+    public static void getCurrentUser(String objectID,  final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonObject> call = request.getCurrentUser(objectID);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+
+    /**
+     * 上传文件
+     *
+     * @param path
+     * @param callback
+     */
+    public static void postFile(String path, final INetworkResponse callback) {
+        LogUtils.i("开始上传文件：" + path);
+        BmobUpload.initBmob("cd89b563ca70dfd60befb89fa9ad6e42",
+                "f21c0ff7f6aa0405e9f97c30fc9a414f", 6 * 1000);
+        BmobUpload.uploadFile(path, new BmobUpload.IUpLoadResult() {
+            @Override
+            public void onUpLoadResult(String result) {
+                LogUtils.i("上传完成，result：" + result);
+                if (!result.equals("Not Found") && !result.equals("file Not Found")
+                        && !result.equals("Error") && !result.equals("Unregistered")
+                        && !result.equals("")) {
+                    try {
+                        //将字符串转换成jsonObject对象
+                        JSONObject myJsonObject = new JSONObject(result);
+                        callback.onSucceed(myJsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        callback.onFailure(INetworkResponse.ERR_RESULT_FAILURE);
+                    }
+                } else {
+                    callback.onFailure(INetworkResponse.ERR_RESULT_FAILURE);
+                }
+            }
+        });
+
+    }
 }

@@ -4,7 +4,7 @@ package com.jiangtao.shuzicai.model.user.interfaces;
  * Created by Nicky on 2017/1/19.
  */
 
-public interface IRegisterPresenter {
+public interface IRegisterSetPresenter {
 
     //获取验证码
     void getVerifyCode(String phone);

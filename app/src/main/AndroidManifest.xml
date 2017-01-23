@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashActivity"
+            android:name=".model.main.SplashActivity"
             android:theme="@style/StartStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -35,9 +35,12 @@
         <activity android:name=".model.main.MainActivity"/>
         <activity android:name=".model.user.LoginActivity"/>
         <activity android:name=".model.user.RegisterSetPhoneActivity"/>
-        <activity android:name=".model.user.RegisterSetInfoActivity"/>
+        <activity android:name=".model.user.UserInfoActivity"/>
         <activity android:name=".model.setting.SettingActivity"/>
         <activity android:name=".common.view.photo_gallery.imageloader.GalleyActivity"/>
+
+
+        <service android:name="com.jiangtao.shuzicai.model.main.SplashIntentService"/>
     </application>
 
 </manifest>

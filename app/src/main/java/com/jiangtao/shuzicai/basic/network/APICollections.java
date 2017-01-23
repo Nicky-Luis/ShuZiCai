@@ -4,12 +4,15 @@ package com.jiangtao.shuzicai.basic.network;
 import com.google.gson.JsonObject;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
+import com.jiangtao.shuzicai.model.user.entry.UpdateInfoBean;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -21,19 +24,10 @@ import retrofit2.http.Query;
 public interface APICollections {
 
     /**
-     * 获取最新的固件版本号
-     * 传递 FirmwareVersionBean 对象
-     *
-     * @param body 数据表单
-     */
-    @POST("g_version_match.php")
-   Call<JsonObject> getFirmwareVersion(@Body String body);
-
-    /**
      * 获取所有APP的信息
      */
-    @GET("apps")
-   Call<JsonObject> getApps();
+    @GET("1/apps")
+    Call<JsonObject> getApps();
 
 
     /**
@@ -42,8 +36,8 @@ public interface APICollections {
      * @param where 条件
      * @return
      */
-    @GET("classes/StockIndex")
-   Call<JsonObject> getIndexDate(@Query("where") String where);
+    @GET("1/classes/StockIndex")
+    Call<JsonObject> getIndexDate(@Query("where") String where);
 
     /**
      * 获取公告数据
@@ -52,9 +46,9 @@ public interface APICollections {
      * @param skip  开始位置
      * @return
      */
-    @GET("classes/BillboardMessage")
-   Call<JsonObject> getBillboardData(@Query("limit") int limit,
-                                        @Query("skip") int skip);
+    @GET("1/classes/BillboardMessage")
+    Call<JsonObject> getBillboardData(@Query("limit") int limit,
+                                      @Query("skip") int skip);
 
     /**
      * 请求短信验证码
@@ -62,8 +56,8 @@ public interface APICollections {
      * @param mobilePhoneNumber
      * @return
      */
-    @POST("requestSmsCode")
-   Call<JsonObject> requestSmsCode(@Body RequestBody mobilePhoneNumber);
+    @POST("1/requestSmsCode")
+    Call<JsonObject> requestSmsCode(@Body RequestBody mobilePhoneNumber);
 
 
     /**
@@ -72,17 +66,17 @@ public interface APICollections {
      * @param mobilePhoneNumber
      * @return
      */
-    @POST("verifySmsCode/{smsCode}")
-   Call<JsonObject> verifySmsCode(@Path("smsCode") String smsCode,
-                                     @Body SmsCodeVerifyBean mobilePhoneNumber);
+    @POST("1/verifySmsCode/{smsCode}")
+    Call<JsonObject> verifySmsCode(@Path("smsCode") String smsCode,
+                                   @Body SmsCodeVerifyBean mobilePhoneNumber);
 
     /**
      * 查询短信状态
      *
      * @return
      */
-    @GET("querySms/{smsId}")
-   Call<JsonObject> querySms(@Path("smsId") String smsId);
+    @GET("1/querySms/{smsId}")
+    Call<JsonObject> querySms(@Path("smsId") String smsId);
 
 
     /**
@@ -91,8 +85,8 @@ public interface APICollections {
      * @param bean
      * @return
      */
-    @POST("users")
-   Call<JsonObject> register(@Body RegisterBean bean);
+    @POST("1/users")
+    Call<JsonObject> register(@Body RegisterBean bean);
 
     /**
      * 判断邀请码是否存在
@@ -100,7 +94,40 @@ public interface APICollections {
      * @param where
      * @return
      */
-    @GET("users")
+    @GET("1/users")
     Call<JsonObject> isInvitationCodeExist(@Query("where") String where);
+
+    /**
+     * 修改用户信息
+     *
+     * @param objectID
+     * @param bean
+     * @return
+     */
+    @PUT("1/users/{objectID}")
+    Call<JsonObject> updateUserInfo(@Header("X-Bmob-Session-Token") String userToken,
+                                    @Path("objectID") String objectID,
+                                    @Body UpdateInfoBean bean);
+
+
+    /**
+     * 登录
+     *
+     * @param username
+     * @param password
+     * @return
+     */
+    @GET("1/login")
+    Call<JsonObject> login(@Query("username") String username,
+                           @Query("password") String password);
+
+    /**
+     * 获取当前用户信息
+     *
+     * @param objectID
+     * @return
+     */
+    @GET("1/users/{objectID}")
+    Call<JsonObject> getCurrentUser(@Path("objectID") String objectID);
 
 }

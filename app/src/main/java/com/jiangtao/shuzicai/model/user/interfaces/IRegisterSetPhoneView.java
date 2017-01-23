@@ -4,7 +4,7 @@ package com.jiangtao.shuzicai.model.user.interfaces;
  * Created by Nicky on 2017/1/19.
  */
 
-public interface IRegisterPhoneView {
+public interface IRegisterSetPhoneView {
 
     //已发送验证码
     void onGetVeryCode(String ssid);

@@ -178,6 +178,18 @@ public class NetworkRequest {
                         .addHeader("X-Bmob-Application-Id", "cd89b563ca70dfd60befb89fa9ad6e42")
                         .addHeader("X-Bmob-REST-API-Key", "f21c0ff7f6aa0405e9f97c30fc9a414f")
                         .build();
+                //设置Content-Type
+//                request.newBuilder().post(new RequestBody() {
+//
+//                    @Override
+//                    public MediaType contentType() {
+//                        return MediaType.parse("image/jpeg");
+//                    }
+//
+//                    @Override
+//                    public void writeTo(BufferedSink sink) throws IOException {
+//                    }
+//                });
                 return chain.proceed(request);
             }
         };
@@ -189,6 +201,7 @@ public class NetworkRequest {
         httpClientBuilder.addInterceptor(loggingInterceptor);
         //添加header
         httpClientBuilder.addInterceptor(headInterceptor);
+
         return httpClientBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)

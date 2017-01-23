@@ -3,10 +3,13 @@ package com.jiangtao.shuzicai;
 
 import android.content.Context;
 
+import com.blankj.utilcode.utils.ThreadPoolUtils;
 import com.blankj.utilcode.utils.Utils;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jiangtao.shuzicai.basic.app.BasicApp;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.utils.AppCrashUtils;
+import com.jiangtao.shuzicai.model.user.entry.UserModel;
 
 /**
  * Created by Nicky on 2016/11/26.
@@ -17,6 +20,10 @@ public class Application extends BasicApp {
 
     //全局上下文
     public static Context APPContext;
+    //线程池
+    public static ThreadPoolUtils AppThreadPool;
+    //用户实例
+    public static UserModel userInstance;
 
     //获取比目所有APP信息
     public static String getUserURl() {
@@ -42,5 +49,9 @@ public class Application extends BasicApp {
         Utils.init(this);
         //初始化全局异常处理
         AppCrashUtils.getInstance().init(this);
+        //初始化Fresco
+        Fresco.initialize(this);
+        //初始化线程池
+        AppThreadPool = new ThreadPoolUtils(ThreadPoolUtils.Type.CachedThread, 5);
     }
 }

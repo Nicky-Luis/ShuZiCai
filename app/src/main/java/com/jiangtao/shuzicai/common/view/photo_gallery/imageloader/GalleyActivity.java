@@ -1,6 +1,5 @@
 package com.jiangtao.shuzicai.common.view.photo_gallery.imageloader;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,16 +23,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.blankj.utilcode.utils.ToastUtils;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
+import com.jiangtao.shuzicai.common.message.SelectGalleryPhotoMsg;
 import com.jiangtao.shuzicai.common.view.photo_gallery.bean.ImageFloder;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -46,7 +47,7 @@ import butterknife.BindView;
 public class GalleyActivity extends BaseActivityWithToolBar implements
         ListImageDirPopupWindow.OnImageDirSelected {
 
-    public static final String INTENT_KEY_PHOTO_LIST = "select_result";
+    //相关状态
     public static final String INTENT_KEY_SELECTED_COUNT = "selected_count";
     public static final String INTENT_KEY_ONE = "one_pic";
     // 所有的图片
@@ -103,12 +104,8 @@ public class GalleyActivity extends BaseActivityWithToolBar implements
                 if (null != mAdapter) {
                     // 点击完成时
                     List<String> list = mAdapter.getSelectedImageList();
-                    if (list.size() > 0) {
-                        Intent intentFinish = new Intent();
-                        intentFinish.putExtra(INTENT_KEY_PHOTO_LIST, (Serializable) list);
-                        setResult(Activity.RESULT_OK, intentFinish);
-                        finish();
-                    }
+                    EventBus.getDefault().post(new SelectGalleryPhotoMsg(list));
+                    finish();
                 }
             }
         });
@@ -148,8 +145,7 @@ public class GalleyActivity extends BaseActivityWithToolBar implements
      */
     private void data2View() {
         if (mImgDir == null) {
-            Toast.makeText(getApplicationContext(), "擦，一张图片没扫描到",
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast("一张图片没扫描到");
             return;
         }
 
@@ -373,7 +369,7 @@ public class GalleyActivity extends BaseActivityWithToolBar implements
         @Override
         public void OnItemClick(int count) {
             if (isSingle) {
-                setCenterTitle("选取照片poi~");
+                setCenterTitle("选取照片");
             } else {
                 setCenterTitle("选取照片 (" + count + "/9)");
             }
