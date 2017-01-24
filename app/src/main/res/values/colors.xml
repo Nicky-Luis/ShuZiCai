@@ -5,9 +5,9 @@
     <!-- 主黄色 -->
     <color name="main_yellow">#ffc400</color>
     <!-- 主褐色 -->
-    <color name="main_brown">#86542f</color>
+    <color name="main_red">#eb4f38</color>
     <!-- 主橘色 -->
-    <color name="main_orange">#ff8400</color>
+    <color name="main_orange">#ea8010</color>
     <!-- 纯白色 -->
     <color name="main_deep_white">#FFFFFF</color>
     <!-- 微白色 -->

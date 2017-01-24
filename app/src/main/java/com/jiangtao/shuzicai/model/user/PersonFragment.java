@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.URLUtil;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.network.INetworkResponse;
 import com.jiangtao.shuzicai.common.message.EditUserInfoMsg;
 import com.jiangtao.shuzicai.common.message.LoginMsg;
+import com.jiangtao.shuzicai.common.message.LogoutMsg;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -27,8 +29,6 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.jiangtao.shuzicai.R.id.userSexTxt;
 
 /***
  * 个人中心fragment
@@ -54,8 +54,32 @@ public class PersonFragment extends BaseFragment {
     @BindView(R.id.userLocation)
     TextView userLocation;
     //性别
-    @BindView(userSexTxt)
+    @BindView(R.id.userSexTxt)
     ImageView userSexImg;
+    //金币
+    @BindView(R.id.goldLayout)
+    LinearLayout goldLayout;
+    //银元
+    @BindView(R.id.silverLayout)
+    LinearLayout silverLayout;
+    //金币
+    @BindView(R.id.goldCountTxt)
+    TextView goldCountTxt;
+    //银元
+    @BindView(R.id.silverCountTxt)
+    TextView silverCountTxt;
+    //财富明细
+    @BindView(R.id.wealthDetailsTxt)
+    TextView wealthDetailsTxt;
+    //游戏记录
+    @BindView(R.id.gameRcordTxt)
+    TextView gameRcordTxt;
+    //邀请
+    @BindView(R.id.myInviteTxt)
+    TextView myInviteTxt;
+    //充值按钮
+    @BindView(R.id.rechargeBtn)
+    Button rechargeBtn;
 
 
     //设置点击事件
@@ -116,16 +140,27 @@ public class PersonFragment extends BaseFragment {
      * 设置页面状态
      */
     private void resetView() {
-        if (null == loginLayout || null == userInfoLayout) {
+        if (null == loginLayout || null == userInfoLayout || null == goldLayout ||
+                null == silverLayout || null == wealthDetailsTxt ||
+                null == gameRcordTxt || null == myInviteTxt) {
             return;
         }
+        int loginVisible;
         if (Application.userInstance == null) {
             loginLayout.setVisibility(View.VISIBLE);
-            userInfoLayout.setVisibility(View.GONE);
+            loginVisible = View.GONE;
         } else {
             loginLayout.setVisibility(View.GONE);
-            userInfoLayout.setVisibility(View.VISIBLE);
+            loginVisible = View.VISIBLE;
         }
+
+        //设置可见状态
+        userInfoLayout.setVisibility(loginVisible);
+        goldLayout.setVisibility(loginVisible);
+        silverLayout.setVisibility(loginVisible);
+        wealthDetailsTxt.setVisibility(loginVisible);
+        gameRcordTxt.setVisibility(loginVisible);
+        myInviteTxt.setVisibility(loginVisible);
     }
 
     /**
@@ -198,6 +233,7 @@ public class PersonFragment extends BaseFragment {
         synchronizeDate();
     }
 
+
     /**
      * 用户编辑信息处理
      *
@@ -210,4 +246,14 @@ public class PersonFragment extends BaseFragment {
         synchronizeDate();
     }
 
+
+    /**
+     * 退出登录
+     *
+     * @param msg
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEventMainThread(LogoutMsg msg) {
+        resetView();
+    }
 }

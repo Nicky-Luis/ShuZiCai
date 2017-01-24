@@ -112,8 +112,9 @@ public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements
 
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    if (!VerifyCodeBtn.isEnabled()) {
+                    if (VerifyCodeBtn.isEnabled()) {
                         VerifyCodeBtn.setEnabled(false);
+                        VerifyCodeBtn.setBackgroundColor(getResources().getColor(R.color.gray));
                     }
                     String still = millisUntilFinished / 1000 + "秒";
                     VerifyCodeBtn.setText(still);
@@ -122,6 +123,7 @@ public class RegisterSetPhoneActivity extends BaseActivityWithToolBar implements
                 @Override
                 public void onFinish() {
                     VerifyCodeBtn.setEnabled(true);
+                    VerifyCodeBtn.setBackgroundColor(getResources().getColor(R.color.main_orange));
                     VerifyCodeBtn.setText("发送验证码");
                 }
             }.start();

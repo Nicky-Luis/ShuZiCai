@@ -75,7 +75,7 @@ public class TrendView extends RelativeLayout {
     private void initView(View rootView) {
         //listView
         trendView = (LineChart) rootView.findViewById(R.id.trend_line_chart);
-        trendView.setBackgroundResource(R.color.wheat);
+        trendView.setBackgroundResource(R.color.lightgoldenrodyellow);
         trendView.setDescription(null);//描述
         trendView.setTouchEnabled(true); //启用/禁用与图表的所有可能的触摸交互。
         trendView.setDragEnabled(false); //是否允许拖拽图表

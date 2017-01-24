@@ -39,8 +39,10 @@
         <activity android:name=".model.setting.SettingActivity"/>
         <activity android:name=".common.view.photo_gallery.imageloader.GalleyActivity"/>
 
+        <service android:name=".model.main.SplashIntentService"/>
 
-        <service android:name="com.jiangtao.shuzicai.model.main.SplashIntentService"/>
+        <activity android:name=".model.setting.ResetPasswordActivity">
+        </activity>
     </application>
 
 </manifest>

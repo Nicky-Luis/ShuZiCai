@@ -62,7 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/offset_40dp"
             android:layout_marginLeft="@dimen/offset_16dp"
-            android:background="@color/peru"
+            android:background="@color/main_orange"
+            android:textColor="@color/white"
             android:text="获取验证码"/>
     </LinearLayout>
 
@@ -92,7 +93,8 @@
         android:layout_width="@dimen/offset_300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/offset_40dp"
-        android:background="@color/peru"
+        android:background="@color/main_orange"
+        android:textColor="@color/white"
         android:text="注册"/>
 
     <LinearLayout

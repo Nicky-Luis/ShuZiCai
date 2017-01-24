@@ -10,7 +10,7 @@
         android:id="@+id/loginViewLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/offset_8dp"
+        android:layout_marginTop="@dimen/offset_48dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -34,6 +34,7 @@
             android:gravity="center"
             android:text="登陆/注册"/>
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/userInfoLayout"
@@ -92,10 +93,122 @@
                 android:text="广东"
                 android:textSize="@dimen/font_size_normal"/>
 
-
         </RelativeLayout>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/goldLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/offset_18dp"
+        android:padding="@dimen/offset_4dp">
+
+        <ImageView
+            android:layout_width="@dimen/offset_32dp"
+            android:layout_height="@dimen/offset_32dp"
+            android:layout_margin="@dimen/offset_8dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/gold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="金币："
+            android:textColor="@color/main_light_black"/>
+
+        <TextView
+            android:id="@+id/goldCountTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="236"
+            android:textColor="@color/main_light_black"/>
+
+        <Button
+            android:id="@+id/rechargeBtn"
+            android:layout_width="wrap_content"
+            android:background="@color/main_orange"
+            android:textColor="@color/white"
+            android:layout_height="@dimen/offset_40dp"
+            android:text="充值"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/silverLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/offset_1dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/offset_4dp">
+
+        <ImageView
+            android:layout_width="@dimen/offset_32dp"
+            android:layout_height="@dimen/offset_32dp"
+            android:layout_margin="@dimen/offset_8dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/silver"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="银元："
+            android:textColor="@color/main_light_black"/>
+
+        <TextView
+            android:id="@+id/silverCountTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="236"
+            android:textColor="@color/main_light_black"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/wealthDetailsTxt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/offset_48dp"
+        android:layout_marginTop="@dimen/offset_1dp"
+        android:background="@color/white"
+        android:drawablePadding="@dimen/offset_4dp"
+        android:drawableRight="@mipmap/right_more"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/offset_10dp"
+        android:text="财富明细"
+        android:textColor="@color/main_deep_black"/>
+
+
+    <TextView
+        android:id="@+id/gameRcordTxt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/offset_48dp"
+        android:layout_marginTop="@dimen/offset_48dp"
+        android:background="@color/white"
+        android:drawablePadding="@dimen/offset_4dp"
+        android:drawableRight="@mipmap/right_more"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/offset_10dp"
+        android:text="游戏记录"
+        android:textColor="@color/main_deep_black"/>
+
+    <TextView
+        android:id="@+id/myInviteTxt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/offset_48dp"
+        android:layout_marginTop="@dimen/offset_1dp"
+        android:background="@color/white"
+        android:drawablePadding="@dimen/offset_4dp"
+        android:drawableRight="@mipmap/right_more"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/offset_10dp"
+        android:text="我的邀请"
+        android:textColor="@color/main_deep_black"/>
 
 </LinearLayout>

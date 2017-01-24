@@ -49,7 +49,8 @@
         android:layout_marginLeft="@dimen/offset_20dp"
         android:layout_marginRight="@dimen/offset_20dp"
         android:layout_marginTop="@dimen/offset_18dp"
-        android:background="@color/peru"
+        android:background="@color/main_orange"
+        android:textColor="@color/white"
         android:text="登录"/>
 
     <LinearLayout
