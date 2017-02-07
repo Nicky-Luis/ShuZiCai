@@ -59,8 +59,8 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
                 //检测是否有内存泄露
                 // RefWatcher refWatcher = BasicApp.getRefWatcher(getActivity());
                 // refWatcher.watch(this);
-                loadLayout(mRootView);
                 initPresenter();
+                loadLayout(mRootView);
             }
             ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (parent != null) {

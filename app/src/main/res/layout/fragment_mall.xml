@@ -1,11 +1,91 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/goods_swipe_refresh_widget"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_light_white"
+    android:orientation="vertical">
 
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="商城 "
-        android:gravity="center"/>
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mallRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/offset_48dp"
+                    android:layout_marginTop="@dimen/offset_8dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/offset_4dp">
+
+                    <TextView
+                        android:id="@+id/mallMyMoney"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="我的资产:"
+                        android:textColor="@color/main_light_black"
+                        android:textSize="@dimen/font_size_normal_high"/>
+
+                    <TextView
+                        android:id="@+id/mallMyGold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="金币 300"/>
+
+                    <TextView
+                        android:id="@+id/mallMySilver"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="银币 300"/>
+
+                    <Button
+                        android:id="@+id/rechargeBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/offset_38dp"
+                        android:background="@color/main_orange"
+                        android:text="兑换"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/wealthDetailsTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/offset_48dp"
+                    android:layout_marginTop="@dimen/offset_1dp"
+                    android:background="@color/white"
+                    android:drawablePadding="@dimen/offset_4dp"
+                    android:drawableRight="@mipmap/right_more"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/offset_10dp"
+                    android:text="兑奖记录"
+                    android:textColor="@color/main_deep_black"/>
+            </LinearLayout>
+        </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
+
+    </FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
+
+

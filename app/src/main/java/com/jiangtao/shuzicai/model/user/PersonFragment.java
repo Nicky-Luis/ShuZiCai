@@ -83,7 +83,8 @@ public class PersonFragment extends BaseFragment {
 
 
     //设置点击事件
-    @OnClick({R.id.loginViewLayout, R.id.userInfoLayout})
+    @OnClick({R.id.loginViewLayout, R.id.userInfoLayout,
+            R.id.wealthDetailsTxt, R.id.gameRcordTxt, R.id.myInviteTxt})
     public void OnClick(View view) {
         switch (view.getId()) {
 
@@ -99,6 +100,22 @@ public class PersonFragment extends BaseFragment {
             }
             break;
 
+            case R.id.wealthDetailsTxt: {
+                Intent intent = new Intent(getActivity(), WealthActivity.class);
+                startActivity(intent);
+            }
+            break;
+
+            case R.id.gameRcordTxt: {
+                Intent intent = new Intent(getActivity(), GameRecordsActivity.class);
+                startActivity(intent);
+            }
+            break;
+            case R.id.myInviteTxt: {
+                Intent intent = new Intent(getActivity(), InviteDetailActivity.class);
+                startActivity(intent);
+            }
+            break;
         }
     }
 

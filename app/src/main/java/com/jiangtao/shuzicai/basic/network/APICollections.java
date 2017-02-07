@@ -130,4 +130,15 @@ public interface APICollections {
     @GET("1/users/{objectID}")
     Call<JsonObject> getCurrentUser(@Path("objectID") String objectID);
 
+
+    /**
+     * 获取商品信息
+     * @param limit
+     * @param skip
+     * @return
+     */
+    @GET("1/classes/Goods")
+    Call<JsonObject> getGoods(@Query("limit") int limit,
+                              @Query("skip") int skip);
+
 }

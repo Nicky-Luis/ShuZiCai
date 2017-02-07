@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:fresco="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/goods_item_ly"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:gravity="center"
+              android:padding="@dimen/offset_4dp"
+              android:orientation="vertical">
+
+    <!--布局-->
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mall_item_img"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/offset_150dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:gravity="center"
+        android:scaleType="fitXY"
+        fresco:fadeDuration="200"
+        fresco:failureImage="@mipmap/ic_launcher"
+        fresco:failureImageScaleType="fitXY"/>
+
+    <TextView
+        android:id="@+id/mall_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/offset_2dp"
+        android:gravity="left"
+        android:text="名称"/>
+
+    <TextView
+        android:id="@+id/mall_item_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/darkorange"
+        android:layout_margin="@dimen/offset_2dp"
+        android:gravity="right"
+        android:text="50金币"/>
+
+</LinearLayout>

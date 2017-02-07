@@ -2,6 +2,7 @@ package com.jiangtao.shuzicai.model.setting;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,7 +47,7 @@ public class SettingActivity extends BaseActivityWithToolBar {
 
 
     //退出登录
-    @OnClick({R.id.logoutBtn})
+    @OnClick({R.id.logoutBtn, R.id.feedbackTxt, R.id.helpTxt,R.id.aboutTxt})
     public void OnClick(View view) {
         switch (view.getId()) {
 
@@ -54,6 +55,23 @@ public class SettingActivity extends BaseActivityWithToolBar {
                 startLogout();
                 break;
 
+            case R.id.feedbackTxt: {
+                Intent intent = new Intent(SettingActivity.this, FeedbackActivity.class);
+                startActivity(intent);
+            }
+            break;
+
+            case R.id.helpTxt: {
+                Intent intent = new Intent(SettingActivity.this, HelpActivity.class);
+                startActivity(intent);
+            }
+            break;
+
+            case R.id.aboutTxt: {
+                Intent intent = new Intent(SettingActivity.this, AboutActivity.class);
+                startActivity(intent);
+            }
+            break;
         }
     }
 
@@ -86,11 +104,11 @@ public class SettingActivity extends BaseActivityWithToolBar {
 
     //设置view的状态
     private void setViewStatus() {
-        if (Application.userInstance==null){
+        if (Application.userInstance == null) {
             logoutBtn.setVisibility(View.GONE);
             modifyPasswordTxt.setVisibility(View.GONE);
             findPasswordTxt.setVisibility(View.GONE);
-        }else {
+        } else {
             logoutBtn.setVisibility(View.VISIBLE);
             modifyPasswordTxt.setVisibility(View.VISIBLE);
             findPasswordTxt.setVisibility(View.VISIBLE);

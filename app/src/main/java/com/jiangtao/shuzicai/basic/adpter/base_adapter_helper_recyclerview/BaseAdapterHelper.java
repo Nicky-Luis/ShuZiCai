@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
@@ -18,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
  * Created by HanHailong on 15/9/6.
@@ -75,6 +78,23 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     public BaseAdapterHelper setImageResource(int viewId, int imageResId) {
         ImageView view = retrieveView(viewId);
         view.setImageResource(imageResId);
+        return this;
+    }
+
+    /**
+     * 设置url
+     * @param viewId
+     * @param url
+     * @return
+     */
+    public BaseAdapterHelper setImageUrl(int viewId, String url) {
+        if (null==url){
+            return this;
+        }
+        //代码中
+        Uri uri = Uri.parse(url);
+        SimpleDraweeView view = retrieveView(viewId);
+        view.setImageURI(uri);//之后的一切全交给fresco就行了
         return this;
     }
 

@@ -43,6 +43,22 @@
 
         <activity android:name=".model.setting.ResetPasswordActivity">
         </activity>
+        <activity android:name=".model.user.WealthActivity">
+        </activity>
+        <activity android:name=".model.user.InviteDetailActivity">
+        </activity>
+        <activity android:name=".model.user.GameRecordsActivity">
+        </activity>
+        <activity android:name=".model.setting.HelpActivity">
+        </activity>
+        <activity android:name=".model.setting.FeedbackActivity">
+        </activity>
+        <activity android:name=".model.setting.AboutActivity">
+        </activity>
+        <activity android:name=".model.mall.GoodsExchangeActivity">
+        </activity>
+        <activity android:name=".model.mall.ExchangeRecordActivity">
+        </activity>
     </application>
 
 </manifest>

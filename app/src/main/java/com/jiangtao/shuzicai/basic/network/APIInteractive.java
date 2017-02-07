@@ -185,14 +185,30 @@ public class APIInteractive {
 
     /**
      * 获取当前用户信息
+     *
      * @param objectID
      * @param callback
      */
-    public static void getCurrentUser(String objectID,  final INetworkResponse callback) {
+    public static void getCurrentUser(String objectID, final INetworkResponse callback) {
         if (null == request) {
             initRetrofit();
         }
         Call<JsonObject> call = request.getCurrentUser(objectID);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+    /**
+     * 获取商品信息
+     *
+     * @param limit
+     * @param skip
+     * @param callback
+     */
+    public static void getGoods(int limit, int skip, final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonObject> call = request.getGoods(limit, skip);
         NetworkRequest.netRequest(call, callback);
     }
 
