@@ -2,6 +2,7 @@ package com.jiangtao.shuzicai.basic.network;
 
 
 import com.google.gson.JsonObject;
+import com.jiangtao.shuzicai.model.mall.entry.Order;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
 import com.jiangtao.shuzicai.model.user.entry.UpdateInfoBean;
@@ -133,6 +134,7 @@ public interface APICollections {
 
     /**
      * 获取商品信息
+     *
      * @param limit
      * @param skip
      * @return
@@ -140,5 +142,21 @@ public interface APICollections {
     @GET("1/classes/Goods")
     Call<JsonObject> getGoods(@Query("limit") int limit,
                               @Query("skip") int skip);
+
+    /**
+     * 提交订单
+     * @param bean
+     * @return
+     */
+    @POST("1/classes/goodsOrder")
+    Call<JsonObject> submitOrder(@Body Order bean);
+
+
+    /**
+     * 获取时间
+     * @return
+     */
+    @GET("1/timestamp")
+    Call<JsonObject> getServerTime();
 
 }

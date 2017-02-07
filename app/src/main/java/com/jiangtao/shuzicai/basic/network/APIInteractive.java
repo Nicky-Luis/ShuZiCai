@@ -3,6 +3,7 @@ package com.jiangtao.shuzicai.basic.network;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.JsonObject;
+import com.jiangtao.shuzicai.model.mall.entry.Order;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
 import com.jiangtao.shuzicai.model.user.entry.UpdateInfoBean;
@@ -209,6 +210,33 @@ public class APIInteractive {
             initRetrofit();
         }
         Call<JsonObject> call = request.getGoods(limit, skip);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+    /**
+     * 提交订单
+     *
+     * @param order
+     * @param callback
+     */
+    public static void submitOrder(Order order, final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonObject> call = request.submitOrder(order);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+
+    /**
+     * 获取服务器时间
+     * @param callback
+     */
+    public static void getServerTime(final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonObject> call = request.getServerTime();
         NetworkRequest.netRequest(call, callback);
     }
 

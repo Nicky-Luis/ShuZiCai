@@ -9,6 +9,17 @@ import java.io.Serializable;
 
 public class Goods implements Serializable {
 
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    //goods id
+    private String goodsId;
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
     //名称
     private String goodsName;
     //详细描述
@@ -22,8 +33,9 @@ public class Goods implements Serializable {
     //总销售量
     private int salesVolume;
 
-    public Goods(String goodsName, String goodsDetail, float goodsPrice, String goodsImgUrl, int inventory, int
-            salesVolume) {
+    public Goods(String goodsId, String goodsName, String goodsDetail, float goodsPrice, String goodsImgUrl, int
+            inventory, int salesVolume) {
+        this.goodsId = goodsId;
         this.goodsName = goodsName;
         this.goodsDetail = goodsDetail;
         this.goodsPrice = goodsPrice;
