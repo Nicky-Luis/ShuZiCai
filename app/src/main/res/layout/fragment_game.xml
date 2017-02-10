@@ -1,11 +1,193 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/main_light_white">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="游戏 "
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1px"
+            android:layout_marginTop="@dimen/offset_10dp"
+            android:background="@color/darkorange"
+            android:orientation="horizontal"
+            android:padding="@dimen/offset_2dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/offset_4dp"
+                android:text="沪深300涨跌预测"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_normal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="第345期"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_normal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/priceForecastLy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/darkorange"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/gameIndexMainData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/offset_8dp"
+                android:text="3110.15"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_huge"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/offset_8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/gameIndexChange"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/offset_8dp"
+                    android:layout_height="wrap_content"
+                    android:text="-29.4"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_size_normal"/>
+
+                <TextView
+                    android:id="@+id/gameIndexChangePercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/offset_8dp"
+                    android:text="-2%"
+                    android:layout_marginBottom="@dimen/offset_8dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_size_normal"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableRight="@mipmap/right_more_game"
+                android:gravity="right|center"
+                android:text="去预测"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_normal_high"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mantissaForecastLy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/offset_10dp"
+            android:background="@color/darkorange"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/offset_1dp"
+                android:background="@color/darkorange"
+                android:orientation="horizontal"
+                android:padding="@dimen/offset_2dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/offset_4dp"
+                    android:text="沪深300尾数预测"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_size_normal"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="第345期"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_size_normal"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/game_guess_mantissa"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/wholeForecastLy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/offset_10dp"
+            android:background="@color/darkorange"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/offset_1dp"
+                android:background="@color/darkorange"
+                android:orientation="horizontal"
+                android:padding="@dimen/offset_2dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/offset_4dp"
+                    android:text="沪深300全数预测"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_size_normal"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="第245期"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_size_normal"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/game_guess_whole"/>
+        </LinearLayout>
+
+        <!--公布栏-->
+        <com.jiangtao.shuzicai.common.view.billboard_view.BillboardView
+            android:id="@+id/gameBillboardView"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/offset_68dp"
+            android:layout_marginBottom="@dimen/offset_8dp"
+            android:layout_marginTop="@dimen/offset_10dp"
+            android:background="@color/lightgoldenrodyellow"/>
+    </LinearLayout>
+
+</ScrollView>

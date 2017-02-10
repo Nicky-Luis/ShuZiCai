@@ -130,12 +130,12 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
         if (isVisibleToUser) {
             LogUtils.i("---------显示----------");
             if (null != mainBillboardView) {
-                mainBillboardView.setScrollDataList(billboardMessages).startScrollView();
+             //   mainBillboardView.setScrollDataList(billboardMessages).startScrollView();
             }
         } else {
             LogUtils.i("---------隐藏----------");
             if (null != mainBillboardView) {
-                mainBillboardView.stopScrollView();
+              //  mainBillboardView.stopScrollView();
             }
         }
     }

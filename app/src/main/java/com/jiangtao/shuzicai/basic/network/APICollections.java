@@ -2,6 +2,7 @@ package com.jiangtao.shuzicai.basic.network;
 
 
 import com.google.gson.JsonObject;
+import com.jiangtao.shuzicai.common.entity.BmobBatch;
 import com.jiangtao.shuzicai.model.mall.entry.Order;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
@@ -145,6 +146,7 @@ public interface APICollections {
 
     /**
      * 提交订单
+     *
      * @param bean
      * @return
      */
@@ -153,10 +155,31 @@ public interface APICollections {
 
 
     /**
-     * 获取时间
+     * 获取服务器时间
+     *
      * @return
      */
     @GET("1/timestamp")
     Call<JsonObject> getServerTime();
+
+    /**
+     * 获取交易记录
+     *
+     * @param where
+     * @return
+     */
+    @GET("1/classes/goodsOrder")
+    Call<JsonObject> getExchangeRecord(@Query("where") String where,
+                                       @Query("include") String include);
+
+
+    /**
+     * 获取服务器时间
+     *
+     * @return
+     */
+    @POST("1/batch")
+    Call<JsonObject> bmobBatch(@Body BmobBatch bean);
+
 
 }

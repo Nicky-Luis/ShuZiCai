@@ -1,6 +1,7 @@
 package com.jiangtao.shuzicai.model.mall.entry;
 
 import com.jiangtao.shuzicai.common.entity.BmobDate;
+import com.jiangtao.shuzicai.common.entity.BmobPointer;
 
 /**
  * Created by Nicky on 2017/2/7.
@@ -9,7 +10,7 @@ import com.jiangtao.shuzicai.common.entity.BmobDate;
 public class Order {
 
     //商品id
-    private String goodsId;
+    private BmobPointer goods;
     //用户Id
     private String userId;
     //电话
@@ -18,6 +19,10 @@ public class Order {
     private String address;
     //下单时间
     private BmobDate orderTime;
+    //联系人
+    private String contacts;
+    //商品对象
+    private Goods goodObj;
 
     public void setOrderTime(BmobDate orderTime) {
         this.orderTime = orderTime;
@@ -30,26 +35,14 @@ public class Order {
     //订单的状态,0：未处理，1:已处理
     private int orderStatus;
 
-    public Order(String goodsId, String userId, String receivingPhone, String address, BmobDate orderTime, int
-            orderStatus) {
-        this.goodsId = goodsId;
-        this.userId = userId;
-        this.receivingPhone = receivingPhone;
-        this.address = address;
-        this.orderTime = orderTime;
-        this.orderStatus = orderStatus;
-    }
 
     public Order() {
     }
 
-    public String getGoodsId() {
-        return goodsId;
+    public BmobPointer getGoods() {
+        return goods;
     }
 
-    public String getUserId() {
-        return userId;
-    }
 
     public String getReceivingPhone() {
         return receivingPhone;
@@ -64,12 +57,13 @@ public class Order {
         return orderStatus;
     }
 
-    public void setGoodsId(String goodsId) {
-        this.goodsId = goodsId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setGoods(BmobPointer goods) {
+
+        this.goods = goods;
     }
 
     public void setReceivingPhone(String receivingPhone) {
@@ -80,8 +74,27 @@ public class Order {
         this.address = address;
     }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public void setOrderStatus(int orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public Goods getGoodObj() {
+        return goodObj;
+    }
+
+    public void setGoodObj(Goods goodObj) {
+        this.goodObj = goodObj;
+    }
+
+    public String getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(String contacts) {
+        this.contacts = contacts;
     }
 }

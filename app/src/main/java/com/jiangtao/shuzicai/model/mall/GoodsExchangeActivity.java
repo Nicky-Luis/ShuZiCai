@@ -1,5 +1,6 @@
 package com.jiangtao.shuzicai.model.mall;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.Gravity;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.hss01248.lib.MyDialogListener;
+import com.hss01248.lib.StytledDialog;
 import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
@@ -16,6 +19,7 @@ import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.network.INetworkResponse;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.common.entity.BmobDate;
+import com.jiangtao.shuzicai.common.entity.BmobPointer;
 import com.jiangtao.shuzicai.common.view.city_selecter.ChangeAddressPopWindow;
 import com.jiangtao.shuzicai.model.mall.entry.Goods;
 import com.jiangtao.shuzicai.model.mall.entry.Order;
@@ -51,6 +55,10 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
     //地址详情
     @BindView(R.id.ship_address_detail_edt)
     EditText addressEdt;
+    //地址详情
+    @BindView(R.id.contacts_edt)
+    EditText contactsEdt;
+
     //电话
     @BindView(R.id.phone_edt)
     EditText phoneEdt;
@@ -68,7 +76,7 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
                 break;
 
             case R.id.confirmBtn:
-                submitOrder();
+                confirmDilog();
                 break;
         }
     }
@@ -102,15 +110,17 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
         setCenterTitle("商品详情");
     }
 
-    //提交订单
-    private void submitOrder() {
+    //弹出确认框
+    private void confirmDilog() {
         if (null == Application.userInstance) {
             Intent intent = new Intent(this, LoginActivity.class);
+            ToastUtils.showShortToast("请先进行登录");
             startActivity(intent);
             return;
         }
+
         final Order order = new Order();
-        order.setGoodsId(goods.getGoodsId());
+        order.setGoods(new BmobPointer("Goods", goods.getObjectId()));
         order.setUserId(Application.userInstance.getObjectId());
         if (EditTextUtils.isEmpty(phoneEdt)) {
             ToastUtils.showShortToast("电话不能为空");
@@ -118,18 +128,44 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
         }
         String phone = EditTextUtils.getContent(phoneEdt);
         order.setReceivingPhone(phone);
+        //地址
         if (EditTextUtils.isEmpty(addressEdt)) {
             ToastUtils.showShortToast("地址不能为空");
             return;
         }
         String address = EditTextUtils.getContent(phoneEdt);
         order.setAddress(addressPre + address);
+        //联系人
+        if (EditTextUtils.isEmpty(contactsEdt)) {
+            ToastUtils.showShortToast("联系人不能为空");
+            return;
+        }
+        String contact = EditTextUtils.getContent(phoneEdt);
+        order.setContacts(contact);
+
 
         //状态
         order.setOrderStatus(0);
 
-        showProgress();
+        StytledDialog.showMdAlert(this, "系统提示", "提交订单将消费" + goods.getGoodsPrice() +
+                        "金币，是否确认？",
+                "确认", "取消", null, false, true, new MyDialogListener() {
 
+                    @Override
+                    public void onFirst(DialogInterface dialogInterface) {
+                        submitOrder(order);
+                    }
+
+                    @Override
+                    public void onSecond(DialogInterface dialogInterface) {
+
+                    }
+                }).show();
+    }
+
+    //提交订单
+    private void submitOrder(final Order order) {
+        showProgress("提交订单中...");
         APIInteractive.getServerTime(new INetworkResponse() {
             @Override
             public void onFailure(int code) {
@@ -141,13 +177,15 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
             public void onSucceed(JSONObject result) {
                 try {
                     String time = result.optString("datetime");
-                    order.setOrderTime(new BmobDate("Date",time));
+                    order.setOrderTime(new BmobDate("Date", time));
                     submit();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ToastUtils.showShortToast("订单提交失败");
                 }
             }
 
+            //提交订单
             private void submit() {
                 APIInteractive.submitOrder(order, new INetworkResponse() {
                     @Override

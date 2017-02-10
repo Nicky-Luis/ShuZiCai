@@ -230,6 +230,7 @@ public class APIInteractive {
 
     /**
      * 获取服务器时间
+     *
      * @param callback
      */
     public static void getServerTime(final INetworkResponse callback) {
@@ -237,6 +238,20 @@ public class APIInteractive {
             initRetrofit();
         }
         Call<JsonObject> call = request.getServerTime();
+        NetworkRequest.netRequest(call, callback);
+    }
+
+    /**
+     * 获取交易记录
+     *
+     * @param where
+     * @param callback
+     */
+    public static void getExchangeRecord(String where, String include, final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonObject> call = request.getExchangeRecord(where, include);
         NetworkRequest.netRequest(call, callback);
     }
 

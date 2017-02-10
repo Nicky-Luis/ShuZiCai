@@ -1,0 +1,161 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:fresco="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="@dimen/offset_2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/offset_4dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="订单时间："
+                android:textColor="@color/main_light_black"
+                android:textSize="@dimen/font_size_normal"/>
+
+            <TextView
+                android:id="@+id/view_orders_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="2017-02-08"
+                android:textColor="@color/main_light_black"
+                android:textSize="@dimen/font_size_normal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="收货地址："
+                android:textColor="@color/main_light_black"
+                android:textSize="@dimen/font_size_normal"/>
+
+            <TextView
+                android:id="@+id/view_orders_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="2017-02-08"
+                android:textColor="@color/main_light_black"
+                android:textSize="@dimen/font_size_normal"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="联系电话："
+                android:textColor="@color/main_light_black"
+                android:textSize="@dimen/font_size_normal"/>
+
+            <TextView
+                android:id="@+id/view_orders_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="13802536915"
+                android:textColor="@color/main_light_black"
+                android:textSize="@dimen/font_size_normal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="联系人："
+                android:textColor="@color/main_light_black"
+                android:textSize="@dimen/font_size_normal"/>
+
+            <TextView
+                android:id="@+id/view_orders_people"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="13802536915"
+                android:textColor="@color/main_light_black"
+                android:textSize="@dimen/font_size_normal"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/offset_1dp"
+        android:orientation="horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/orders_goods_img"
+            android:layout_width="@dimen/offset_68dp"
+            android:layout_height="@dimen/offset_68dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:gravity="center"
+            android:scaleType="fitXY"
+            fresco:fadeDuration="200"
+            fresco:failureImage="@mipmap/ic_launcher"
+            fresco:failureImageScaleType="fitXY"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/orders_goods_name_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="商品名称"
+                android:textSize="@dimen/font_size_middle"
+                android:textColor="@color/main_light_black"/>
+
+            <TextView
+                android:id="@+id/orders_goods_price_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textColor="@color/darkorange"
+                android:textSize="@dimen/font_size_large"
+                android:text="53金币"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

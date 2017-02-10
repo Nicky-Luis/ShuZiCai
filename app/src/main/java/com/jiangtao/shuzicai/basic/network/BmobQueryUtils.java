@@ -1,5 +1,7 @@
 package com.jiangtao.shuzicai.basic.network;
 
+import com.jiangtao.shuzicai.common.entity.BmobPointer;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,7 +36,7 @@ public class BmobQueryUtils {
 
 
     /**
-     * 小于
+     * 等于
      *
      * @param value
      * @return
@@ -48,6 +50,23 @@ public class BmobQueryUtils {
         }
         return resultObject.toString();
     }
+
+    /**
+     * 等于
+     *
+     * @param value
+     * @return
+     */
+    public String equal(BmobPointer value) {
+        JSONObject resultObject = new JSONObject();
+        try {
+            resultObject.put(this.kayValue, value.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resultObject.toString();
+    }
+
 
     /**
      * 小于

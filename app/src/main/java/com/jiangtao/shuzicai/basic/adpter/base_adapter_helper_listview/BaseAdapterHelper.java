@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.text.util.Linkify;
 import android.util.SparseArray;
@@ -35,6 +36,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
  * Allows an abstraction of the ViewHolder pattern.<br>
@@ -242,6 +245,13 @@ public class BaseAdapterHelper {
      * @return The BaseAdapterHelper for chaining.
      */
     public BaseAdapterHelper setImageUrl(int viewId, String imageUrl) {
+        if (null==imageUrl){
+            return this;
+        }
+        //代码中
+        Uri uri = Uri.parse(imageUrl);
+        SimpleDraweeView view = retrieveView(viewId);
+        view.setImageURI(uri);//之后的一切全交给fresco就行了
         //ImageView view = retrieveView(viewId);
         //Picasso.with(context).load(imageUrl).into(view);
         return this;
@@ -251,8 +261,7 @@ public class BaseAdapterHelper {
      * Will download an image from a URL and put it in an ImageView.<br/>
      *
      * @param viewId         The view id.
-     * @param requestBuilder The Picasso request builder. (e.g.
-     *                       Picasso.with(context).load(imageUrl))
+     *
      * @return The BaseAdapterHelper for chaining.
      */
     public BaseAdapterHelper setImageBuilder(int viewId/* RequestCreator

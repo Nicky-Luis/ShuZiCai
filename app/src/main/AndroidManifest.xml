@@ -59,6 +59,12 @@
         </activity>
         <activity android:name=".model.mall.ExchangeRecordActivity">
         </activity>
+        <activity android:name=".model.game.GuessMantissaActivity">
+        </activity>
+        <activity android:name=".model.game.GuessWholeActivityActivity">
+        </activity>
+        <activity android:name=".model.game.PriceForecastActivity">
+        </activity>
     </application>
 
 </manifest>

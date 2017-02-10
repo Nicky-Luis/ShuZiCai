@@ -38,6 +38,9 @@ public class MainActivity extends BaseActivityWithToolBar {
 
     @Override
     protected void onInitialize() {
+        resetToolView();
+        setLeftTitle("数字连连猜");
+
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(
                 getBaseFragmentManager(), getContext());
         mainViewPager.setAdapter(adapter);
