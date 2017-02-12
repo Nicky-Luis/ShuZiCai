@@ -15,7 +15,7 @@ import com.jiangtao.shuzicai.AppConfigure;
 import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
-import com.jiangtao.shuzicai.common.message.LogoutMsg;
+import com.jiangtao.shuzicai.common.event_message.LogoutMsg;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

@@ -10,6 +10,7 @@ import com.jiangtao.shuzicai.basic.app.BasicApp;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.utils.AppCrashUtils;
 import com.jiangtao.shuzicai.model.user.entry.UserModel;
+import com.jiangtao.shuzicai.model.user.entry.WealthValue;
 
 /**
  * Created by Nicky on 2016/11/26.
@@ -24,6 +25,8 @@ public class Application extends BasicApp {
     public static ThreadPoolUtils AppThreadPool;
     //用户实例
     public static UserModel userInstance;
+    //用户的财富
+    public static WealthValue wealthValue;
 
     //获取比目所有APP信息
     public static String getUserURl() {

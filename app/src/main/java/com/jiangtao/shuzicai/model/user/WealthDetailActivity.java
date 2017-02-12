@@ -1,4 +1,4 @@
-package com.jiangtao.shuzicai.model.mall;
+package com.jiangtao.shuzicai.model.user;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,9 +16,7 @@ import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.network.BmobQueryUtils;
 import com.jiangtao.shuzicai.basic.network.INetworkResponse;
-import com.jiangtao.shuzicai.model.mall.entry.Goods;
-import com.jiangtao.shuzicai.model.mall.entry.Order;
-import com.jiangtao.shuzicai.model.user.LoginActivity;
+import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,22 +26,21 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class ExchangeRecordActivity extends BaseActivityWithToolBar implements SwipeRefreshLayout.OnRefreshListener {
-
+public class WealthDetailActivity extends BaseActivityWithToolBar
+        implements SwipeRefreshLayout.OnRefreshListener {
 
     //交易记录Listview
-    @BindView(R.id.exchangeRecordListView)
-    ListView exchangeRecordListView;
+    @BindView(R.id.wealthDetailRecordListView)
+    ListView wealthDetailRecordListView;
     //刷新
-    @BindView(R.id.exchange_record_refresh_widget)
-    SwipeRefreshLayout mSwipeRefreshWidget;
+    @BindView(R.id.wealth_detail_record_refresh_widget)
+    SwipeRefreshLayout wealthDetailSwipe;
     //适配器
-    private QuickAdapter<Order> adapter;
-
+    private QuickAdapter<WealthDetail> adapter;
 
     @Override
     public int setLayoutId() {
-        return R.layout.activity_exchange_record;
+        return R.layout.activity_wealth_detail;
     }
 
     @Override
@@ -59,6 +56,53 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
 
     }
 
+    //初始化swipe
+    private void initSwipeRefresh() {
+        wealthDetailSwipe.setColorSchemeResources(
+                android.R.color.holo_blue_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_orange_light);
+        wealthDetailSwipe.setOnRefreshListener(this);
+    }
+
+    //初始化ListView
+    private void initListView() {
+        //初始化适配器
+        adapter = new QuickAdapter<WealthDetail>(this, R.layout.item_wealth_record_listview,
+                new ArrayList<WealthDetail>()) {
+            @Override
+            protected void convert(BaseAdapterHelper helper, WealthDetail item) {
+                helper.setText(R.id.wealth_detail_time, item.getCreateAt());
+                String type = "充值";
+                switch (item.getOperationType()) {
+                    case WealthDetail.Operation_Type_Recharge:
+                        type = "充值";
+                        break;
+                    case WealthDetail.Operation_Type_Exchange:
+                        type = "兑换礼品";
+                        break;
+                    case WealthDetail.Operation_Type_Reward:
+                        type = "获奖";
+                        break;
+                    case WealthDetail.Operation_Type_Game:
+                        type = "游戏消耗";
+                        break;
+                    case WealthDetail.Operation_Type_Conversion:
+                        type = "兑换成银元";
+                        break;
+
+                }
+                helper.setText(R.id.wealth_detail_type, type);
+                String valueType = item.getCurrencyType() == 0 ? "金币" : "银元";
+                helper.setText(R.id.wealth_detail_value, item.getOperationValue() + ":" + valueType);
+            }
+        };
+        wealthDetailRecordListView.setAdapter(adapter);
+    }
+
+
+    //初始化标头栏
     private void initTitleBar() {
         //右键
         setLeftImage(R.mipmap.ic_arrow_back_white_24dp, new View.OnClickListener() {
@@ -67,36 +111,8 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
                 finish();
             }
         });
-        setCenterTitle("兑换记录");
-    }
 
-    //初始化swipe
-    private void initSwipeRefresh() {
-        mSwipeRefreshWidget.setColorSchemeResources(
-                android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_red_light,
-                android.R.color.holo_orange_light);
-        mSwipeRefreshWidget.setOnRefreshListener(this);
-    }
-
-    //初始化ListView
-    private void initListView() {
-        //初始化适配器
-        adapter = new QuickAdapter<Order>(this, R.layout.item_exchange_record_listview,
-                new ArrayList<Order>()) {
-            @Override
-            protected void convert(BaseAdapterHelper helper, Order item) {
-                helper.setText(R.id.view_orders_time,item.getOrderTime().getIso());
-                helper.setText(R.id.view_orders_address,item.getAddress());
-                helper.setText(R.id.view_orders_phone,item.getReceivingPhone());
-                helper.setText(R.id.view_orders_people,item.getContacts());
-                helper.setImageUrl(R.id.orders_goods_img,item.getGoodObj().getGoodsImgUrl());
-                helper.setText(R.id.orders_goods_name_txt,item.getGoodObj().getGoodsName());
-                helper.setText(R.id.orders_goods_price_txt,item.getGoodObj().getGoodsPrice()+"金币");
-            }
-        };
-        exchangeRecordListView.setAdapter(adapter);
+        setCenterTitle("财富明细");
     }
 
     //获取数据
@@ -111,33 +127,28 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
         BmobQueryUtils utils = BmobQueryUtils.newInstance();
         String where = utils.setValue("userId").equal(Application.userInstance.getObjectId());
 
-        APIInteractive.getExchangeRecord(where,"goods", new INetworkResponse() {
+        APIInteractive.getWealthDetailRecord(where, new INetworkResponse() {
             @Override
             public void onFailure(int code) {
-                mSwipeRefreshWidget.setRefreshing(false);
+                wealthDetailSwipe.setRefreshing(false);
                 ToastUtils.showShortToast("获取数据失败");
             }
 
             @Override
             public void onSucceed(JSONObject result) {
-                mSwipeRefreshWidget.setRefreshing(false);
+                wealthDetailSwipe.setRefreshing(false);
                 LogUtils.i("result = " + result);
-                List<Order> orders =new ArrayList<>();
+                List<WealthDetail> wealthDetails = new ArrayList<>();
                 try {
                     JSONArray jArray = result.optJSONArray("results");
                     for (int i = 0; i < jArray.length(); i++) {
                         JSONObject object = (JSONObject) jArray.get(i);
                         Gson gson = new Gson();
-                        Order  order= gson.fromJson(object.toString(),Order.class);
-
-                        JSONObject goodsObject = object.optJSONObject("goods");
-                        Gson goodsGson = new Gson();
-                        Goods good = goodsGson.fromJson(goodsObject.toString(),Goods.class);
-                        order.setGoodObj(good);
-                        orders.add(order);
+                        WealthDetail wealthDetail = gson.fromJson(object.toString(), WealthDetail.class);
+                        wealthDetails.add(wealthDetail);
                     }
                     adapter.clear();
-                    adapter.addAll(orders);
+                    adapter.addAll(wealthDetails);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

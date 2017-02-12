@@ -1,20 +1,28 @@
 package com.jiangtao.shuzicai.model.mall;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
+import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.BaseAdapterHelper;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.QuickAdapter;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
+import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
 import com.jiangtao.shuzicai.model.mall.entry.Goods;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
 import com.jiangtao.shuzicai.model.mall.interfaces.IMailPresenter;
@@ -44,6 +52,15 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
     //
     @BindView(R.id.goods_swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefreshWidget;
+    //金币
+    @BindView(R.id.mallMyGold)
+    TextView mallMyGold;
+    //金币
+    @BindView(R.id.mallMySilver)
+    TextView mallMySilver;
+    //兑换按钮
+    @BindView(R.id.rechargeBtn)
+    Button rechargeBtn;
     //
     //参数
     public static final String ARGS_PAGE = "args_page";
@@ -55,13 +72,20 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
     private IMailPresenter mailPresenter;
 
     //设置点击事件
-    @OnClick({R.id.wealthDetailsTxt})
+    @OnClick({R.id.wealthDetailsTxt, R.id.rechargeBtn})
     public void OnClick(View view) {
         switch (view.getId()) {
 
+            //财富详细
             case R.id.wealthDetailsTxt: {
                 Intent intent = new Intent(getActivity(), ExchangeRecordActivity.class);
                 startActivity(intent);
+            }
+            break;
+
+            //兑换
+            case R.id.rechargeBtn: {
+                wealthExchange();
             }
             break;
         }
@@ -99,9 +123,41 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
         initData();
     }
 
+    //初始化数据
     private void initData() {
         mailAdapter.clear();
         mailPresenter.getFirstPageGoods();
+        bindWealth();
+    }
+
+    //兑换框
+    private void wealthExchange() {
+        EditText convertEdt = new EditText(getActivity());
+        convertEdt.setPadding(5,0,5,0);
+        convertEdt.setInputType(InputType.TYPE_CLASS_NUMBER);
+        convertEdt.setHint("输入要兑换的金额...");
+        convertEdt.setBackgroundColor(getResources().getColor(R.color.main_thin_white));
+
+        new AlertDialog.Builder(getActivity()).setTitle("1金币可兑换1000银币").setView(
+                convertEdt).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).setNegativeButton("取消", null).show();
+    }
+
+    //绑定财富数据
+    private void bindWealth() {
+        //绑定财富数据
+        String gold = "金币：0";
+        String silver = "银币：0";
+        if (null != Application.wealthValue) {
+            gold = "金币：" + String.valueOf((int) Application.wealthValue.getGoldValue());
+            silver = "银币：" + String.valueOf((int) Application.wealthValue.getSilverValue());
+        }
+        mallMyGold.setText(gold);
+        mallMySilver.setText(silver);
     }
 
     //初始化swipe
@@ -157,6 +213,16 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
     public void onMessageEventMainThread(String event) {
         Log.e("event MainThread", "消息： " + event + "  thread: " +
                 Thread.currentThread().getName());
+    }
+
+    /**
+     * 财富发生了变化
+     *
+     * @param msg
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEventMainThread(WealthChangeMsg msg) {
+        bindWealth();
     }
 
     @Override

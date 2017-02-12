@@ -43,7 +43,7 @@
 
         <activity android:name=".model.setting.ResetPasswordActivity">
         </activity>
-        <activity android:name=".model.user.WealthActivity">
+        <activity android:name=".model.user.WealthDetailActivity">
         </activity>
         <activity android:name=".model.user.InviteDetailActivity">
         </activity>

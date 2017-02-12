@@ -1,12 +1,15 @@
 package com.jiangtao.shuzicai.basic.network;
 
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jiangtao.shuzicai.common.entity.BmobBatch;
 import com.jiangtao.shuzicai.model.mall.entry.Order;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
 import com.jiangtao.shuzicai.model.user.entry.UpdateInfoBean;
+
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -134,6 +137,15 @@ public interface APICollections {
 
 
     /**
+     * 获取当前用户的财富
+     *
+     * @param where
+     * @return
+     */
+    @GET("1/classes/WealthValue")
+    Call<JsonObject> getWealthValue(@Query("where") String where);
+
+    /**
      * 获取商品信息
      *
      * @param limit
@@ -163,7 +175,7 @@ public interface APICollections {
     Call<JsonObject> getServerTime();
 
     /**
-     * 获取交易记录
+     * 获取兑换交易记录
      *
      * @param where
      * @return
@@ -172,14 +184,23 @@ public interface APICollections {
     Call<JsonObject> getExchangeRecord(@Query("where") String where,
                                        @Query("include") String include);
 
+    /**
+     * 获取交易记录
+     *
+     * @param where
+     * @return
+     */
+    @GET("1/classes/WealthDetail")
+    Call<JsonObject> getWealthDetailRecord(@Query("where") String where);
+
 
     /**
-     * 获取服务器时间
-     *
+     * 批量操作
+     * @param bean
      * @return
      */
     @POST("1/batch")
-    Call<JsonObject> bmobBatch(@Body BmobBatch bean);
+    Call<JsonArray> bmobBatch(@Body Map<String, List> bean);
 
 
 }

@@ -26,7 +26,7 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
-import com.jiangtao.shuzicai.common.message.SelectGalleryPhotoMsg;
+import com.jiangtao.shuzicai.common.event_message.SelectGalleryPhotoMsg;
 import com.jiangtao.shuzicai.common.view.photo_gallery.bean.ImageFloder;
 
 import org.greenrobot.eventbus.EventBus;

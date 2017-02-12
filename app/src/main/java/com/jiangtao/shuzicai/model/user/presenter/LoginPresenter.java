@@ -6,7 +6,7 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.network.INetworkResponse;
-import com.jiangtao.shuzicai.common.message.LoginMsg;
+import com.jiangtao.shuzicai.common.event_message.LoginMsg;
 import com.jiangtao.shuzicai.model.user.entry.UserModel;
 import com.jiangtao.shuzicai.model.user.interfaces.ILoginPresenter;
 import com.jiangtao.shuzicai.model.user.interfaces.ILoginView;

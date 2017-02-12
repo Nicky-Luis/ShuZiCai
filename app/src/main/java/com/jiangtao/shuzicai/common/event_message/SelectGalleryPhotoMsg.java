@@ -1,4 +1,4 @@
-package com.jiangtao.shuzicai.common.message;
+package com.jiangtao.shuzicai.common.event_message;
 
 import java.util.List;
 

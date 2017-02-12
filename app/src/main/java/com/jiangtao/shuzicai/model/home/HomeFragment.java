@@ -7,8 +7,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
+import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
 import com.jiangtao.shuzicai.common.view.billboard_view.BillboardView;
 import com.jiangtao.shuzicai.common.view.billboard_view.model.BillboardMessage;
 import com.jiangtao.shuzicai.common.view.trend_view.TrendView;
@@ -63,6 +65,13 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
     //总计
     @BindView(R.id.homeIndexTotal)
     TextView homeIndexTotal;
+    //财富
+    @BindView(R.id.homeMyGold)
+    TextView homeMyGold;
+    //财富
+    @BindView(R.id.homeMySilver)
+    TextView homeMySilver;
+
 
     //对象实例化
     public static HomeFragment newInstance(int page) {
@@ -130,12 +139,12 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
         if (isVisibleToUser) {
             LogUtils.i("---------显示----------");
             if (null != mainBillboardView) {
-             //   mainBillboardView.setScrollDataList(billboardMessages).startScrollView();
+                //   mainBillboardView.setScrollDataList(billboardMessages).startScrollView();
             }
         } else {
             LogUtils.i("---------隐藏----------");
             if (null != mainBillboardView) {
-              //  mainBillboardView.stopScrollView();
+                //  mainBillboardView.stopScrollView();
             }
         }
     }
@@ -159,6 +168,7 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
     @Override
     public void bindIndexData(StockIndex indexData) {
         resetIndexViewValue();
+        bindWealth();
         if (null == indexData) {
             return;
         }
@@ -183,7 +193,7 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
 
     @Override
     public void bindBillboardData(List<BillboardMessage> datas) {
-        LogUtils.i("---------绑定公告数据："+datas.size());
+        LogUtils.i("---------绑定公告数据：" + datas.size());
         //广播数据
         billboardMessages = datas;
         //绑定数据
@@ -200,5 +210,28 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
         homeIndexTransaction.setText("成交额(万元)--");
         homeIndexTotal.setText("成交量(万手)--");
         homeIndexChange.setText("--");
+    }
+
+    //绑定财富数据
+    private void bindWealth() {
+        //绑定财富数据
+        String gold = "金币：0";
+        String silver = "银币：0";
+        if (null != Application.wealthValue) {
+            gold = "金币：" + String.valueOf((int) Application.wealthValue.getGoldValue());
+            silver = "银币：" + String.valueOf((int) Application.wealthValue.getSilverValue());
+        }
+        homeMyGold.setText(gold);
+        homeMySilver.setText(silver);
+    }
+
+    /**
+     * 财富发生了变化
+     *
+     * @param msg
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEventMainThread(WealthChangeMsg msg) {
+        bindWealth();
     }
 }

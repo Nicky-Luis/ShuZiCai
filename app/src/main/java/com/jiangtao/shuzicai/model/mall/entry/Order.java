@@ -9,7 +9,7 @@ import com.jiangtao.shuzicai.common.entity.BmobPointer;
  */
 public class Order {
 
-    //商品id
+    //商品Pointer
     private BmobPointer goods;
     //用户Id
     private String userId;

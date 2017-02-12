@@ -124,8 +124,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="我的资产:"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_size_large"/>
+                android:textColor="@color/main_light_white"
+                android:textSize="@dimen/font_size_middle"/>
 
             <TextView
                 android:id="@+id/homeMyGold"
@@ -133,6 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:textColor="@color/white"
                 android:text="金币 300"/>
 
             <TextView
@@ -141,6 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:textColor="@color/white"
                 android:text="银币 300"/>
         </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.jiangtao.shuzicai.basic.network;
 
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jiangtao.shuzicai.model.mall.entry.Order;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
@@ -10,6 +11,9 @@ import com.jiangtao.shuzicai.model.user.entry.UpdateInfoBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -199,6 +203,20 @@ public class APIInteractive {
     }
 
     /**
+     * 获取当前用户的财富
+     *
+     * @param where
+     * @param callback
+     */
+    public static void getWealthValue(String where, final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonObject> call = request.getWealthValue(where);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+    /**
      * 获取商品信息
      *
      * @param limit
@@ -253,6 +271,34 @@ public class APIInteractive {
         }
         Call<JsonObject> call = request.getExchangeRecord(where, include);
         NetworkRequest.netRequest(call, callback);
+    }
+
+
+    /**
+     * 获取交易记录
+     *
+     * @param where
+     * @param callback
+     */
+    public static void getWealthDetailRecord(String where, final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonObject> call = request.getWealthDetailRecord(where);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+    /**
+     * 批量操作
+     * @param bean
+     * @param callback
+     */
+    public static void bmobBatch(Map<String, List> bean, final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonArray> call = request.bmobBatch(bean);
+        NetworkRequest.netRequest2(call, callback);
     }
 
 
