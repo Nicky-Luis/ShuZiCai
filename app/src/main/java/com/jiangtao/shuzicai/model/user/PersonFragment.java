@@ -78,7 +78,7 @@ public class PersonFragment extends BaseFragment {
     @BindView(R.id.silverCountTxt)
     TextView silverCountTxt;
     //财富明细
-    @BindView(R.id.wealthDetailsTxt)
+    @BindView(R.id.wealthDetailTxt)
     TextView wealthDetailsTxt;
     //游戏记录
     @BindView(R.id.gameRcordTxt)
@@ -93,7 +93,7 @@ public class PersonFragment extends BaseFragment {
 
     //设置点击事件
     @OnClick({R.id.loginViewLayout, R.id.userInfoLayout,
-            R.id.wealthDetailsTxt, R.id.gameRcordTxt, R.id.myInviteTxt})
+            R.id.wealthDetailTxt, R.id.gameRcordTxt, R.id.myInviteTxt})
     public void OnClick(View view) {
         switch (view.getId()) {
 
@@ -109,7 +109,7 @@ public class PersonFragment extends BaseFragment {
             }
             break;
 
-            case R.id.wealthDetailsTxt: {
+            case R.id.wealthDetailTxt: {
                 Intent intent = new Intent(getActivity(), WealthDetailActivity.class);
                 startActivity(intent);
             }

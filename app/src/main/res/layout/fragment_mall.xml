@@ -62,7 +62,7 @@
                         android:text="银币 300"/>
 
                     <Button
-                        android:id="@+id/rechargeBtn"
+                        android:id="@+id/exchangeBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/offset_38dp"
                         android:background="@color/main_orange"
@@ -71,7 +71,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/wealthDetailsTxt"
+                    android:id="@+id/exchangeRecordTxt"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/offset_48dp"
                     android:layout_marginTop="@dimen/offset_1dp"

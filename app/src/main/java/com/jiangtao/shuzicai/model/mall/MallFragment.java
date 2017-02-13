@@ -7,10 +7,9 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,12 +21,14 @@ import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.BaseAdapterHelper;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.QuickAdapter;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
+import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
 import com.jiangtao.shuzicai.model.mall.entry.Goods;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
 import com.jiangtao.shuzicai.model.mall.interfaces.IMailPresenter;
 import com.jiangtao.shuzicai.model.mall.presenter.MailPresenter;
 import com.jiangtao.shuzicai.model.mall.view.IMailView;
+import com.jiangtao.shuzicai.model.user.LoginActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -37,6 +38,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 /***
  * 首页fragment
@@ -58,9 +61,6 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
     //金币
     @BindView(R.id.mallMySilver)
     TextView mallMySilver;
-    //兑换按钮
-    @BindView(R.id.rechargeBtn)
-    Button rechargeBtn;
     //
     //参数
     public static final String ARGS_PAGE = "args_page";
@@ -72,20 +72,32 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
     private IMailPresenter mailPresenter;
 
     //设置点击事件
-    @OnClick({R.id.wealthDetailsTxt, R.id.rechargeBtn})
+    @OnClick({R.id.exchangeRecordTxt, R.id.exchangeBtn})
     public void OnClick(View view) {
         switch (view.getId()) {
 
-            //财富详细
-            case R.id.wealthDetailsTxt: {
-                Intent intent = new Intent(getActivity(), ExchangeRecordActivity.class);
-                startActivity(intent);
+            //兑奖详情
+            case R.id.exchangeRecordTxt: {
+                if (null == Application.userInstance) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    ToastUtils.showShortToast("请先进行登录");
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getActivity(), ExchangeRecordActivity.class);
+                    startActivity(intent);
+                }
             }
             break;
 
             //兑换
-            case R.id.rechargeBtn: {
-                wealthExchange();
+            case R.id.exchangeBtn: {
+                if (null == Application.userInstance) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    ToastUtils.showShortToast("请先进行登录");
+                    startActivity(intent);
+                } else {
+                    wealthExchange();
+                }
             }
             break;
         }
@@ -132,17 +144,21 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
 
     //兑换框
     private void wealthExchange() {
-        EditText convertEdt = new EditText(getActivity());
-        convertEdt.setPadding(5,0,5,0);
-        convertEdt.setInputType(InputType.TYPE_CLASS_NUMBER);
-        convertEdt.setHint("输入要兑换的金额...");
-        convertEdt.setBackgroundColor(getResources().getColor(R.color.main_thin_white));
+        LayoutInflater inflater = (LayoutInflater)
+                getActivity().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.dialog_exchange_layout, null);
+        final EditText convertEdt = (EditText) layout.findViewById(R.id.convertEdt);
 
         new AlertDialog.Builder(getActivity()).setTitle("1金币可兑换1000银币").setView(
-                convertEdt).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                layout).setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                if (EditTextUtils.isEmpty(convertEdt)) {
+                    ToastUtils.showShortToast("金币数不能空");
+                } else {
+                    float value = Float.parseFloat(EditTextUtils.getContent(convertEdt));
+                    mailPresenter.submitExchange(value);
+                }
             }
         }).setNegativeButton("取消", null).show();
     }
@@ -235,6 +251,13 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
     public void onGetGoodsFailed() {
         mSwipeRefreshWidget.setRefreshing(false);
         ToastUtils.showLongToast("获取数据失败");
+    }
+
+    @Override
+    public void onExchangeResult(boolean isSuccess) {
+        if (isSuccess) {
+            mailPresenter.getWealthValue();
+        }
     }
 
     @Override

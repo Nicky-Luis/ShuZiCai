@@ -9,4 +9,8 @@ public interface IMailPresenter {
     void getFirstPageGoods();
 
     void  getMoreGoods();
+
+    void submitExchange(float goldNumber);
+
+    void getWealthValue();
 }

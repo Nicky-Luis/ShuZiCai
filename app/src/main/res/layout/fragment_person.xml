@@ -172,7 +172,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/wealthDetailsTxt"
+        android:id="@+id/wealthDetailTxt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/offset_48dp"
         android:layout_marginTop="@dimen/offset_1dp"

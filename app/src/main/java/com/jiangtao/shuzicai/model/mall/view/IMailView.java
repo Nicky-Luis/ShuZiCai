@@ -13,4 +13,6 @@ public interface IMailView {
     void onGetGoods(List<Goods> goodses);
 
     void onGetGoodsFailed();
+
+    void  onExchangeResult(boolean isSuccess);
 }
