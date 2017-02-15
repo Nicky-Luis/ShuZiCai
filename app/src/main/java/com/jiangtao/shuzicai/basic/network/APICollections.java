@@ -202,5 +202,12 @@ public interface APICollections {
     @POST("1/batch")
     Call<JsonArray> bmobBatch(@Body Map<String, List> bean);
 
-
+    /**
+     * 查询用户信息
+     *
+     * @param where
+     * @return
+     */
+    @GET("1/classes/_User")
+    Call<JsonObject> getUserInfo(@Query("where") String where);
 }

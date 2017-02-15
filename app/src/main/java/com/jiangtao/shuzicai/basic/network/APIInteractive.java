@@ -303,6 +303,21 @@ public class APIInteractive {
 
 
     /**
+     * 获取用户信息
+     *
+     * @param where
+     * @param callback
+     */
+    public static void getUserInfo(String where, final INetworkResponse callback) {
+        if (null == request) {
+            initRetrofit();
+        }
+        Call<JsonObject> call = request.getUserInfo(where);
+        NetworkRequest.netRequest(call, callback);
+    }
+
+
+    /**
      * 上传文件
      *
      * @param path

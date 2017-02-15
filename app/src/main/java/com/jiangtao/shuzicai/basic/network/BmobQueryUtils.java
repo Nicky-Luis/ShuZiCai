@@ -1,13 +1,18 @@
 package com.jiangtao.shuzicai.basic.network;
 
+import com.google.gson.Gson;
 import com.jiangtao.shuzicai.common.entity.BmobPointer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Nicky on 2017/1/16.
@@ -16,10 +21,10 @@ import java.util.Locale;
 
 public class BmobQueryUtils {
 
-    //str
-    private String kayValue = "";
     //条件
     private JSONObject conditionObject;
+    //str
+    private String kayValue = "";
 
     private BmobQueryUtils() {
         conditionObject = new JSONObject();
@@ -42,6 +47,22 @@ public class BmobQueryUtils {
      * @return
      */
     public String equal(String value) {
+        JSONObject resultObject = new JSONObject();
+        try {
+            resultObject.put(this.kayValue, value);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resultObject.toString();
+    }
+
+    /**
+     * 等于
+     *
+     * @param value
+     * @return
+     */
+    public String equal(int value) {
         JSONObject resultObject = new JSONObject();
         try {
             resultObject.put(this.kayValue, value);
@@ -206,18 +227,24 @@ public class BmobQueryUtils {
     }
 
     /**
-     * 不等于
+     * 包含在数组中
      *
-     * @param value
+     * @param values
      * @return
      */
-    public BmobQueryUtils Include(int value) {
+    public String Include(List<String> values) {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("$in",values);
+        Gson gson = new Gson();
+        String str = gson.toJson(map);
+
+        JSONObject resultObject = new JSONObject();
         try {
-            conditionObject.put("$in", value);
+            resultObject.put(this.kayValue, str);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return this;
+        return resultObject.toString();
     }
 
 
@@ -314,6 +341,23 @@ public class BmobQueryUtils {
         return this;
     }
 
+    /**
+     * 与
+     * @param where1
+     * @param where2
+     * @return
+     */
+    public String and(String where1,String where2) {
+        List<String> list =new ArrayList<>();
+        list.add(where1);
+        list.add(where2);
+
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("$and",list);
+        Gson gson = new Gson();
+        String str = gson.toJson(map);
+        return str;
+    }
 
     /**
      * 获取编码后的值
