@@ -116,4 +116,28 @@
         <item name="android:windowExitAnimation">@anim/gallery_slide_out</item>
     </style>
 
+
+    <!--猜尾数-->
+    <style name="style_mantissa_index_textView">
+        <item name="android:layout_width">@dimen/offset_40dp</item>
+        <item name="android:layout_height">@dimen/offset_40dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_margin">@dimen/offset_2dp</item>
+        <item name="android:padding">@dimen/offset_4dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textSize">@dimen/font_size_xlarge_high</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="style_mantissa_index_EditText">
+        <item name="android:layout_width">@dimen/offset_40dp</item>
+        <item name="android:layout_height">@dimen/offset_40dp</item>
+        <item name="android:layout_margin">@dimen/offset_2dp</item>
+        <item name="android:padding">@dimen/offset_4dp</item>
+        <item name="android:background">@color/gray</item>
+        <item name="android:textSize">@dimen/font_size_xlarge_high</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

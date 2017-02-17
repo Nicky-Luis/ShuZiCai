@@ -25,7 +25,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
@@ -59,7 +58,7 @@ public class NetworkRequest {
                 .client(getOkHttpClient())//使用自己创建的OkHttp
                 .addConverterFactory(ScalarsConverterFactory.create()) //增加返回值为String的支持
                 .addConverterFactory(GsonConverterFactory.create())//增加返回值为Gson的支持(以实体类返回)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //增加返回值为Oservable<T>的支持
+               // .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //增加返回值为Oservable<T>的支持
                 .build();
 
         return retrofit.create(clss);

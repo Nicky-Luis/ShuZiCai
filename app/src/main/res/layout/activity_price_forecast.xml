@@ -1,13 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     android:id="@+id/activity_price_forecast"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_light_white"
+    android:orientation="vertical"
     tools:context="com.jiangtao.shuzicai.model.game.PriceForecastActivity">
 
     <!--toolbar-->
     <include layout="@layout/toolbar"/>
 
-</RelativeLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/forecast_refresh_widget"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_light_white"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/forecastRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
+                android:id="@+id/forecastHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/offset_10dp"
+                        android:background="@color/white"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/offset_48dp"
+                            android:text="最新\n指数"/>
+
+
+                        <TextView
+                            android:id="@+id/forecastMainIndex"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:layout_weight="1"
+                            android:gravity="center|left"
+                            android:text="3100.15"
+                            android:textSize="@dimen/font_size_large"/>
+
+                        <TextView
+                            android:id="@+id/indexChange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="+6.15"/>
+
+                        <TextView
+                            android:id="@+id/indexChangePercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="15%"/>
+                    </LinearLayout>
+
+                    <com.jiangtao.shuzicai.common.view.trend_view.TrendView
+                        android:id="@+id/gameTrendView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_10dp">
+
+                        <TextView
+                            android:id="@+id/forecastTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="预测12月26日"/>
+
+                        <TextView
+                            android:id="@+id/forecastResult"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="本期与12月26日15:10分公布"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_10dp">
+
+                        <TextView
+                            android:id="@+id/forecastUpBtn"
+                            android:layout_width="@dimen/offset_100dp"
+                            android:layout_height="@dimen/offset_48dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="看涨"/>
+
+                        <LinearLayout
+                            android:layout_width="@dimen/offset_20dp"
+                            android:background="@color/main_light_white"
+                            android:layout_height="match_parent"/>
+
+                        <TextView
+                            android:id="@+id/forecastDownBtn"
+                            android:layout_width="@dimen/offset_100dp"
+                            android:layout_height="@dimen/offset_48dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="看跌"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/offset_10dp"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="参与记录"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="本期记录"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
+
+        </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

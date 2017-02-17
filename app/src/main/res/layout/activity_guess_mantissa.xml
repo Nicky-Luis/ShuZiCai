@@ -1,14 +1,287 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/activity_guess_mantissa"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jiangtao.shuzicai.model.game.GuessMantissaActivity">
-
+    android:background="@color/main_light_white"
+    android:orientation="vertical"
+    tools:context="com.jiangtao.shuzicai.model.game.PriceForecastActivity">
 
     <!--toolbar-->
     <include layout="@layout/toolbar"/>
 
-</RelativeLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/mantissa_refresh_widget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_light_white"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mantissaRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
+                android:id="@+id/mantissaHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioGroup
+                        android:id="@+id/mantissaRadioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/offset_12dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/mantissaIndexSSEBtn"
+                            style="@style/style_main_index_radio_btn"
+                            android:checked="true"
+                            android:text="百分位直选"/>
+
+                        <RadioButton
+                            android:id="@+id/mantissaIndexCISBtn"
+                            style="@style/style_main_index_radio_btn"
+                            android:text="双数直选"/>
+
+                        <RadioButton
+                            android:id="@+id/mantissaIndexSCIBtn"
+                            style="@style/style_main_index_radio_btn"
+                            android:text="双数直选"/>
+
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/offset_4dp"
+                        android:background="@color/white"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/offset_48dp"
+                            android:text="沪深\n300"/>
+
+
+                        <TextView
+                            android:id="@+id/forecastMainIndex"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:layout_weight="1"
+                            android:gravity="center|left"
+                            android:text="3100.15"
+                            android:textSize="@dimen/font_size_large"/>
+
+                        <TextView
+                            android:id="@+id/indexChange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="+6.15"/>
+
+                        <TextView
+                            android:id="@+id/indexChangePercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="15%"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_4dp">
+
+                        <TextView
+                            style="@style/style_mantissa_index_textView"
+                            android:text="3"/>
+
+                        <TextView
+                            style="@style/style_mantissa_index_textView"
+                            android:text="1"/>
+
+                        <TextView
+                            style="@style/style_mantissa_index_textView"
+                            android:text="1"/>
+
+                        <TextView
+                            style="@style/style_mantissa_index_textView"
+                            android:text="0"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_4dp"
+                            android:text="."
+                            android:textSize="@dimen/font_size_huge"/>
+
+                        <EditText
+                            style="@style/style_mantissa_index_EditText"/>
+
+                        <EditText
+                            style="@style/style_mantissa_index_EditText"/>
+
+                        <TextView
+                            android:layout_width="@dimen/offset_64dp"
+                            android:layout_height="@dimen/offset_36dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/offset_10dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="提交"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/offset_4dp"
+                        android:background="@color/white"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/offset_48dp"
+                            android:text="伦敦\n金指"/>
+
+                        <TextView
+                            android:id="@+id/goldForecastMainIndex"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:layout_weight="1"
+                            android:gravity="center|left"
+                            android:text="3100.15"
+                            android:textSize="@dimen/font_size_large"/>
+
+                        <TextView
+                            android:id="@+id/goldIndexChange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="+6.15"/>
+
+                        <TextView
+                            android:id="@+id/goldIndexChangePercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="15%"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_4dp">
+
+                        <TextView
+                            style="@style/style_mantissa_index_textView"
+                            android:text="3"/>
+
+                        <TextView
+                            style="@style/style_mantissa_index_textView"
+                            android:text="1"/>
+
+                        <TextView
+                            style="@style/style_mantissa_index_textView"
+                            android:text="1"/>
+
+                        <TextView
+                            style="@style/style_mantissa_index_textView"
+                            android:text="0"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_4dp"
+                            android:text="."
+                            android:textSize="@dimen/font_size_huge"/>
+
+                        <EditText
+                            style="@style/style_mantissa_index_EditText"/>
+
+                        <EditText
+                            style="@style/style_mantissa_index_EditText"/>
+
+                        <TextView
+                            android:layout_width="@dimen/offset_64dp"
+                            android:layout_height="@dimen/offset_36dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/offset_10dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="提交"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_10dp">
+
+                        <TextView
+                            android:id="@+id/mantissaTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="预测12月26日"/>
+
+                        <TextView
+                            android:id="@+id/mantissaResult"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="本期与12月26日15:10分公布"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/offset_10dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="参与记录"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="本期记录"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
+
+        </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

@@ -108,7 +108,7 @@ public class TrendDataTools {
             for (StockIndex data : retList) {
                 if (data.getStock_type() == type) {
                     Calendar calendar = Calendar.getInstance();
-                    Date date = sdf.parse(data.getDate().getIso());
+                    Date date = sdf.parse(data.getDate().getDate());
                     calendar.setTime(date);
                     float day = calendar.get(Calendar.DAY_OF_MONTH);
                     TrendModel model = new TrendModel(calendar, day, data.getStock_value());

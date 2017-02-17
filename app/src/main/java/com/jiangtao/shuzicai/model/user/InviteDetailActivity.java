@@ -261,9 +261,9 @@ public class InviteDetailActivity extends BaseActivityWithToolBar implements Swi
                                 }.getType());
                         for (WealthDetail wealth : wealthDetails) {
                             if (wealth.getOperationType() == 0) {
-                                inviteAdapter.add(new InviteRecord(wealth.getCreateAt(),
-                                        userModel.getNickName(), wealth.getOperationValue(),
-                                        wealth.getOperationValue() * type));
+                               // inviteAdapter.add(new InviteRecord(wealth.getCreateAt(),
+                                //        userModel.getNickName(), wealth.getOperationValue(),
+                                 //       wealth.getOperationValue() * type));
                             }
                         }
                     } catch (Exception e) {

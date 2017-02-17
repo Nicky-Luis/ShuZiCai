@@ -172,7 +172,7 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
         if (null == indexData) {
             return;
         }
-        homeIndexTime.setText(indexData.getDate().getIso().substring(0, 9));
+        homeIndexTime.setText(indexData.getDate().getDate().substring(0, 9));
         //构造方法的字符格式这里如果小数不足2位,会以0补足.
         DecimalFormat decimalFormat = new DecimalFormat(".00");
         String date = decimalFormat.format(indexData.getStock_value());

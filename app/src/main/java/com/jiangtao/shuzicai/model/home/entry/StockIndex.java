@@ -1,13 +1,14 @@
 package com.jiangtao.shuzicai.model.home.entry;
 
-import com.jiangtao.shuzicai.common.entity.BmobDate;
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobDate;
 
 /**
  * Created by Nicky on 2017/1/16.
  * 指数model
  */
 
-public class StockIndex {
+public class StockIndex extends BmobObject{
 
     //指数类型
     public final static int Type_ShangZheng = 1;
