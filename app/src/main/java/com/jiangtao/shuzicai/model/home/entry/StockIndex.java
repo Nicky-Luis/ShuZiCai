@@ -8,13 +8,15 @@ import cn.bmob.v3.datatype.BmobDate;
  * 指数model
  */
 
-public class StockIndex extends BmobObject{
+public class StockIndex extends BmobObject {
 
     //指数类型
     public final static int Type_ShangZheng = 1;
     public final static int Type_ShenZheng = 2;
     public final static int Type_HuShen = 3;
     public final static int Type_chuangYe = 4;
+    public final static int Type_chuangGold = 5;
+
 
     //指数名称
     private String stock_name;

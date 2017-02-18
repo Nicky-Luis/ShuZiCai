@@ -46,18 +46,18 @@
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/mantissaIndexSSEBtn"
+                            android:id="@+id/mantissaFirstBtn"
                             style="@style/style_main_index_radio_btn"
                             android:checked="true"
                             android:text="百分位直选"/>
 
                         <RadioButton
-                            android:id="@+id/mantissaIndexCISBtn"
+                            android:id="@+id/mantissaSecondBtn"
                             style="@style/style_main_index_radio_btn"
                             android:text="双数直选"/>
 
                         <RadioButton
-                            android:id="@+id/mantissaIndexSCIBtn"
+                            android:id="@+id/mantissaThirdBtn"
                             style="@style/style_main_index_radio_btn"
                             android:text="双数直选"/>
 
@@ -79,7 +79,7 @@
 
 
                         <TextView
-                            android:id="@+id/forecastMainIndex"
+                            android:id="@+id/hushenMainIndex"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_margin="@dimen/offset_10dp"
@@ -89,14 +89,14 @@
                             android:textSize="@dimen/font_size_large"/>
 
                         <TextView
-                            android:id="@+id/indexChange"
+                            android:id="@+id/hushenChange"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/offset_10dp"
                             android:text="+6.15"/>
 
                         <TextView
-                            android:id="@+id/indexChangePercent"
+                            android:id="@+id/hushenChangePercent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/offset_10dp"
@@ -112,18 +112,22 @@
                         android:padding="@dimen/offset_4dp">
 
                         <TextView
+                            android:id="@+id/hushenIndexFirstNum"
                             style="@style/style_mantissa_index_textView"
                             android:text="3"/>
 
                         <TextView
+                            android:id="@+id/hushenIndexSecondNum"
                             style="@style/style_mantissa_index_textView"
                             android:text="1"/>
 
                         <TextView
+                            android:id="@+id/hushenIndexThirdNum"
                             style="@style/style_mantissa_index_textView"
                             android:text="1"/>
 
                         <TextView
+                            android:id="@+id/hushenIndexFourthNum"
                             style="@style/style_mantissa_index_textView"
                             android:text="0"/>
 
@@ -135,12 +139,15 @@
                             android:textSize="@dimen/font_size_huge"/>
 
                         <EditText
+                            android:id="@+id/hushenIndexFirstEdt"
                             style="@style/style_mantissa_index_EditText"/>
 
                         <EditText
+                            android:id="@+id/hushenIndexSecondEdt"
                             style="@style/style_mantissa_index_EditText"/>
 
                         <TextView
+                            android:id="@+id/hushenSubmitBtn"
                             android:layout_width="@dimen/offset_64dp"
                             android:layout_height="@dimen/offset_36dp"
                             android:layout_gravity="center_vertical"
@@ -172,7 +179,7 @@
                             android:layout_margin="@dimen/offset_10dp"
                             android:layout_weight="1"
                             android:gravity="center|left"
-                            android:text="3100.15"
+                            android:text="31400.15"
                             android:textSize="@dimen/font_size_large"/>
 
                         <TextView
@@ -199,18 +206,22 @@
                         android:padding="@dimen/offset_4dp">
 
                         <TextView
+                            android:id="@+id/goldIndexFirstNum"
                             style="@style/style_mantissa_index_textView"
                             android:text="3"/>
 
                         <TextView
+                            android:id="@+id/goldIndexSecondNum"
                             style="@style/style_mantissa_index_textView"
                             android:text="1"/>
 
                         <TextView
+                            android:id="@+id/goldIndexThirdNum"
                             style="@style/style_mantissa_index_textView"
                             android:text="1"/>
 
                         <TextView
+                            android:id="@+id/goldIndexFourthNum"
                             style="@style/style_mantissa_index_textView"
                             android:text="0"/>
 
@@ -222,12 +233,15 @@
                             android:textSize="@dimen/font_size_huge"/>
 
                         <EditText
+                            android:id="@+id/goldIndexFirstEdt"
                             style="@style/style_mantissa_index_EditText"/>
 
                         <EditText
+                            android:id="@+id/goldIndexSecondEdt"
                             style="@style/style_mantissa_index_EditText"/>
 
                         <TextView
+                            android:id="@+id/goldSubmitBtn"
                             android:layout_width="@dimen/offset_64dp"
                             android:layout_height="@dimen/offset_36dp"
                             android:layout_gravity="center_vertical"
