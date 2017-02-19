@@ -1,11 +1,15 @@
-package com.jiangtao.shuzicai.model.mall;
+package com.jiangtao.shuzicai.model.game;
 
 import android.view.View;
 
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 
-public class PriceForecastDescriptionActivity extends BaseActivityWithToolBar {
+/**
+ * Created by Nicky on 2017/2/19.
+ * 涨跌预测游戏规则说明
+ */
+public class PriceForecastDetailActivity extends BaseActivityWithToolBar {
 
     @Override
     public int setLayoutId() {

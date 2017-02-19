@@ -66,7 +66,7 @@ public class GameFragment extends BaseFragment  implements IGameView{
             break;
 
             case R.id.wholeForecastLy: {
-                Intent intent = new Intent(getActivity(), GuessWholeActivityActivity.class);
+                Intent intent = new Intent(getActivity(), GuessWholeActivity.class);
                 startActivity(intent);
             }
             break;

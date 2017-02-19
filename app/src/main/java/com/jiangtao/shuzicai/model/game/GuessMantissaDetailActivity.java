@@ -5,14 +5,12 @@ import android.view.View;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 
-public class GuessWholeActivityActivity extends BaseActivityWithToolBar {
-
+public class GuessMantissaDetailActivity extends BaseActivityWithToolBar {
 
     @Override
     public int setLayoutId() {
-        return R.layout.activity_guess_whole_activity;
+        return R.layout.activity_guess_mantissa_detial;
     }
-
 
     @Override
     protected void onInitialize() {
@@ -33,6 +31,6 @@ public class GuessWholeActivityActivity extends BaseActivityWithToolBar {
                 finish();
             }
         });
-        setCenterTitle("全数预测");
+        setCenterTitle("尾数预测规则说明");
     }
 }

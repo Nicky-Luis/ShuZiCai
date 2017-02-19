@@ -1,14 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/activity_guess_whole_activity"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jiangtao.shuzicai.model.game.GuessWholeActivityActivity">
-
+    android:background="@color/main_light_white"
+    android:orientation="vertical"
+    tools:context="com.jiangtao.shuzicai.model.game.PriceForecastActivity">
 
     <!--toolbar-->
     <include layout="@layout/toolbar"/>
 
-</RelativeLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/guessWhole_refresh_widget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_light_white"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/guessWholeRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
+                android:id="@+id/guessWholeHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/offset_4dp"
+                        android:background="@color/white"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/offset_48dp"
+                            android:text="沪深\n300"/>
+
+
+                        <TextView
+                            android:id="@+id/guessWholeMainIndex"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:layout_weight="1"
+                            android:gravity="center|left"
+                            android:text="3100.15"
+                            android:textSize="@dimen/font_size_large"/>
+
+                        <TextView
+                            android:id="@+id/guessWholeChange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="+6.15"/>
+
+                        <TextView
+                            android:id="@+id/guessWholeChangePercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="15%"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_4dp">
+
+                        <EditText
+                            android:id="@+id/guessWholeFirstEdt"
+                            style="@style/style_mantissa_index_EditText"
+                            android:inputType="number"
+                            android:maxLength="1"/>
+
+                        <EditText
+                            android:id="@+id/guessWholeSecondEdt"
+                            style="@style/style_mantissa_index_EditText"
+                            android:maxLength="1"
+                            android:inputType="number"/>
+
+                        <EditText
+                            android:id="@+id/guessWholeThirdEdt"
+                            style="@style/style_mantissa_index_EditText"
+                            android:maxLength="1"
+                            android:inputType="number"/>
+
+                        <EditText
+                            android:id="@+id/guessWholeFourthEdt"
+                            style="@style/style_mantissa_index_EditText"
+                            android:maxLength="1"
+                            android:inputType="number"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_4dp"
+                            android:text="."
+                            android:textSize="@dimen/font_size_huge"/>
+
+                        <EditText
+                            android:id="@+id/guessWholeFifthEdt"
+                            style="@style/style_mantissa_index_EditText"
+                            android:maxLength="1"
+                            android:inputType="number"/>
+
+                        <EditText
+                            android:id="@+id/guessWholeSixthEdt"
+                            style="@style/style_mantissa_index_EditText"
+                            android:maxLength="1"
+                            android:inputType="number"/>
+
+                        <TextView
+                            android:id="@+id/guessWholeSubmitBtn"
+                            android:layout_width="@dimen/offset_64dp"
+                            android:layout_height="@dimen/offset_36dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/offset_10dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="提交"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_10dp">
+
+                        <TextView
+                            android:id="@+id/guessWholeTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="预测12月26日"/>
+
+                        <TextView
+                            android:id="@+id/guessWholeResult"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/offset_10dp"
+                            android:text="本期与12月26日15:10分公布"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/offset_10dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/offset_4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="参与记录"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="本期记录"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
+
+        </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

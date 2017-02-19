@@ -140,11 +140,15 @@
 
                         <EditText
                             android:id="@+id/hushenIndexFirstEdt"
-                            style="@style/style_mantissa_index_EditText"/>
+                            style="@style/style_mantissa_index_EditText"
+                            android:inputType="number"
+                            android:maxLength="1"/>
 
                         <EditText
                             android:id="@+id/hushenIndexSecondEdt"
-                            style="@style/style_mantissa_index_EditText"/>
+                            style="@style/style_mantissa_index_EditText"
+                            android:maxLength="1"
+                            android:inputType="number"/>
 
                         <TextView
                             android:id="@+id/hushenSubmitBtn"
@@ -234,11 +238,15 @@
 
                         <EditText
                             android:id="@+id/goldIndexFirstEdt"
-                            style="@style/style_mantissa_index_EditText"/>
+                            style="@style/style_mantissa_index_EditText"
+                            android:maxLength="1"
+                            android:inputType="number"/>
 
                         <EditText
                             android:id="@+id/goldIndexSecondEdt"
-                            style="@style/style_mantissa_index_EditText"/>
+                            style="@style/style_mantissa_index_EditText"
+                            android:maxLength="1"
+                            android:inputType="number"/>
 
                         <TextView
                             android:id="@+id/goldSubmitBtn"

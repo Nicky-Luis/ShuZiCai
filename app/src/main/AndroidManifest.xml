@@ -61,11 +61,15 @@
         </activity>
         <activity android:name=".model.game.GuessMantissaActivity">
         </activity>
-        <activity android:name=".model.game.GuessWholeActivityActivity">
+        <activity android:name=".model.game.GuessWholeActivity">
         </activity>
         <activity android:name=".model.game.PriceForecastActivity">
         </activity>
-        <activity android:name=".model.mall.PriceForecastDescriptionActivity">
+        <activity android:name=".model.game.PriceForecastActivity$PriceForecastDescriptionActivity">
+        </activity>
+        <activity android:name=".model.game.GuessMantissaDetailActivity">
+        </activity>
+        <activity android:name=".model.game.GuessWholeDetailActivity">
         </activity>
     </application>
 

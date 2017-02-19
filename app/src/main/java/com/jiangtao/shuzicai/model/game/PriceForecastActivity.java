@@ -25,7 +25,6 @@ import com.jiangtao.shuzicai.common.view.trend_view.TrendView;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendDataTools;
 import com.jiangtao.shuzicai.model.game.entry.ForecastRecord;
 import com.jiangtao.shuzicai.model.home.entry.StockIndex;
-import com.jiangtao.shuzicai.model.mall.PriceForecastDescriptionActivity;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
 
 import java.util.ArrayList;
@@ -164,7 +163,7 @@ public class PriceForecastActivity extends BaseActivityWithToolBar
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setClass(PriceForecastActivity.this, PriceForecastDescriptionActivity.class);
+                intent.setClass(PriceForecastActivity.this, PriceForecastDetailActivity.class);
                 startActivity(intent);
             }
         });
@@ -289,4 +288,6 @@ public class PriceForecastActivity extends BaseActivityWithToolBar
             }
         });
     }
+
+
 }

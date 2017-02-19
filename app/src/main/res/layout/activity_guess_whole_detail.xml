@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/activity_price_forecast_description"
+    android:id="@+id/activity_guess_whole_detail"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jiangtao.shuzicai.model.game.PriceForecastActivity">
+    tools:context="com.jiangtao.shuzicai.model.game.GuessWholeDetailActivity">
 
     <!--toolbar-->
     <include layout="@layout/toolbar"/>
