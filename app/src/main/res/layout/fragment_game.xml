@@ -27,9 +27,9 @@
                 android:textSize="@dimen/font_size_normal"/>
 
             <TextView
+                android:id="@+id/guess_title_zhangdie_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="第345期"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_size_normal"/>
 
@@ -120,9 +120,9 @@
                     android:textSize="@dimen/font_size_normal"/>
 
                 <TextView
+                    android:id="@+id/guess_title_weishu_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="第345期"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_size_normal"/>
 
@@ -164,9 +164,9 @@
                     android:textSize="@dimen/font_size_normal"/>
 
                 <TextView
+                    android:id="@+id/guess_title_quanshu_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="第245期"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_size_normal"/>
 

@@ -10,31 +10,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.utils.LogUtils;
-import com.blankj.utilcode.utils.ToastUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
-import com.jiangtao.shuzicai.basic.network.APIInteractive;
-import com.jiangtao.shuzicai.basic.network.BmobQueryUtils;
-import com.jiangtao.shuzicai.basic.network.INetworkResponse;
 import com.jiangtao.shuzicai.common.event_message.EditUserInfoMsg;
 import com.jiangtao.shuzicai.common.event_message.LoginMsg;
 import com.jiangtao.shuzicai.common.event_message.LogoutMsg;
 import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
-import com.jiangtao.shuzicai.model.user.entry.WealthValue;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONObject;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -159,7 +147,7 @@ public class PersonFragment extends BaseFragment {
         //初始化时
         resetView();
         // 同步数据
-        synchronizeDate();
+        updateUserInfoDate();
     }
 
     /**
@@ -214,7 +202,9 @@ public class PersonFragment extends BaseFragment {
             userNameTxt.setText(name);
             //设置地址
             String address = Application.userInstance.getAddress();
-            userLocation.setText(address.split("-")[1]);
+            if (address != null && address.length() > 3) {
+                userLocation.setText(address.split("-")[1]);
+            }
             //设置性别
             int gender = Application.userInstance.getGender();
             if (gender == 0) {
@@ -226,74 +216,9 @@ public class PersonFragment extends BaseFragment {
     }
 
     //更新用户财富数据
-    private void upDateWealthValue(WealthValue wealthValue) {
-
-        goldCountTxt.setText(String.valueOf((int) wealthValue.getGoldValue()));
-        silverCountTxt.setText(String.valueOf((int) wealthValue.getSilverValue()));
-    }
-
-    //更新信息
-    private void synchronizeDate() {
-        if (null == Application.userInstance) {
-            return;
-        }
-
-        String userId = Application.userInstance.getObjectId();
-        //获取当前用户的信息
-        APIInteractive.getCurrentUser(userId, new INetworkResponse() {
-            @Override
-            public void onFailure(int code) {
-                LogUtils.e("更新数据失败");
-            }
-
-            @Override
-            public void onSucceed(JSONObject result) {
-                //更新数据
-                Application.userInstance.setModelData(result);
-                updateUserInfoDate();
-                //获取用户的财富
-                getWealthValue();
-            }
-        });
-    }
-
-    /**
-     * 获取财富
-     */
-    private void getWealthValue() {
-        if (null == Application.userInstance) {
-            return;
-        }
-        String userId = Application.userInstance.getObjectId();
-
-        BmobQueryUtils utils = BmobQueryUtils.newInstance();
-        String where = utils.setValue("userId").equal(userId);
-
-        //获取当前用户的信息
-        APIInteractive.getWealthValue(where, new INetworkResponse() {
-            @Override
-            public void onFailure(int code) {
-                LogUtils.e("更新数据失败");
-            }
-
-            @Override
-            public void onSucceed(JSONObject result) {
-                //更新数据
-                try {
-                    String jArray = result.optString("results");
-                    List<WealthValue> wealthValues = new Gson().fromJson(jArray, new TypeToken<List<WealthValue>>() {
-                    }.getType());
-                    if (wealthValues.size() > 0) {
-                        Application.wealthValue = wealthValues.get(0);
-                        EventBus.getDefault().post(new WealthChangeMsg(wealthValues.get(0)));
-                    } else {
-                        ToastUtils.showShortToast("财富数据更新失败");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    private void upDateWealthValue() {
+        goldCountTxt.setText(String.valueOf((int) Application.userInstance.getGoldValue()));
+        silverCountTxt.setText(String.valueOf((int) Application.userInstance.getSilverValue()));
     }
 
     /**
@@ -304,8 +229,8 @@ public class PersonFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMainThread(LoginMsg msg) {
         resetView();
-        // 同步数据
-        synchronizeDate();
+        updateUserInfoDate();
+        upDateWealthValue();
     }
 
 
@@ -317,10 +242,9 @@ public class PersonFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMainThread(EditUserInfoMsg msg) {
         resetView();
-        // 同步数据
-        synchronizeDate();
+        updateUserInfoDate();
+        upDateWealthValue();
     }
-
 
     /**
      * 退出登录
@@ -330,6 +254,7 @@ public class PersonFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMainThread(LogoutMsg msg) {
         resetView();
+        updateUserInfoDate();
     }
 
     /**
@@ -339,6 +264,7 @@ public class PersonFragment extends BaseFragment {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMainThread(WealthChangeMsg msg) {
-        upDateWealthValue(msg.getWealthValue());
+        upDateWealthValue();
+        updateUserInfoDate();
     }
 }

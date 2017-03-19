@@ -3,7 +3,7 @@ package com.jiangtao.shuzicai.basic.network;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jiangtao.shuzicai.model.mall.entry.Order;
+import com.jiangtao.shuzicai.model.mall.entry.GoodsOrder;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
 import com.jiangtao.shuzicai.model.user.entry.UpdateInfoBean;
@@ -163,7 +163,7 @@ public interface APICollections {
      * @return
      */
     @POST("1/classes/goodsOrder")
-    Call<JsonObject> submitOrder(@Body Order bean);
+    Call<JsonObject> submitOrder(@Body GoodsOrder bean);
 
 
     /**

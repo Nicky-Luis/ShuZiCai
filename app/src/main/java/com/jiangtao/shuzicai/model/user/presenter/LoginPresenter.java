@@ -3,11 +3,9 @@ package com.jiangtao.shuzicai.model.user.presenter;
 import android.content.Context;
 
 import com.blankj.utilcode.utils.LogUtils;
-import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.network.INetworkResponse;
 import com.jiangtao.shuzicai.common.event_message.LoginMsg;
-import com.jiangtao.shuzicai.model.user.entry.UserModel;
 import com.jiangtao.shuzicai.model.user.interfaces.ILoginPresenter;
 import com.jiangtao.shuzicai.model.user.interfaces.ILoginView;
 
@@ -42,7 +40,7 @@ public class LoginPresenter implements ILoginPresenter {
             @Override
             public void onSucceed(JSONObject result) {
                 LogUtils.i("登录成功,result:" + result);
-                Application.userInstance = new UserModel(result);
+                //Application.userInstance = new _User(result);
                 loginView.onLoginSucceed();
                 EventBus.getDefault().post(new LoginMsg(true));
             }

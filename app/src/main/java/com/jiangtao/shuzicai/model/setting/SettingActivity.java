@@ -23,6 +23,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 
 public class SettingActivity extends BaseActivityWithToolBar {
 
@@ -47,7 +48,7 @@ public class SettingActivity extends BaseActivityWithToolBar {
 
 
     //退出登录
-    @OnClick({R.id.logoutBtn, R.id.feedbackTxt, R.id.helpTxt,R.id.aboutTxt})
+    @OnClick({R.id.logoutBtn, R.id.feedbackTxt, R.id.helpTxt, R.id.aboutTxt})
     public void OnClick(View view) {
         switch (view.getId()) {
 
@@ -82,6 +83,8 @@ public class SettingActivity extends BaseActivityWithToolBar {
 
                     @Override
                     public void onFirst(DialogInterface dialogInterface) {
+                        //清除缓存用户对象
+                        BmobUser.logOut();
                         if (Application.userInstance != null) {
                             Application.userInstance = null;
                             AppConfigure.saveLoginStatue(false);

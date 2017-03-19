@@ -7,7 +7,7 @@ import cn.bmob.v3.datatype.BmobDate;
  * Created by Nicky on 2017/2/16.
  * 涨跌预测记录
  */
-public class ForecastRecord extends BmobObject {
+public class GuessForecastRecord extends BmobObject {
 
     //涨
     public final static int ForecastDown = 0;
@@ -29,7 +29,7 @@ public class ForecastRecord extends BmobObject {
     //获取的奖励数量
     private float rewardCount;
 
-    public ForecastRecord(String userId, float silverValue, BmobDate time, int periodValue, int periodCount, float
+    public GuessForecastRecord(String userId, float silverValue, BmobDate time, int periodValue, int periodCount, float
             periodResult, float indexResult, float rewardCount) {
         this.userId = userId;
         this.silverValue = silverValue;
@@ -41,8 +41,8 @@ public class ForecastRecord extends BmobObject {
         this.rewardCount = rewardCount;
     }
 
-    public ForecastRecord() {
-        this.setTableName("ForecastRecord");
+    public GuessForecastRecord() {
+        this.setTableName("GuessForecastRecord");
     }
 
     public String getUserId() {

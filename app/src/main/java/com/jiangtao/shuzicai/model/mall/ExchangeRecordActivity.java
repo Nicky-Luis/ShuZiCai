@@ -17,7 +17,7 @@ import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.network.BmobQueryUtils;
 import com.jiangtao.shuzicai.basic.network.INetworkResponse;
 import com.jiangtao.shuzicai.model.mall.entry.Goods;
-import com.jiangtao.shuzicai.model.mall.entry.Order;
+import com.jiangtao.shuzicai.model.mall.entry.GoodsOrder;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
 
 import org.json.JSONArray;
@@ -38,7 +38,7 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
     @BindView(R.id.exchange_record_refresh_widget)
     SwipeRefreshLayout mSwipeRefreshWidget;
     //适配器
-    private QuickAdapter<Order> adapter;
+    private QuickAdapter<GoodsOrder> adapter;
 
 
     @Override
@@ -83,10 +83,10 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
     //初始化ListView
     private void initListView() {
         //初始化适配器
-        adapter = new QuickAdapter<Order>(this, R.layout.item_exchange_record_listview,
-                new ArrayList<Order>()) {
+        adapter = new QuickAdapter<GoodsOrder>(this, R.layout.item_exchange_record_listview,
+                new ArrayList<GoodsOrder>()) {
             @Override
-            protected void convert(BaseAdapterHelper helper, Order item) {
+            protected void convert(BaseAdapterHelper helper, GoodsOrder item) {
                 helper.setText(R.id.view_orders_time,item.getOrderTime().getIso());
                 helper.setText(R.id.view_orders_address,item.getAddress());
                 helper.setText(R.id.view_orders_phone,item.getReceivingPhone());
@@ -122,13 +122,13 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
             public void onSucceed(JSONObject result) {
                 mSwipeRefreshWidget.setRefreshing(false);
                 LogUtils.i("result = " + result);
-                List<Order> orders =new ArrayList<>();
+                List<GoodsOrder> orders =new ArrayList<>();
                 try {
                     JSONArray jArray = result.optJSONArray("results");
                     for (int i = 0; i < jArray.length(); i++) {
                         JSONObject object = (JSONObject) jArray.get(i);
                         Gson gson = new Gson();
-                        Order  order= gson.fromJson(object.toString(),Order.class);
+                        GoodsOrder order= gson.fromJson(object.toString(),GoodsOrder.class);
 
                         JSONObject goodsObject = object.optJSONObject("goods");
                         Gson goodsGson = new Gson();

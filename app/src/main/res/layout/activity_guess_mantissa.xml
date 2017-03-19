@@ -6,11 +6,10 @@
     android:layout_height="match_parent"
     android:background="@color/main_light_white"
     android:orientation="vertical"
-    tools:context="com.jiangtao.shuzicai.model.game.PriceForecastActivity">
-
+    tools:context="com.jiangtao.shuzicai.model.game.GuessForecastActivity">
     <!--toolbar-->
     <include layout="@layout/toolbar"/>
-
+    <!--toolbar-->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/mantissa_refresh_widget"
         android:layout_width="match_parent"
@@ -59,7 +58,7 @@
                         <RadioButton
                             android:id="@+id/mantissaThirdBtn"
                             style="@style/style_main_index_radio_btn"
-                            android:text="双数直选"/>
+                            android:text="双数组选"/>
 
                     </RadioGroup>
 

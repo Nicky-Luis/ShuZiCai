@@ -17,6 +17,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //兼容Android6.0系统所需，如果这句话报错，可在dependencies标签下使用compile 'cn.bmob.android:http-legacy:1.0'**
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -31,10 +33,10 @@ dependencies {
     compile 'com.android.support:design:25.1.0'
     //所需要的依赖包
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'io.reactivex:rxandroid:1.1.0'
+   // compile 'io.reactivex:rxjava:1.1.0'
+   // compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
+    //compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
     compile 'com.squareup.retrofit2:converter-scalars:2.0.0-beta4'
     compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
     compile 'com.google.code.gson:gson:2.6.2'
@@ -52,4 +54,13 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.1.0'
     //recyclerviewheader
     compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.0'
+
+    //以下SDK开发者请根据需要自行选择
+    //bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务，以下是最新的bmob-sdk:
+    //3.5.0：请务必查看下面注释[1]
+    compile 'cn.bmob.android:bmob-sdk:3.5.0'
+    //bmob-sms ：Bmob单独为短信服务提供的包
+    compile 'cn.bmob.android:bmob-sms:1.0.1'
+    //如果你想应用能够兼容Android6.0，请添加此依赖(org.apache.http.legacy.jar)
+    compile 'cn.bmob.android:http-legacy:1.0'
 }

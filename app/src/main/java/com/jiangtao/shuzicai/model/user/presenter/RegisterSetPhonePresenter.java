@@ -10,7 +10,7 @@ import com.jiangtao.shuzicai.basic.network.INetworkResponse;
 import com.jiangtao.shuzicai.basic.network.NetworkRequest;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.RequestVerifyCodeBean;
-import com.jiangtao.shuzicai.model.user.entry.UserModel;
+import com.jiangtao.shuzicai.model.user.entry._User;
 import com.jiangtao.shuzicai.model.user.interfaces.IRegisterSetPhoneView;
 import com.jiangtao.shuzicai.model.user.interfaces.IRegisterSetPresenter;
 import com.jiangtao.shuzicai.model.user.utils.ShareCodeUtil;
@@ -137,11 +137,10 @@ public class RegisterSetPhonePresenter implements IRegisterSetPresenter {
                 String sessionToken = result.optString("sessionToken");
 
                 if (null == Application.userInstance) {
-                    Application.userInstance = new UserModel();
+                    Application.userInstance = new _User();
                 }
                 Application.userInstance.setMobilePhoneNumber(mobilePhoneNumber);
                 Application.userInstance.setObjectId(objectId);
-                Application.userInstance.setToken(sessionToken);
 
                 registerPhoneView.onRegisterSucceed();
             }

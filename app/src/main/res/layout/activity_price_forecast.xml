@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/main_light_white"
     android:orientation="vertical"
-    tools:context="com.jiangtao.shuzicai.model.game.PriceForecastActivity">
+    tools:context="com.jiangtao.shuzicai.model.game.GuessForecastActivity">
 
     <!--toolbar-->
     <include layout="@layout/toolbar"/>

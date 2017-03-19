@@ -1,10 +1,12 @@
 package com.jiangtao.shuzicai.model.user.entry;
 
+import cn.bmob.v3.BmobObject;
+
 /**
  * Created by Nicky on 2017/2/12.
  */
 
-public class WealthDetail {
+public class WealthDetail extends BmobObject {
 
     //伙伴类型
     public final static int Currency_Type_Gold = 0;
@@ -15,6 +17,8 @@ public class WealthDetail {
     public final static int Operation_Type_Reward = 2;
     public final static int Operation_Type_Game = 3;
     public final static int Operation_Type_Conversion = 4;
+    //用户id
+    private String userId;
     //变化之前的值
     private float beforeValue;
     //变化之后的值
@@ -25,10 +29,6 @@ public class WealthDetail {
     private int operationType;
     //操作的数值
     private float operationValue;
-    //用户id
-    private String userId;
-    //createAt
-    private String createdAt;
 
     public WealthDetail(float beforeValue, float afterValue, int currencyType, int operationType, float
             operationValue, String userId) {
@@ -65,14 +65,6 @@ public class WealthDetail {
 
     public String getUserId() {
         return userId;
-    }
-
-    public String getCreateAt() {
-        return createdAt;
-    }
-
-    public void setCreateAt(String createAt) {
-        this.createdAt = createAt;
     }
 
     public void setBeforeValue(float beforeValue) {

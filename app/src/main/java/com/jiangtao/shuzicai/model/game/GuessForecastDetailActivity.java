@@ -9,7 +9,7 @@ import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
  * Created by Nicky on 2017/2/19.
  * 涨跌预测游戏规则说明
  */
-public class PriceForecastDetailActivity extends BaseActivityWithToolBar {
+public class GuessForecastDetailActivity extends BaseActivityWithToolBar {
 
     @Override
     public int setLayoutId() {

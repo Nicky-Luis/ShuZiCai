@@ -10,6 +10,7 @@ import com.jiangtao.shuzicai.basic.utils.EncryptUtils;
  */
 
 public class AppConfigure {
+
     //用户登录信息
     private final static String USER_LOGIN_STATUS_SP = "user_login_status";
     private final static String IS_USER_LOGIN = "is_user_login";

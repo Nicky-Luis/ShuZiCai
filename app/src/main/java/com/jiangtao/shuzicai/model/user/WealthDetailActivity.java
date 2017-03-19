@@ -73,7 +73,7 @@ public class WealthDetailActivity extends BaseActivityWithToolBar
                 new ArrayList<WealthDetail>()) {
             @Override
             protected void convert(BaseAdapterHelper helper, WealthDetail item) {
-                helper.setText(R.id.wealth_detail_time, item.getCreateAt());
+                helper.setText(R.id.wealth_detail_time, item.getCreatedAt());
                 String type = "充值";
                 switch (item.getOperationType()) {
                     case WealthDetail.Operation_Type_Recharge:

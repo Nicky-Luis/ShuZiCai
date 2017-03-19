@@ -23,7 +23,8 @@ import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.common.view.trend_view.TrendView;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendDataTools;
-import com.jiangtao.shuzicai.model.game.entry.ForecastRecord;
+import com.jiangtao.shuzicai.model.game.entry.GameInfo;
+import com.jiangtao.shuzicai.model.game.entry.GuessForecastRecord;
 import com.jiangtao.shuzicai.model.home.entry.StockIndex;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
 
@@ -41,7 +42,7 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 //涨跌预测
-public class PriceForecastActivity extends BaseActivityWithToolBar
+public class GuessForecastActivity extends BaseActivityWithToolBar
         implements SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.forecastRecyclerView)
@@ -66,7 +67,7 @@ public class PriceForecastActivity extends BaseActivityWithToolBar
     TextView indexChangePercent;
 
     //适配器
-    private QuickAdapter<ForecastRecord> forecastAdapter;
+    private QuickAdapter<GuessForecastRecord> forecastAdapter;
 
 
     //设置点击事件
@@ -76,13 +77,13 @@ public class PriceForecastActivity extends BaseActivityWithToolBar
 
             //看涨
             case R.id.forecastUpBtn: {
-                betValue(ForecastRecord.ForecastUp);
+                betValue(GuessForecastRecord.ForecastUp);
             }
             break;
 
             //看跌
             case R.id.forecastDownBtn: {
-                betValue(ForecastRecord.ForecastDown);
+                betValue(GuessForecastRecord.ForecastDown);
             }
             break;
         }
@@ -126,10 +127,10 @@ public class PriceForecastActivity extends BaseActivityWithToolBar
         forecastRecyclerView.addItemDecoration(decoration);
 
         //adapter初始化
-        forecastAdapter = new QuickAdapter<ForecastRecord>(getContext(),
-                R.layout.item_forecast_recoder_recyclerview, new ArrayList<ForecastRecord>()) {
+        forecastAdapter = new QuickAdapter<GuessForecastRecord>(getContext(),
+                R.layout.item_forecast_recoder_recyclerview, new ArrayList<GuessForecastRecord>()) {
             @Override
-            protected void convert(BaseAdapterHelper helper, final ForecastRecord item) {
+            protected void convert(BaseAdapterHelper helper, final GuessForecastRecord item) {
                 helper.setText(R.id.forecast_period_count, "第" + item.getPeriodCount() + "期");
                 helper.setText(R.id.actualResults, "实际结果:" + item.getPeriodResult());
                 if (item.getPeriodValue() == 1) {
@@ -158,12 +159,12 @@ public class PriceForecastActivity extends BaseActivityWithToolBar
                 finish();
             }
         });
-        setCenterTitle("涨跌预测(325期)");
+        setCenterTitle("涨跌预测");
         setRightTitle("说明", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setClass(PriceForecastActivity.this, PriceForecastDetailActivity.class);
+                intent.setClass(GuessForecastActivity.this, GuessForecastDetailActivity.class);
                 startActivity(intent);
             }
         });
@@ -178,9 +179,28 @@ public class PriceForecastActivity extends BaseActivityWithToolBar
         getIndexData();
         getForecastRecord();
         bindIndexValue();
+        getPeriodsCount();
     }
 
     //////////////////////////////////////////////////////
+
+    /***
+     * 获取期数
+     */
+    private void getPeriodsCount() {
+        BmobQuery<GameInfo> query = new BmobQuery<GameInfo>();
+        query.addWhereEqualTo("gameType", GameInfo.type_zhangdie);
+        query.findObjects(new FindListener<GameInfo>() {
+            @Override
+            public void done(List<GameInfo> list, BmobException e) {
+                if (e == null) {
+                    if (list != null && list.size() > 0) {
+                        setCenterTitle("涨跌预测(" + list.get(0).getNewestNum() + "期)");
+                    }
+                }
+            }
+        });
+    }
 
     /**
      * 押注
@@ -215,7 +235,7 @@ public class PriceForecastActivity extends BaseActivityWithToolBar
      * @param type
      */
     private void submitForecastData(float value, int type) {
-        ForecastRecord forecastRecord = new ForecastRecord();
+        GuessForecastRecord forecastRecord = new GuessForecastRecord();
         forecastRecord.setUserId(Application.userInstance.getObjectId());
         forecastRecord.setSilverValue(value);
         forecastRecord.setTime(new BmobDate(new Date(System.currentTimeMillis())));
@@ -268,15 +288,15 @@ public class PriceForecastActivity extends BaseActivityWithToolBar
         if (null == Application.userInstance) {
             return;
         }
-        BmobQuery<ForecastRecord> query = new BmobQuery<>();
+        BmobQuery<GuessForecastRecord> query = new BmobQuery<>();
         //查询playerName叫“比目”的数据
         query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
         //返回50条数据，如果不加上这条语句，默认返回10条数据
         query.setLimit(500);
         //执行查询方法
-        query.findObjects(new FindListener<ForecastRecord>() {
+        query.findObjects(new FindListener<GuessForecastRecord>() {
             @Override
-            public void done(List<ForecastRecord> object, BmobException e) {
+            public void done(List<GuessForecastRecord> object, BmobException e) {
                 mForecastRefreshWidget.setRefreshing(false);
                 if (e == null) {
                     forecastAdapter.clear();

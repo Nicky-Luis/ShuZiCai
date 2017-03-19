@@ -23,6 +23,7 @@ import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.BaseA
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.QuickAdapter;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
+import com.jiangtao.shuzicai.model.game.entry.GameInfo;
 import com.jiangtao.shuzicai.model.game.entry.GuessMantissaRecord;
 import com.jiangtao.shuzicai.model.home.entry.StockIndex;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
@@ -41,6 +42,7 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 import static com.jiangtao.shuzicai.model.game.entry.GuessMantissaRecord.Guess_Type_DoubleDirect;
+import static com.jiangtao.shuzicai.model.game.entry.GuessMantissaRecord.Guess_Type_DoubleGroup;
 import static com.jiangtao.shuzicai.model.game.entry.GuessMantissaRecord.Guess_Type_Percentile;
 
 public class GuessMantissaActivity extends BaseActivityWithToolBar
@@ -259,6 +261,7 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
         getNewestGoldIndex();
         getNewest300Index();
         getMantissaRecord();
+        getPeriodsCount();
     }
 
     //设置view的值
@@ -277,7 +280,7 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
                         break;
 
                     case R.id.mantissaThirdBtn:
-                        currentGuessType = GuessMantissaRecord.Guess_Type_DoubleGroup;
+                        currentGuessType = Guess_Type_DoubleGroup;
                         break;
                 }
                 setGuessType();
@@ -313,9 +316,6 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
 
     //获取最新的黄金信息
     private void getNewestGoldIndex() {
-        if (null == Application.userInstance) {
-            return;
-        }
         BmobQuery<StockIndex> query = new BmobQuery<>();
         //查询playerName叫“比目”的数据
         query.addWhereEqualTo("stock_type", StockIndex.Type_chuangGold);
@@ -366,9 +366,6 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
 
     //获取最新的沪深300信息
     private void getNewest300Index() {
-        if (null == Application.userInstance) {
-            return;
-        }
         BmobQuery<StockIndex> query = new BmobQuery<>();
         //查询playerName叫“比目”的数据
         query.addWhereEqualTo("stock_type", StockIndex.Type_HuShen);
@@ -418,8 +415,29 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
         setGuessType();
     }
 
+    /***
+     * 获取期数
+     */
+    private void getPeriodsCount() {
+        BmobQuery<GameInfo> query = new BmobQuery<GameInfo>();
+        query.addWhereEqualTo("gameType", GameInfo.type_weishu);
+        query.findObjects(new FindListener<GameInfo>() {
+            @Override
+            public void done(List<GameInfo> list, BmobException e) {
+                if (e == null) {
+                    if (list != null && list.size() > 0) {
+                        setCenterTitle("尾数预测(" + list.get(0).getNewestNum() + "期)");
+                    }
+                }
+            }
+        });
+    }
+
     //获取操作记录
     private void getMantissaRecord() {
+        if (null == Application.userInstance) {
+            return;
+        }
         BmobQuery<GuessMantissaRecord> query = new BmobQuery<>();
         //查询playerName叫“比目”的数据
         query.addWhereEqualTo("userId", Application.userInstance.getObjectId());

@@ -217,9 +217,9 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
         //绑定财富数据
         String gold = "金币：0";
         String silver = "银币：0";
-        if (null != Application.wealthValue) {
-            gold = "金币：" + String.valueOf((int) Application.wealthValue.getGoldValue());
-            silver = "银币：" + String.valueOf((int) Application.wealthValue.getSilverValue());
+        if (null != Application.userInstance) {
+            gold = "金币：" + String.valueOf((int) Application.userInstance.getGoldValue());
+            silver = "银币：" + String.valueOf((int) Application.userInstance.getSilverValue());
         }
         homeMyGold.setText(gold);
         homeMySilver.setText(silver);

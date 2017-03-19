@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jiangtao.shuzicai.model.game.PriceForecastActivity">
+    tools:context="com.jiangtao.shuzicai.model.game.GuessForecastActivity">
 
     <!--toolbar-->
     <include layout="@layout/toolbar"/>

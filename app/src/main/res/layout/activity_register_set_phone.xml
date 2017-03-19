@@ -84,7 +84,7 @@
         android:background="@color/white"
         android:hint="输入邀请码..."
         android:inputType="phone"
-        android:maxEms="11"
+        android:maxEms="6"
         android:padding="@dimen/offset_4dp"
         android:textColor="@color/main_deep_black"/>
 

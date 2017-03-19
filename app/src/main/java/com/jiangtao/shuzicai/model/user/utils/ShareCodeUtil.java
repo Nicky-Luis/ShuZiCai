@@ -1,12 +1,12 @@
 package com.jiangtao.shuzicai.model.user.utils;
 
-import com.blankj.utilcode.utils.LogUtils;
-import com.jiangtao.shuzicai.basic.network.APIInteractive;
-import com.jiangtao.shuzicai.basic.network.BmobQueryUtils;
-import com.jiangtao.shuzicai.basic.network.INetworkResponse;
+import com.jiangtao.shuzicai.model.user.entry._User;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * 邀请码生成器，算法原理：
@@ -41,26 +41,23 @@ public class ShareCodeUtil {
      * @return
      */
     private static void isShareCodeExist(final String code, final IShareCallBack callBack) {
-        BmobQueryUtils utils = BmobQueryUtils.newInstance();
-        String where = utils.setValue("InvitationCode").equal(code);
-
-        //查询是否有已经存在的
-        APIInteractive.getVerifyCodeExist(where, new INetworkResponse() {
-
+        BmobQuery<_User> query = new BmobQuery<_User>();
+        query.addWhereEqualTo("InvitationCode", code);
+        query.findObjects(new FindListener<_User>() {
             @Override
-            public void onFailure(int code) {
-                LogUtils.i("查询邀请码成功，code:" + code);
-                callBack.shareCodeExist();
-            }
-
-            @Override
-            public void onSucceed(JSONObject result) {
-                LogUtils.i("查询邀请码成功，result:" + result);
-                JSONArray obj = result.optJSONArray("results");
-                if (obj.length() > 0) {
-                    callBack.shareCodeExist();
+            public void done(List<_User> list, BmobException e) {
+                if (e == null) {
+                    if (null != list) {
+                        if (list.size() > 0) {
+                            callBack.shareCodeExist();
+                        } else {
+                            callBack.getShareCode(code);
+                        }
+                    }else {
+                        callBack.shareCodeExist();
+                    }
                 } else {
-                    callBack.getShareCode(code);
+                    callBack.shareCodeExist();
                 }
             }
         });

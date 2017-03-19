@@ -21,6 +21,7 @@ import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.BaseA
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.QuickAdapter;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
+import com.jiangtao.shuzicai.model.game.entry.GameInfo;
 import com.jiangtao.shuzicai.model.game.entry.GuessWholeRecord;
 import com.jiangtao.shuzicai.model.home.entry.StockIndex;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
@@ -123,7 +124,6 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
             }
         });
         setCenterTitle("全数预测");
-
         setRightTitle("说明", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -178,8 +178,27 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
     private void getData(){
         getNewest300Index();
         getMantissaRecord();
+        getPeriodsCount();
     }
 
+
+    /***
+     * 获取期数
+     */
+    private void getPeriodsCount() {
+        BmobQuery<GameInfo> query = new BmobQuery<GameInfo>();
+        query.addWhereEqualTo("gameType", GameInfo.type_quanshu);
+        query.findObjects(new FindListener<GameInfo>() {
+            @Override
+            public void done(List<GameInfo> list, BmobException e) {
+                if (e == null) {
+                    if (list != null && list.size() > 0) {
+                        setCenterTitle("全数预测(" + list.get(0).getNewestNum() + "期)");
+                    }
+                }
+            }
+        });
+    }
     //获取最新的沪深300信息
     private void getNewest300Index() {
         if (null == Application.userInstance) {
@@ -300,6 +319,9 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
 
     //获取操作记录
     private void getMantissaRecord() {
+        if (null==Application.userInstance){
+            return;
+        }
         BmobQuery<GuessWholeRecord> query = new BmobQuery<>();
         //查询playerName叫“比目”的数据
         query.addWhereEqualTo("userId", Application.userInstance.getObjectId());

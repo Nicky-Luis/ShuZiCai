@@ -4,7 +4,7 @@ package com.jiangtao.shuzicai.basic.network;
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jiangtao.shuzicai.model.mall.entry.Order;
+import com.jiangtao.shuzicai.model.mall.entry.GoodsOrder;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
 import com.jiangtao.shuzicai.model.user.entry.UpdateInfoBean;
@@ -237,7 +237,7 @@ public class APIInteractive {
      * @param order
      * @param callback
      */
-    public static void submitOrder(Order order, final INetworkResponse callback) {
+    public static void submitOrder(GoodsOrder order, final INetworkResponse callback) {
         if (null == request) {
             initRetrofit();
         }

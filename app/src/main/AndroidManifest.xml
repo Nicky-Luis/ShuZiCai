@@ -63,9 +63,9 @@
         </activity>
         <activity android:name=".model.game.GuessWholeActivity">
         </activity>
-        <activity android:name=".model.game.PriceForecastActivity">
+        <activity android:name=".model.game.GuessForecastActivity">
         </activity>
-        <activity android:name=".model.game.PriceForecastActivity$PriceForecastDescriptionActivity">
+        <activity android:name=".model.game.GuessForecastActivity$PriceForecastDescriptionActivity">
         </activity>
         <activity android:name=".model.game.GuessMantissaDetailActivity">
         </activity>
