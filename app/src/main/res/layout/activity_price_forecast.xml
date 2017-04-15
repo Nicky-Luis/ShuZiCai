@@ -52,7 +52,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/offset_48dp"
-                            android:text="最新\n指数"/>
+                            android:text="上期\n指数"/>
 
 
                         <TextView
@@ -93,14 +93,7 @@
                         android:padding="@dimen/offset_10dp">
 
                         <TextView
-                            android:id="@+id/forecastTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/offset_10dp"
-                            android:text="预测12月26日"/>
-
-                        <TextView
-                            android:id="@+id/forecastResult"
+                            android:id="@+id/forecastResultTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/offset_10dp"

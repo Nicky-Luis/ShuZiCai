@@ -7,11 +7,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.blankj.utilcode.utils.ToastUtils;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
 import com.jiangtao.shuzicai.common.view.billboard_view.BillboardView;
 import com.jiangtao.shuzicai.common.view.billboard_view.model.BillboardMessage;
 import com.jiangtao.shuzicai.model.game.entry.GameInfo;
+import com.jiangtao.shuzicai.model.game.entry.HuShenIndex;
 import com.jiangtao.shuzicai.model.game.interfaces.IGamePresenter;
 import com.jiangtao.shuzicai.model.game.presenter.GamePresenter;
 import com.jiangtao.shuzicai.model.game.view.IGameView;
@@ -19,6 +21,7 @@ import com.jiangtao.shuzicai.model.game.view.IGameView;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,6 +52,16 @@ public class GameFragment extends BaseFragment implements IGameView {
     //涨跌
     @BindView(R.id.guess_title_zhangdie_txt)
     TextView guess_title_zhangdie_txt;
+    //主指数
+    @BindView(R.id.gameIndexMainData)
+    TextView gameIndexMainData;
+    //改变量
+    @BindView(R.id.gameIndexChange)
+    TextView gameIndexChange;
+    //百分比
+    @BindView(R.id.gameIndexChangePercent)
+    TextView gameIndexChangePercent;
+
     //presenter
     private IGamePresenter presenter;
 
@@ -108,6 +121,7 @@ public class GameFragment extends BaseFragment implements IGameView {
         // textView.setText("第" + mPage + "页");
         presenter.getBillboardData();
         getPeriodsCount();
+        getIndexData();
     }
 
     /***
@@ -134,6 +148,37 @@ public class GameFragment extends BaseFragment implements IGameView {
             }
         });
     }
+
+    //获取数据
+    public void getIndexData() {
+        BmobQuery<HuShenIndex> query = new BmobQuery<HuShenIndex>();
+        query.max(new String[]{"createdAt"});
+        //执行查询方法
+        query.findObjects(new FindListener<HuShenIndex>() {
+            @Override
+            public void done(List<HuShenIndex> stockIndices, BmobException e) {
+                Log.i("bmob", "返回：" + stockIndices.size());
+                if (e == null) {
+                    if (stockIndices.size() > 0) {
+                        //指数值
+                        HuShenIndex indexData =stockIndices.get(0);
+                        float price = Float.valueOf(indexData.getNowPrice());
+                        float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                        gameIndexMainData.setText(String.valueOf(resultPrice));
+
+                        gameIndexChange.setText(indexData.getDiff_money());
+                        //涨跌比率
+                        String changePercent = indexData.getDiff_rate() + "%";
+                        gameIndexChangePercent.setText(changePercent);
+                    }
+                } else {
+                    ToastUtils.showShortToast("获取数据失败");
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
+    }
+
 
     /**
      * 主线程处理接收到的数据

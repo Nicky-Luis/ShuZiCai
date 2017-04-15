@@ -65,7 +65,7 @@
         </activity>
         <activity android:name=".model.game.GuessForecastActivity">
         </activity>
-        <activity android:name=".model.game.GuessForecastActivity$PriceForecastDescriptionActivity">
+        <activity android:name=".model.game.GuessForecastDetailActivity">
         </activity>
         <activity android:name=".model.game.GuessMantissaDetailActivity">
         </activity>

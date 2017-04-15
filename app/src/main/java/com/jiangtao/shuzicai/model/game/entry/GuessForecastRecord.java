@@ -1,7 +1,6 @@
 package com.jiangtao.shuzicai.model.game.entry;
 
 import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobDate;
 
 /**
  * Created by Nicky on 2017/2/16.
@@ -15,97 +14,119 @@ public class GuessForecastRecord extends BmobObject {
     //用户id
     private String userId;
     //押注银元数值
-    private float silverValue;
-    //押注时间
-    private BmobDate time;
-    //涨跌情况，0:跌，1：涨
-    private int periodValue;
+    private float betSilverValue;
+    //押注涨跌情况，0:跌，1：涨
+    private int betValue;
     //押注期数
-    private int periodCount;
-    //实际结果
-    private float periodResult;
+    private int periodNum;
+    //状态,0:未开奖，1：中奖，2：未中奖
+    private int betStatus;
+    //实际结果，0:跌，1：涨
+    private int betResult;
     //实际的指数
     private float indexResult;
     //获取的奖励数量
-    private float rewardCount;
+    private float rewardValue;
+    //奖励是否已经同步：0：未同步，1：已经同步
+    private int rewardFlag;
+    //预测是否已经处理：0：未处理，1：已经处理
+    private int handlerFlag;
 
-    public GuessForecastRecord(String userId, float silverValue, BmobDate time, int periodValue, int periodCount, float
-            periodResult, float indexResult, float rewardCount) {
+    public GuessForecastRecord(){
+    }
+
+    public GuessForecastRecord(String userId, float betSilverValue, int betValue, int periodNum, int betStatus, int
+            betResult, float indexResult, float rewardValue, int rewardFlag, int handlerFlag) {
         this.userId = userId;
-        this.silverValue = silverValue;
-        this.time = time;
-        this.periodValue = periodValue;
-        this.periodCount = periodCount;
-        this.periodResult = periodResult;
+        this.betSilverValue = betSilverValue;
+        this.betValue = betValue;
+        this.periodNum = periodNum;
+        this.betStatus = betStatus;
+        this.betResult = betResult;
         this.indexResult = indexResult;
-        this.rewardCount = rewardCount;
+        this.rewardValue = rewardValue;
+        this.rewardFlag = rewardFlag;
+        this.handlerFlag = handlerFlag;
     }
 
-    public GuessForecastRecord() {
-        this.setTableName("GuessForecastRecord");
-    }
 
     public String getUserId() {
         return userId;
     }
 
-    public float getSilverValue() {
-        return silverValue;
+    public float getBetSilverValue() {
+        return betSilverValue;
     }
 
-    public BmobDate getTime() {
-        return time;
+    public int getBetValue() {
+        return betValue;
     }
 
-    public int getPeriodValue() {
-        return periodValue;
+    public int getPeriodNum() {
+        return periodNum;
     }
 
-    public int getPeriodCount() {
-        return periodCount;
+    public int getBetStatus() {
+        return betStatus;
     }
 
-    public float getPeriodResult() {
-        return periodResult;
+    public int getBetResult() {
+        return betResult;
     }
 
     public float getIndexResult() {
         return indexResult;
     }
 
-    public float getRewardCount() {
-        return rewardCount;
+    public float getRewardValue() {
+        return rewardValue;
+    }
+
+    public int getRewardFlag() {
+        return rewardFlag;
+    }
+
+    public int getHandlerFlag() {
+        return handlerFlag;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public void setSilverValue(float silverValue) {
-        this.silverValue = silverValue;
+    public void setBetSilverValue(float betSilverValue) {
+        this.betSilverValue = betSilverValue;
     }
 
-    public void setTime(BmobDate time) {
-        this.time = time;
+    public void setBetValue(int betValue) {
+        this.betValue = betValue;
     }
 
-    public void setPeriodValue(int periodValue) {
-        this.periodValue = periodValue;
+    public void setPeriodNum(int periodNum) {
+        this.periodNum = periodNum;
     }
 
-    public void setPeriodCount(int periodCount) {
-        this.periodCount = periodCount;
+    public void setBetStatus(int betStatus) {
+        this.betStatus = betStatus;
     }
 
-    public void setPeriodResult(float periodResult) {
-        this.periodResult = periodResult;
+    public void setBetResult(int betResult) {
+        this.betResult = betResult;
     }
 
     public void setIndexResult(float indexResult) {
         this.indexResult = indexResult;
     }
 
-    public void setRewardCount(float rewardCount) {
-        this.rewardCount = rewardCount;
+    public void setRewardValue(float rewardValue) {
+        this.rewardValue = rewardValue;
+    }
+
+    public void setRewardFlag(int rewardFlag) {
+        this.rewardFlag = rewardFlag;
+    }
+
+    public void setHandlerFlag(int handlerFlag) {
+        this.handlerFlag = handlerFlag;
     }
 }

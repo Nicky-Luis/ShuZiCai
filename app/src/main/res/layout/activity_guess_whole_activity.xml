@@ -148,14 +148,7 @@
                         android:padding="@dimen/offset_10dp">
 
                         <TextView
-                            android:id="@+id/guessWholeTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/offset_10dp"
-                            android:text="预测12月26日"/>
-
-                        <TextView
-                            android:id="@+id/guessWholeResult"
+                            android:id="@+id/guessWholeResultTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/offset_10dp"

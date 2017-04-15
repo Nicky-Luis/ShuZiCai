@@ -63,7 +63,7 @@ public class TrendView extends RelativeLayout {
      */
     private void constructView(Context context) {
         this.mContext = context;
-        this.name = "沪深300";
+        this.name = "上证指数";
         // 导入布局
         View rootView = LayoutInflater.from(context).inflate(R.layout.view_trendview_layout, this, true);
         initView(rootView);

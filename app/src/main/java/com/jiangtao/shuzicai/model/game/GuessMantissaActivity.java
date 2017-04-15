@@ -25,21 +25,22 @@ import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.model.game.entry.GameInfo;
 import com.jiangtao.shuzicai.model.game.entry.GuessMantissaRecord;
-import com.jiangtao.shuzicai.model.home.entry.StockIndex;
+import com.jiangtao.shuzicai.model.game.entry.HuShenIndex;
+import com.jiangtao.shuzicai.model.game.entry.LondonGold;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 import static com.jiangtao.shuzicai.model.game.entry.GuessMantissaRecord.Guess_Type_DoubleDirect;
 import static com.jiangtao.shuzicai.model.game.entry.GuessMantissaRecord.Guess_Type_DoubleGroup;
@@ -70,18 +71,6 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
     //百分比
     @BindView(R.id.hushenChangePercent)
     TextView hushenChangePercent;
-    //首位
-    @BindView(R.id.hushenIndexFirstNum)
-    TextView hushenIndexFirstNum;
-    //次位
-    @BindView(R.id.hushenIndexSecondNum)
-    TextView hushenIndexSecondNum;
-    //三位
-    @BindView(R.id.hushenIndexThirdNum)
-    TextView hushenIndexThirdNum;
-    //四位
-    @BindView(R.id.hushenIndexFourthNum)
-    TextView hushenIndexFourthNum;
     //首输入框
     @BindView(R.id.hushenIndexFirstEdt)
     EditText hushenIndexFirstEdt;
@@ -91,6 +80,8 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
     //提交
     @BindView(R.id.hushenSubmitBtn)
     TextView hushenSubmitBtn;
+    @BindView(R.id.mantissaResultTime)
+    TextView mantissaResultTime;
     //----------------------------------
     //指数
     @BindView(R.id.goldForecastMainIndex)
@@ -101,18 +92,6 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
     //百分比
     @BindView(R.id.goldIndexChangePercent)
     TextView goldIndexChangePercent;
-    //首位
-    @BindView(R.id.goldIndexFirstNum)
-    TextView goldIndexFirstNum;
-    //次位
-    @BindView(R.id.goldIndexSecondNum)
-    TextView goldIndexSecondNum;
-    //三位
-    @BindView(R.id.goldIndexThirdNum)
-    TextView goldIndexThirdNum;
-    //四位
-    @BindView(R.id.goldIndexFourthNum)
-    TextView goldIndexFourthNum;
     //首输入框
     @BindView(R.id.goldIndexFirstEdt)
     EditText goldIndexFirstEdt;
@@ -122,28 +101,21 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
     //提交
     @BindView(R.id.goldSubmitBtn)
     TextView goldSubmitBtn;
-    //预测时间
-    @BindView(R.id.mantissaTime)
-    TextView mantissaTime;
-    //预测时间
-    @BindView(R.id.mantissaResult)
-    TextView mantissaResult;
-    //指数数据
-    private char[] hushenIndexArray;
-    private char[] goldIndexArray;
     //当前的游戏类型
     private int currentGuessType = GuessMantissaRecord.Guess_Type_Percentile;
     //handler
     private Handler mHandler = new Handler();
     //适配器
     private QuickAdapter<GuessMantissaRecord> recordAdapter;
+    //押注的期数
+    private int NewestNum = 0;
 
     //设置点击事件
     @OnClick({R.id.hushenSubmitBtn, R.id.goldSubmitBtn})
     public void OnClick(View view) {
         switch (view.getId()) {
 
-            //提交
+            //提交沪深
             case R.id.hushenSubmitBtn: {
                 submitValue(GuessMantissaRecord.Index_Type_Hushen);
             }
@@ -249,7 +221,11 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
                 }
 
                 helper.setText(R.id.guss_mantissa_period_count, "第" + item.getPeriodNum() + "期");
-                helper.setText(R.id.actualResults, "实际结果:" + item.getIndexResult());
+                if (item.getHandlerFlag() == 0) {
+                    helper.setText(R.id.actualResults, "实际结果: 待定");
+                } else {
+                    helper.setText(R.id.actualResults, "实际结果:" + item.getIndexResult());
+                }
                 helper.setText(R.id.gussMantissaResult, "预测结果：" + item.getGuessValue());
             }
         };
@@ -262,6 +238,7 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
         getNewest300Index();
         getMantissaRecord();
         getPeriodsCount();
+        mantissaResultTime.setText("");
     }
 
     //设置view的值
@@ -291,23 +268,21 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
     //设置游戏类型
     private void setGuessType() {
         //设置沪深300的
-        if (currentGuessType == GuessMantissaRecord.Guess_Type_Percentile
-                && hushenIndexArray != null && hushenIndexArray.length > 5) {
-            hushenIndexFirstEdt.setText(String.valueOf(hushenIndexArray[5]));
-            hushenIndexFirstEdt.setBackgroundColor(getResources().getColor(R.color.white));
-            hushenIndexFirstEdt.setEnabled(false);
+        if (currentGuessType == GuessMantissaRecord.Guess_Type_Percentile) {
+            hushenIndexFirstEdt.setText("");
+            hushenIndexFirstEdt.setVisibility(View.GONE);
         } else {
             hushenIndexFirstEdt.setText("");
+            hushenIndexFirstEdt.setVisibility(View.VISIBLE);
             hushenIndexFirstEdt.setBackgroundColor(getResources().getColor(R.color.gray));
             hushenIndexFirstEdt.setEnabled(true);
         }
         //设置黄金的
-        if (currentGuessType == GuessMantissaRecord.Guess_Type_Percentile
-                && goldIndexArray != null && goldIndexArray.length > 5) {
-            goldIndexFirstEdt.setText(String.valueOf(goldIndexArray[5]));
-            goldIndexFirstEdt.setBackgroundColor(getResources().getColor(R.color.white));
-            goldIndexFirstEdt.setEnabled(false);
+        if (currentGuessType == GuessMantissaRecord.Guess_Type_Percentile) {
+            goldIndexFirstEdt.setText("");
+            goldIndexFirstEdt.setVisibility(View.GONE);
         } else {
+            goldIndexFirstEdt.setVisibility(View.VISIBLE);
             goldIndexFirstEdt.setText("");
             goldIndexFirstEdt.setBackgroundColor(getResources().getColor(R.color.gray));
             goldIndexFirstEdt.setEnabled(true);
@@ -316,27 +291,19 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
 
     //获取最新的黄金信息
     private void getNewestGoldIndex() {
-        BmobQuery<StockIndex> query = new BmobQuery<>();
-        //查询playerName叫“比目”的数据
-        query.addWhereEqualTo("stock_type", StockIndex.Type_chuangGold);
-        // 根据createAt字段降序显示数据
-        query.order("-date");
-        //返回10条数据，如果不加上这条语句，默认返回10条数据
-        query.setLimit(10);
+        BmobQuery<LondonGold> query = new BmobQuery<LondonGold>();
+        query.max(new String[]{"createdAt"});
         //执行查询方法
-        query.findObjects(new FindListener<StockIndex>() {
+        query.findObjects(new FindListener<LondonGold>() {
             @Override
-            public void done(List<StockIndex> stockIndices, BmobException e) {
+            public void done(List<LondonGold> stockIndices, BmobException e) {
                 mantissaRefreshWidget.setRefreshing(false);
                 if (e == null) {
                     //获取到最后的是10条黄金信息
                     if (null != stockIndices) {
-                        StockIndex stockIndex = stockIndices.get(0);
+                        LondonGold stockIndex = stockIndices.get(0);
                         bindGoldValue(stockIndex);
                     }
-                    // for (StockIndex stockIndex : stockIndices) {
-                    //      LogUtils.i("黄金数据：" + stockIndex.toString());
-                    // }
                 } else {
                     ToastUtils.showShortToast("获取数据失败");
                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
@@ -346,18 +313,10 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
     }
 
     //绑定黄金数据
-    private void bindGoldValue(StockIndex stockIndex) {
-        float indexValue = stockIndex.getStock_value();
-        goldForecastMainIndex.setText(String.valueOf(indexValue));
-        goldIndexChange.setText(String.valueOf(stockIndex.getChange_value()));
-        goldIndexChangePercent.setText(String.valueOf(stockIndex.getChange_percent()) + "%");
-
-        String aS = String.valueOf(indexValue);
-        goldIndexArray = aS.toCharArray();
-        goldIndexFirstNum.setText(String.valueOf(goldIndexArray[0]));
-        goldIndexSecondNum.setText(String.valueOf(goldIndexArray[1]));
-        goldIndexThirdNum.setText(String.valueOf(goldIndexArray[2]));
-        goldIndexFourthNum.setText(String.valueOf(goldIndexArray[3]));
+    private void bindGoldValue(LondonGold stockIndex) {
+        goldForecastMainIndex.setText(stockIndex.getPrice());
+        goldIndexChange.setText(stockIndex.getChangequantity());
+        goldIndexChangePercent.setText(stockIndex.getChangepercent() + "%");
 
         LogUtils.i("黄金数据：" + stockIndex.toString());
         //根据类型再去绑定
@@ -366,27 +325,18 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
 
     //获取最新的沪深300信息
     private void getNewest300Index() {
-        BmobQuery<StockIndex> query = new BmobQuery<>();
-        //查询playerName叫“比目”的数据
-        query.addWhereEqualTo("stock_type", StockIndex.Type_HuShen);
-        // 根据createAt字段降序显示数据
-        query.order("-date");
-        //返回10条数据，如果不加上这条语句，默认返回10条数据
-        query.setLimit(10);
+        BmobQuery<HuShenIndex> query = new BmobQuery<HuShenIndex>();
+        query.max(new String[]{"createdAt"});
         //执行查询方法
-        query.findObjects(new FindListener<StockIndex>() {
+        query.findObjects(new FindListener<HuShenIndex>() {
             @Override
-            public void done(List<StockIndex> stockIndices, BmobException e) {
+            public void done(List<HuShenIndex> stockIndices, BmobException e) {
                 mantissaRefreshWidget.setRefreshing(false);
                 if (e == null) {
-                    //获取到最后的是10条黄金信息
-                    if (null != stockIndices) {
-                        StockIndex stockIndex = stockIndices.get(0);
+                    if (null != stockIndices && stockIndices.size() > 0) {
+                        HuShenIndex stockIndex = stockIndices.get(0);
                         bindIndex300Value(stockIndex);
                     }
-                    // for (StockIndex stockIndex : stockIndices) {
-                    //      LogUtils.i("黄金数据：" + stockIndex.toString());
-                    // }
                 } else {
                     ToastUtils.showShortToast("获取数据失败");
                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
@@ -396,19 +346,15 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
     }
 
     //绑定300数据
-    private void bindIndex300Value(StockIndex stockIndex) {
-        float indexValue = stockIndex.getStock_value();
-        hushenMainIndex.setText(String.valueOf(indexValue));
-        hushenChange.setText(String.valueOf(stockIndex.getChange_value()));
-        hushenChangePercent.setText(String.valueOf(stockIndex.getChange_percent()) + "%");
+    private void bindIndex300Value(HuShenIndex stockIndex) {
+        float price = Float.valueOf(stockIndex.getNowPrice());
+        float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+        hushenMainIndex.setText(String.valueOf(resultPrice));
 
-        String aS = String.valueOf(indexValue);
-        hushenIndexArray = aS.toCharArray();
+        hushenChange.setText(stockIndex.getDiff_money());
 
-        hushenIndexFirstNum.setText(String.valueOf(hushenIndexArray[0]));
-        hushenIndexSecondNum.setText(String.valueOf(hushenIndexArray[1]));
-        hushenIndexThirdNum.setText(String.valueOf(hushenIndexArray[2]));
-        hushenIndexFourthNum.setText(String.valueOf(hushenIndexArray[3]));
+        String changePercent = stockIndex.getDiff_rate() + "%";
+        hushenChangePercent.setText(changePercent);
 
         LogUtils.i("300数据：" + stockIndex.toString());
         //根据类型再去绑定
@@ -426,7 +372,8 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
             public void done(List<GameInfo> list, BmobException e) {
                 if (e == null) {
                     if (list != null && list.size() > 0) {
-                        setCenterTitle("尾数预测(" + list.get(0).getNewestNum() + "期)");
+                        NewestNum = list.get(0).getNewestNum();
+                        setCenterTitle("尾数预测(" + NewestNum + "期)");
                     }
                 }
             }
@@ -441,9 +388,9 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
         BmobQuery<GuessMantissaRecord> query = new BmobQuery<>();
         //查询playerName叫“比目”的数据
         query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
-        query.order("-time");
+        query.order("-createdAt");
         //最多100条
-        query.setLimit(100);
+        query.setLimit(10);
         //执行查询方法
         query.findObjects(new FindListener<GuessMantissaRecord>() {
             @Override
@@ -476,31 +423,31 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
             firstEdt = goldIndexFirstEdt;
             secondEdt = goldIndexSecondEdt;
         }
-
-        if (EditTextUtils.isEmpty(firstEdt)) {
+        //百分位任何情况下都不能为空
+        if (EditTextUtils.isEmpty(secondEdt)) {
             ToastUtils.showShortToast("请先输入预测的数据");
             return;
         }
+        int firstValue = 0;
+        int secondValue = Integer.valueOf(EditTextUtils.getContent(secondEdt));
+
         if (currentGuessType != GuessMantissaRecord.Guess_Type_Percentile) {
-            if (EditTextUtils.isEmpty(secondEdt)) {
+            if (EditTextUtils.isEmpty(firstEdt)) {
                 ToastUtils.showShortToast("请先输入预测的数据");
                 return;
             }
+            firstValue = Integer.valueOf(EditTextUtils.getContent(firstEdt));
         }
-
-        int firstValue = Integer.valueOf(EditTextUtils.getContent(firstEdt));
-        int secondValue = Integer.valueOf(EditTextUtils.getContent(secondEdt));
-
         //记录值
         final GuessMantissaRecord record = new GuessMantissaRecord();
         record.setUserId(Application.userInstance.getObjectId());
         record.setGuessType(currentGuessType);
         record.setReward(false);
         record.setIndexType(indexType);
-        record.setTime(new BmobDate(new Date(System.currentTimeMillis())));
+
         record.setIndexResult(0);
         record.setRewardCount(0);
-        record.setPeriodNum(100);
+        record.setPeriodNum(NewestNum);
 
         if (GuessMantissaRecord.Guess_Type_Percentile == currentGuessType) {
             record.setGuessValue(secondValue);
@@ -523,15 +470,19 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
                 if (EditTextUtils.isEmpty(convertEdt)) {
                     ToastUtils.showShortToast("币数不能空");
                 } else {
-                    float value = Float.parseFloat(EditTextUtils.getContent(convertEdt));
-                    if (value % 20 == 0) {
+                    final float value = Float.parseFloat(EditTextUtils.getContent(convertEdt));
+                    if (value > Application.userInstance.getGoldValue()) {
+                        ToastUtils.showShortToast("金币不够，请充值");
+                    } else if (value % 20 == 0) {
                         record.setGoldValue(value);
                         record.save(new SaveListener<String>() {
                             @Override
                             public void done(String s, BmobException e) {
                                 if (e == null) {
                                     ToastUtils.showShortToast("操作成功");
-                                    //延时去执行
+                                    //更新用户的财富
+                                    updateWealth(value);
+                                    //更新游戏记录
                                     getMantissaRecord();
                                 } else {
                                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
@@ -544,6 +495,27 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
                 }
             }
         }).setNegativeButton("取消", null).show();
+        firstEdt.setText("");
+        secondEdt.setText("");
     }
 
+    /**
+     * 更新财务数据
+     *
+     * @param value
+     */
+    public void updateWealth(float value) {
+        Application.userInstance.setGoldValue(
+                Application.userInstance.getGoldValue() - value);
+        Application.userInstance.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    LogUtils.i("更新数据成功");
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
+    }
 }

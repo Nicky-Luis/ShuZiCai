@@ -16,14 +16,13 @@ import com.jiangtao.shuzicai.common.view.billboard_view.model.BillboardMessage;
 import com.jiangtao.shuzicai.common.view.trend_view.TrendView;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendModel;
 import com.jiangtao.shuzicai.model.home.entry.StockIndex;
-import com.jiangtao.shuzicai.model.home.interfaces.IHomeFragmentPresenter;
 import com.jiangtao.shuzicai.model.home.presenter.HomeFragmentPresenter;
 import com.jiangtao.shuzicai.model.home.view.IHomeFragmentView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
     //binding对象
     List<BillboardMessage> billboardMessages;
     //页数
-    private IHomeFragmentPresenter presenter;
+    private HomeFragmentPresenter presenter;
     //趋势图
     @BindView(R.id.mainTrendView)
     TrendView mainTrendView;
@@ -160,7 +159,25 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
     }
 
     @Override
-    public void onUpdateIndexData(List<TrendModel> datas) {
+    public void onUpdateIndexData(List<TrendModel> datas, String type) {
+        //设置名称
+        switch (type) {
+            case StockIndex.Type_ShangZheng:
+                mainTrendView.setName("上证指数");
+                break;
+
+            case StockIndex.Type_HuShen:
+                mainTrendView.setName("沪深300");
+                break;
+
+            case StockIndex.Type_ShenZheng:
+                mainTrendView.setName("深证成指");
+                break;
+
+            case StockIndex.Type_chuangYe:
+                mainTrendView.setName("创业板指");
+                break;
+        }
         //交易数据
         mainTrendView.bindTrendData(datas);
     }
@@ -172,23 +189,24 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
         if (null == indexData) {
             return;
         }
-        homeIndexTime.setText(indexData.getDate().getDate().substring(0, 9));
-        //构造方法的字符格式这里如果小数不足2位,会以0补足.
-        DecimalFormat decimalFormat = new DecimalFormat(".00");
-        String date = decimalFormat.format(indexData.getStock_value());
-        homeIndexMainData.setText(date);
-
+        homeIndexTime.setText(indexData.getTime().substring(0, 10));
+        //指数值
+        float price = Float.valueOf(indexData.getNowPrice());
+        float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+        homeIndexMainData.setText(String.valueOf(resultPrice));
         //成交量
-        String volume = "成交额(万元):" + decimalFormat.format(indexData.getTurnover_volume());
+        float amount = Float.valueOf(indexData.getTradeAmount()) / (10000 * 10000);
+        float resultAmount = new BigDecimal(amount).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+        String volume = "成交额:" + resultAmount + "亿元";
         homeIndexTransaction.setText(volume);
         //成交笔数
-        String count = "成交量(万手):" + decimalFormat.format(indexData.getTurnover_count());
-        homeIndexTotal.setText(count);
-
-        //成交笔数
-        String changeValue = decimalFormat.format(indexData.getChange_value());
-        String changePercent = decimalFormat.format(indexData.getChange_percent()) + "%";
-        homeIndexChange.setText(changeValue + "   " + changePercent);
+        float count = Float.valueOf(indexData.getTradeNum()) / (10000);
+        float resultCount = new BigDecimal(count).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+        String countStr = "成交量:" + resultCount + "万手";
+        homeIndexTotal.setText(countStr);
+        //涨跌比率
+        String changePercent = indexData.getDiff_rate() + "%";
+        homeIndexChange.setText(indexData.getDiff_money() + "   " + changePercent);
     }
 
     @Override
@@ -206,10 +224,10 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
         homeIndexTime.setText(calendar.get(Calendar.YEAR) + "-" +
                 (calendar.get(Calendar.MONTH) + 1) + "-" +
                 calendar.get(Calendar.DAY_OF_MONTH));
-        homeIndexMainData.setText("--");
-        homeIndexTransaction.setText("成交额(万元)--");
-        homeIndexTotal.setText("成交量(万手)--");
-        homeIndexChange.setText("--");
+        homeIndexMainData.setText("");
+        homeIndexTransaction.setText("成交额");
+        homeIndexTotal.setText("成交量");
+        homeIndexChange.setText("");
     }
 
     //绑定财富数据

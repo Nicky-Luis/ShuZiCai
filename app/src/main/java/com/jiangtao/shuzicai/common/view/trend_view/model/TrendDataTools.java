@@ -1,7 +1,9 @@
 package com.jiangtao.shuzicai.common.view.trend_view.model;
 
+import com.jiangtao.shuzicai.model.game.entry.HuShenIndex;
 import com.jiangtao.shuzicai.model.home.entry.StockIndex;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,7 +100,7 @@ public class TrendDataTools {
      * @param retList
      * @return
      */
-    public static List<TrendModel> getTrendDatas(int type, List<StockIndex> retList) {
+    public static List<TrendModel> getTrendDatas(String type, List<StockIndex> retList) {
         //交易数据
         List<TrendModel> trendModels = new ArrayList<>();
 
@@ -106,12 +108,14 @@ public class TrendDataTools {
         try {
             //解析数据
             for (StockIndex data : retList) {
-                if (data.getStock_type() == type) {
+                if (data.getCode().equals(type)) {
                     Calendar calendar = Calendar.getInstance();
-                    Date date = sdf.parse(data.getDate().getDate());
+                    Date date = sdf.parse(data.getTime());
                     calendar.setTime(date);
                     float day = calendar.get(Calendar.DAY_OF_MONTH);
-                    TrendModel model = new TrendModel(calendar, day, data.getStock_value());
+                    float price = Float.valueOf(data.getNowPrice());
+                    float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                    TrendModel model = new TrendModel(calendar, day, resultPrice);
                     trendModels.add(model);
                 }
             }
@@ -121,6 +125,8 @@ public class TrendDataTools {
         return trendModels;
     }
 
+
+
     /**
      * 数据解析，将股票数据转化为图表数据
      *
@@ -128,12 +134,45 @@ public class TrendDataTools {
      * @param retList
      * @return
      */
-    public static StockIndex getNewestDatas(int type, List<StockIndex> retList) {
+    public static List<TrendModel> getTrendDatas2(String type, List<HuShenIndex> retList) {
+        //交易数据
+        List<TrendModel> trendModels = new ArrayList<>();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        try {
+            //解析数据
+            for (HuShenIndex data : retList) {
+                if (data.getCode().equals(type)) {
+                    Calendar calendar = Calendar.getInstance();
+                    Date date = sdf.parse(data.getTime());
+                    calendar.setTime(date);
+                    float day = calendar.get(Calendar.DAY_OF_MONTH);
+                    float price = Float.valueOf(data.getNowPrice());
+                    float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                    TrendModel model = new TrendModel(calendar, day, resultPrice);
+                    trendModels.add(model);
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return trendModels;
+    }
+
+
+    /**
+     * 数据解析，将股票数据转化为图表数据
+     *
+     * @param type
+     * @param retList
+     * @return
+     */
+    public static StockIndex getNewestDatas(String type, List<StockIndex> retList) {
         if (null == retList || retList.size() == 0) {
             return null;
         }
         for (int index = retList.size() - 1; index >= 0; index--) {
-            if (retList.get(index).getStock_type() == type) {
+            if (retList.get(index).getCode().equals(type)) {
                 return retList.get(index);
             }
         }

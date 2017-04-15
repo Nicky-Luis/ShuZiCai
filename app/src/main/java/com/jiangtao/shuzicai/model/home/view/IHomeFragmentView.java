@@ -13,7 +13,7 @@ import java.util.List;
 public interface IHomeFragmentView {
 
     //获取指数数据
-    void onUpdateIndexData(List<TrendModel> datas);
+    void onUpdateIndexData(List<TrendModel> datas,String type);
 
     //绑定数据
     void bindIndexData(StockIndex indexData);

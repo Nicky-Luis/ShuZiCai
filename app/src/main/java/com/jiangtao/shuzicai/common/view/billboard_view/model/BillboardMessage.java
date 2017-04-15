@@ -3,11 +3,14 @@ package com.jiangtao.shuzicai.common.view.billboard_view.model;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.common.entity.BmobDate;
 
+import cn.bmob.v3.BmobObject;
+
 /**
  * Created by Nicky on 2017/1/14.
+ * 公告信息
  */
 
-public class BillboardMessage {
+public class BillboardMessage extends BmobObject{
 
     //1、注册充值类型，2、奖励金币，3、奖励银元，4、投注金币，5投注银元
     public final static int Type_Join = 1;

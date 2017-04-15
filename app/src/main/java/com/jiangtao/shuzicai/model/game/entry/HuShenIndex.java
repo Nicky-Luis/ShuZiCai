@@ -1,20 +1,16 @@
-package com.jiangtao.shuzicai.model.home.entry;
+package com.jiangtao.shuzicai.model.game.entry;
 
 import cn.bmob.v3.BmobObject;
 
 /**
- * Created by Nicky on 2017/1/16.
- * 指数model
+ * Created by Nicky on 2017/4/15.
+ * 沪深指数游戏信息
  */
 
-public class StockIndex extends BmobObject {
+public class HuShenIndex extends BmobObject {
 
-    //上证指数，深证成指,创业板指,沪深300
-    public final static String Type_ShangZheng = "sh000001";
-    public final static String Type_ShenZheng = "sz399001";
-    public final static String Type_chuangYe = "sz399006";
-    public final static String Type_HuShen = "sz399300";
-    //sh000001,sz399001,sz399006,sz399300
+    //最新期数
+    private int periodsNum;
     //昨日关盘日期
     private String yestodayClosePrice;
     private String todayMax;
@@ -41,13 +37,15 @@ public class StockIndex extends BmobObject {
     private String diff_rate;
     private String minPrice;
 
-    public StockIndex() {
+
+    public HuShenIndex() {
     }
 
-    public StockIndex(String yestodayClosePrice, String todayMax, String todayMin, String max52,
-                      String diff_money, String tradeNum, String code, String maxPrice, String nowPrice, String
-                              min52, String time, String name, String tradeAmount, String swing, String
-                              todayOpenPrice, String diff_rate, String minPrice) {
+    public HuShenIndex(int periodsNum, String yestodayClosePrice, String todayMax, String todayMin, String max52,
+                       String diff_money, String tradeNum, String code, String maxPrice, String nowPrice, String
+                               min52, String time, String name, String tradeAmount, String swing, String
+                               todayOpenPrice, String diff_rate, String minPrice) {
+        this.periodsNum = periodsNum;
         this.yestodayClosePrice = yestodayClosePrice;
         this.todayMax = todayMax;
         this.todayMin = todayMin;
@@ -67,6 +65,9 @@ public class StockIndex extends BmobObject {
         this.minPrice = minPrice;
     }
 
+    public int getPeriodsNum() {
+        return periodsNum;
+    }
 
     public String getYestodayClosePrice() {
         return yestodayClosePrice;
@@ -136,6 +137,9 @@ public class StockIndex extends BmobObject {
         return minPrice;
     }
 
+    public void setPeriodsNum(int periodsNum) {
+        this.periodsNum = periodsNum;
+    }
 
     public void setYestodayClosePrice(String yestodayClosePrice) {
         this.yestodayClosePrice = yestodayClosePrice;
@@ -204,4 +208,5 @@ public class StockIndex extends BmobObject {
     public void setMinPrice(String minPrice) {
         this.minPrice = minPrice;
     }
+
 }
