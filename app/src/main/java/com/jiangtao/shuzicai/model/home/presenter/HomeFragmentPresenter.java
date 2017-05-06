@@ -100,7 +100,6 @@ public class HomeFragmentPresenter {
                     homeFragmentView.bindBillboardData(billboardMessages);
                 } else {
                     LogUtils.e("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
-                    ToastUtils.showLongToast("获取数据失败");
                 }
             }
         });

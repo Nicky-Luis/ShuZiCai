@@ -79,16 +79,24 @@ public class WealthDetailActivity extends BaseActivityWithToolBar
                     case WealthDetail.Operation_Type_Recharge:
                         type = "充值";
                         break;
-                    case WealthDetail.Operation_Type_Exchange:
+
+                    case WealthDetail.Operation_Type_Good_Exchange:
                         type = "兑换礼品";
                         break;
-                    case WealthDetail.Operation_Type_Reward:
+
+                    case WealthDetail.Operation_Type_Forecast_Reward:
+                    case WealthDetail.Operation_Type_Mantisssa_Reward:
+                    case WealthDetail.Operation_Type_Whole_Reward:
                         type = "获奖";
                         break;
-                    case WealthDetail.Operation_Type_Game:
+
+                    case WealthDetail.Operation_Type_Game_Forecast:
+                    case WealthDetail.Operation_Type_Game_Mantisssa:
+                    case WealthDetail.Operation_Type_Game_Whole:
                         type = "游戏消耗";
                         break;
-                    case WealthDetail.Operation_Type_Conversion:
+
+                    case WealthDetail.Operation_Type_Wealth_Exchange:
                         type = "兑换成银元";
                         break;
 

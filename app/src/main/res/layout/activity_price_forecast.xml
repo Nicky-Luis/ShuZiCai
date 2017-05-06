@@ -52,7 +52,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/offset_48dp"
-                            android:text="上期\n指数"/>
+                            android:text="伦敦\n金价"/>
 
 
                         <TextView
@@ -62,7 +62,7 @@
                             android:layout_margin="@dimen/offset_10dp"
                             android:layout_weight="1"
                             android:gravity="center|left"
-                            android:text="3100.15"
+                            android:text=""
                             android:textSize="@dimen/font_size_large"/>
 
                         <TextView
@@ -70,14 +70,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/offset_10dp"
-                            android:text="+6.15"/>
+                            android:text=""/>
 
                         <TextView
                             android:id="@+id/indexChangePercent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/offset_10dp"
-                            android:text="15%"/>
+                            android:text=""/>
                     </LinearLayout>
 
                     <com.jiangtao.shuzicai.common.view.trend_view.TrendView
@@ -141,12 +141,12 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="参与记录"/>
+                            android:text="期数"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="本期记录"/>
+                            android:text="参与记录"/>
                     </LinearLayout>
                 </LinearLayout>
             </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>

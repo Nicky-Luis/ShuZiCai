@@ -3,7 +3,6 @@ package com.jiangtao.shuzicai.model.game.presenter;
 import android.content.Context;
 
 import com.blankj.utilcode.utils.LogUtils;
-import com.blankj.utilcode.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
@@ -41,7 +40,7 @@ public class GamePresenter implements IGamePresenter {
             @Override
             public void onFailure(int code) {
                 LogUtils.i("code=" + code);
-                ToastUtils.showLongToast("获取数据失败");
+                gameView.getDataFail();
             }
 
             @Override

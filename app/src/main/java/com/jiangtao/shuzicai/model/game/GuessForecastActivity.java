@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
+import com.jiangtao.shuzicai.AppHandlerService;
 import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.BaseAdapterHelper;
@@ -23,28 +24,25 @@ import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.common.view.trend_view.TrendView;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendDataTools;
-import com.jiangtao.shuzicai.model.game.entry.GameInfo;
+import com.jiangtao.shuzicai.model.game.entry.Config;
 import com.jiangtao.shuzicai.model.game.entry.GuessForecastRecord;
-import com.jiangtao.shuzicai.model.game.entry.HuShenIndex;
-import com.jiangtao.shuzicai.model.home.entry.StockIndex;
+import com.jiangtao.shuzicai.model.game.entry.LondonGold;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
+import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 //涨跌预测
 public class GuessForecastActivity extends BaseActivityWithToolBar
@@ -74,7 +72,9 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
     @BindView(R.id.forecastResultTime)
     TextView forecastResultTime;
     //押注的期数
-    private int NewestNum = 0;
+    private int NewestNum = -1;
+    //是否允许交易
+    private boolean isTread = false;
 
     //适配器
     private QuickAdapter<GuessForecastRecord> forecastAdapter;
@@ -162,20 +162,19 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
     }
 
     //绑定指数值
-    private void bindIndexValue(HuShenIndex indexData) {
+    private void bindIndexValue(LondonGold indexData) {
         if (null == indexData) {
             return;
         }
         //指数值
-        float price = Float.valueOf(indexData.getNowPrice());
+        float price = Float.valueOf(indexData.getLatestpri());
         float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
         forecastMainIndex.setText(String.valueOf(resultPrice));
 
         //涨跌比率
-        indexChange.setText(indexData.getDiff_money());
-        String changePercent = indexData.getDiff_rate() + "%";
+        indexChange.setText(indexData.getChange());
+        String changePercent = indexData.getLimit() + "%";
         indexChangePercent.setText(changePercent);
-
 
         //这期开奖时间
         forecastResultTime.setText("");
@@ -207,9 +206,8 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
     }
 
     private void initData() {
-        getLastWeekData();
-        getForecastRecord();
         getPeriodsCount();
+        getForecastRecord();
     }
 
     //////////////////////////////////////////////////////
@@ -218,16 +216,17 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
      * 获取期数
      */
     private void getPeriodsCount() {
-        BmobQuery<GameInfo> query = new BmobQuery<GameInfo>();
-        query.addWhereEqualTo("gameType", GameInfo.type_zhangdie);
-        query.findObjects(new FindListener<GameInfo>() {
+        BmobQuery<Config> query = new BmobQuery<Config>();
+        query.getObject(Config.objectId, new QueryListener<Config>() {
             @Override
-            public void done(List<GameInfo> list, BmobException e) {
-                if (e == null) {
-                    if (list != null && list.size() > 0) {
-                        NewestNum = list.get(0).getNewestNum();
-                        setCenterTitle("涨跌预测(" + NewestNum + "期)");
-                    }
+            public void done(Config gameInfo, BmobException e) {
+                if (e == null && gameInfo != null) {
+                    NewestNum = gameInfo.getNewestNum();
+                    setCenterTitle("涨跌预测(" + NewestNum + "期)");
+                    //获取前面五期数据
+                    getShowLondonData(NewestNum - 1);
+                    //记录是否可以交易
+                    isTread = gameInfo.isTread();
                 }
             }
         });
@@ -246,6 +245,11 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
             return;
         }
 
+        if (!isTread) {
+            ToastUtils.showShortToast("当前时间不能交易");
+            return;
+        }
+
         LayoutInflater inflater = (LayoutInflater)
                 this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.dialog_exchange_layout, null);
@@ -259,11 +263,41 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
                 if (EditTextUtils.isEmpty(convertEdt)) {
                     ToastUtils.showShortToast("银币数数不能空");
                 } else {
-                    float value = Float.parseFloat(EditTextUtils.getContent(convertEdt));
-                    submitForecastData(value, type);
+                    int value = Integer.parseInt(EditTextUtils.getContent(convertEdt));
+                    if (value <= 0) {
+                        ToastUtils.showShortToast("请输入正确的金币值");
+                    } else {
+                        getIfJoined(value, type);
+                    }
                 }
             }
         }).setNegativeButton("取消", null).show();
+    }
+
+    //判断是否已经参与了游戏
+    public void getIfJoined(final int value, final int type) {
+        if (-1 == NewestNum) {
+            ToastUtils.showShortToast("操作失败，请重试");
+            return;
+        }
+        BmobQuery<GuessForecastRecord> query = new BmobQuery<GuessForecastRecord>();
+        query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
+        query.addWhereEqualTo("periodNum", NewestNum);
+        query.count(GuessForecastRecord.class, new CountListener() {
+            @Override
+            public void done(Integer integer, BmobException e) {
+                if (e == null) {
+                    if (0 == integer) {
+                        submitForecastData(value, type);
+                    } else {
+                        ToastUtils.showShortToast("不能重复参与同一期游戏");
+                    }
+                } else {
+                    ToastUtils.showShortToast("操作失败，请重试");
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
     }
 
     /**
@@ -272,7 +306,7 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
      * @param value
      * @param type
      */
-    private void submitForecastData(final float value, int type) {
+    private void submitForecastData(final int value, int type) {
         if (value > Application.userInstance.getSilverValue()) {
             ToastUtils.showShortToast("银币不够");
             return;
@@ -289,7 +323,7 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
                 if (e == null) {
                     getForecastRecord();
                     updateWealth(value);
-                    ToastUtils.showShortToast("操作成功");
+                    ToastUtils.showShortToast("操作成功,请等待开奖");
                 } else {
                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
@@ -298,21 +332,21 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
         });
     }
 
-    //获取数据
-    public void getIndexData(BmobDate date) {
-        BmobQuery<HuShenIndex> query = new BmobQuery<HuShenIndex>();
-        query.addWhereGreaterThan("createdAt", date);
-        query.order("createdAt");
-        query.setLimit(50);
+    //获取前面5期伦敦金的数据用于显示
+    public void getShowLondonData(final int newestNum) {
+        BmobQuery<LondonGold> query = new BmobQuery<LondonGold>();
+        query.order("-createdAt");
+        query.setLimit(5);
         //执行查询方法
-        query.findObjects(new FindListener<HuShenIndex>() {
+        query.findObjects(new FindListener<LondonGold>() {
             @Override
-            public void done(List<HuShenIndex> stockIndices, BmobException e) {
-                Log.i("bmob", "返回：" + stockIndices.size());
+            public void done(List<LondonGold> stockIndices, BmobException e) {
                 mForecastRefreshWidget.setRefreshing(false);
-                if (e == null) {
-                    gameTrendView.bindTrendData(TrendDataTools.getTrendDatas2(
-                            StockIndex.Type_HuShen, stockIndices));
+                if (e == null && null != stockIndices) {
+                    LogUtils.i("bmob", "返回：" + stockIndices.size());
+                    gameTrendView.setName("伦敦金");
+                    gameTrendView.bindTrendData(TrendDataTools.getTrendDatas2(newestNum,
+                            stockIndices), 1);
                     if (stockIndices.size() > 0) {
                         bindIndexValue(stockIndices.get(0));
                     }
@@ -329,15 +363,24 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
      *
      * @param value
      */
-    public void updateWealth(float value) {
-        Application.userInstance.setSilverValue(Application.userInstance.getSilverValue() - value);
-        Application.userInstance.update(new UpdateListener() {
+    public void updateWealth(int value) {
+        final int afterValue = Application.userInstance.getSilverValue() - value;
+        //记录金币的操作状态
+        WealthDetail wealthDetail = new WealthDetail(
+                Application.userInstance.getObjectId(),
+                Application.userInstance.getSilverValue(),
+                afterValue,
+                WealthDetail.Currency_Type_Silver,
+                WealthDetail.Operation_Type_Game_Forecast,
+                value, 1);
+        wealthDetail.save(new SaveListener<String>() {
             @Override
-            public void done(BmobException e) {
+            public void done(String s, BmobException e) {
                 if (e == null) {
-                    LogUtils.i("更新数据成功");
+                    Application.userInstance.setSilverValue(afterValue);
+                    AppHandlerService.updateWealth();
                 } else {
-                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                    LogUtils.e("更新财务记录失败:" + e);
                 }
             }
         });
@@ -363,29 +406,6 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
                 } else {
                     ToastUtils.showShortToast("获取数据失败");
                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
-                }
-            }
-        });
-    }
-
-    /**
-     * 获取7天前的时间
-     *
-     * @return
-     */
-    private void getLastWeekData() {
-        gameTrendView.setName("沪深300");
-        //一个礼拜前的数据
-        Bmob.getServerTime(new QueryListener<Long>() {
-            @Override
-            public void done(Long aLong, BmobException e) {
-                if (e == null) {
-                    int dayCount = 7;
-                    BmobDate date = new BmobDate(new Date(aLong - (dayCount * 24 * 60 * 60)));
-                    getIndexData(date);
-                    Log.i("bmob", "当前服务器时间为:" + aLong);
-                } else {
-                    Log.i("bmob", "获取服务器时间失败:" + e.getMessage());
                 }
             }
         });

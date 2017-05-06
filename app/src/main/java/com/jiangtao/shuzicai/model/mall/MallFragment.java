@@ -25,7 +25,6 @@ import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
 import com.jiangtao.shuzicai.model.mall.entry.Goods;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
-import com.jiangtao.shuzicai.model.mall.interfaces.IMailPresenter;
 import com.jiangtao.shuzicai.model.mall.presenter.MailPresenter;
 import com.jiangtao.shuzicai.model.mall.view.IMailView;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
@@ -69,7 +68,7 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
     //适配器
     private QuickAdapter<Goods> mailAdapter;
     //presenter对象
-    private IMailPresenter mailPresenter;
+    private MailPresenter mailPresenter;
 
     //设置点击事件
     @OnClick({R.id.exchangeRecordTxt, R.id.exchangeBtn})
@@ -156,8 +155,14 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
                 if (EditTextUtils.isEmpty(convertEdt)) {
                     ToastUtils.showShortToast("金币数不能空");
                 } else {
-                    float value = Float.parseFloat(EditTextUtils.getContent(convertEdt));
-                    mailPresenter.submitExchange(value);
+                    int value = Integer.parseInt(EditTextUtils.getContent(convertEdt));
+                    if (value <= 0) {
+                        ToastUtils.showShortToast("请输入正确的金币值");
+                    } else if (value > Application.userInstance.getGoldValue()) {
+                        ToastUtils.showShortToast("金币数量不足，请充值");
+                    } else {
+                        mailPresenter.submitExchange(value);
+                    }
                 }
             }
         }).setNegativeButton("取消", null).show();
@@ -169,8 +174,8 @@ public class MallFragment extends BaseFragment implements IMailView, SwipeRefres
         String gold = "金币：0";
         String silver = "银币：0";
         if (null != Application.userInstance) {
-            gold = "金币：" + String.valueOf((int) Application.userInstance.getGoldValue());
-            silver = "银币：" + String.valueOf((int) Application.userInstance.getSilverValue());
+            gold = "金币：" + Application.userInstance.getGoldValue();
+            silver = "银币：" + Application.userInstance.getSilverValue();
         }
         mallMyGold.setText(gold);
         mallMySilver.setText(silver);

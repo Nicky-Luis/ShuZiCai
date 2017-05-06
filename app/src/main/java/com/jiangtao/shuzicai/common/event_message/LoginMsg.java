@@ -11,11 +11,7 @@ public class LoginMsg {
         this.result = result;
     }
 
-    public boolean isResult() {
+    public boolean isSucceed() {
         return result;
-    }
-
-    public void setResult(boolean result) {
-        this.result = result;
     }
 }

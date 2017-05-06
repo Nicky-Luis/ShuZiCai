@@ -13,25 +13,20 @@ import com.blankj.utilcode.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hss01248.lib.MyDialogListener;
 import com.hss01248.lib.StytledDialog;
+import com.jiangtao.shuzicai.AppHandlerService;
 import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
-import com.jiangtao.shuzicai.common.entity.BmobDate;
 import com.jiangtao.shuzicai.common.view.city_selecter.ChangeAddressPopWindow;
 import com.jiangtao.shuzicai.model.mall.entry.Goods;
 import com.jiangtao.shuzicai.model.mall.entry.GoodsOrder;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
 import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -187,15 +182,20 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
 
     //提交订单
     private void saveWealthDetailOrder(final GoodsOrder order) {
-        final float afterValue = Application.userInstance.getGoldValue() - goods.getGoodsPrice();
+        final int afterValue = Application.userInstance.getGoldValue() - goods.getGoodsPrice();
+        if (afterValue <= 0) {
+            ToastUtils.showShortToast("金币不足，请充值");
+            return;
+        }
         //记录操作状态
         final WealthDetail wealthDetail = new WealthDetail(
+                Application.userInstance.getObjectId(),
                 Application.userInstance.getGoldValue(),
                 afterValue,
                 WealthDetail.Currency_Type_Gold,
-                WealthDetail.Operation_Type_Exchange,
+                WealthDetail.Operation_Type_Good_Exchange,
                 goods.getGoodsPrice(),
-                Application.userInstance.getObjectId());
+                1);
         //先保存财富详情数据
         wealthDetail.save(new SaveListener<String>() {
             @Override
@@ -218,7 +218,7 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
      * @param wealthDetail
      */
     private void saveOrderValue(GoodsOrder order, WealthDetail wealthDetail,
-                                final float afterValue) {
+                                final int afterValue) {
         order.setWealthDetail(wealthDetail);
         order.setOptUser(null);
         //保存订单
@@ -235,57 +235,49 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
         });
     }
 
-    /**
-     * 更新财富数据
-     *
-     * @param afterValue
-     */
-    private void updateWealthValue(final float afterValue) {
-        Application.userInstance.setGoldValue(afterValue);
-        Application.userInstance.update(new UpdateListener() {
+    //更新商品信息
+    public void startUpdateGoods() {
+        goods.setInventory(goods.getInventory() - 1);
+        goods.setSalesVolume(goods.getSalesVolume() + 1);
+        if (goods.getInventory() <= 0) {
+            goods.setIsOnline(0);
+        }
+        goods.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
-                hideProgress();
                 if (e == null) {
                     ToastUtils.showShortToast("订单提交成功");
+                    hideProgress();
                     finish();
                 } else {
-                    ToastUtils.showShortToast("订单提交失败");
-                    LogUtils.e("提交订单失败：" + e.getMessage() + "," + e.getErrorCode());
+                    ToastUtils.showShortToast("数据异常");
                 }
             }
         });
     }
 
+    /**
+     * 更新财富数据
+     *
+     * @param afterValue
+     */
+    private void updateWealthValue(final int afterValue) {
+
+        Application.userInstance.setGoldValue(afterValue);
+        AppHandlerService.updateWealth();
+        startUpdateGoods();
+    }
+
     //提交订单
     private void startSubmitOrder() {
         showProgress("提交订单中...");
-        Bmob.getServerTime(new QueryListener<Long>() {
-
-            @Override
-            public void done(Long time, BmobException e) {
-                if (e == null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String times = formatter.format(new Date(time * 1000L));
-                    GoodsOrder order = getOrderObj();
-                    if (null != order) {
-                        try {
-                            order.setOrderTime(new BmobDate("Date", times));
-                            saveWealthDetailOrder(order);
-                        } catch (Exception ex) {
-                            hideProgress();
-                            ex.printStackTrace();
-                            ToastUtils.showShortToast("订单提交失败");
-                        }
-                    }
-
-                } else {
-                    hideProgress();
-                    ToastUtils.showShortToast("订单提交失败");
-                    LogUtils.e("获取服务器时间失败:" + e.getMessage());
-                }
-            }
-        });
+        GoodsOrder order = getOrderObj();
+        if (null != order) {
+            saveWealthDetailOrder(order);
+        } else {
+            hideProgress();
+            ToastUtils.showShortToast("订单提交失败");
+        }
     }
 
     //设置数据

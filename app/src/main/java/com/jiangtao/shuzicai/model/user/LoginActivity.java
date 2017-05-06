@@ -6,15 +6,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.jiangtao.shuzicai.AppConfigure;
-import com.jiangtao.shuzicai.Application;
+import com.jiangtao.shuzicai.AppHandlerService;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.common.event_message.LoginMsg;
-import com.jiangtao.shuzicai.model.user.entry._User;
+import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,9 +21,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.LogInListener;
 
 public class LoginActivity extends BaseActivityWithToolBar {
 
@@ -93,27 +89,7 @@ public class LoginActivity extends BaseActivityWithToolBar {
             ToastUtils.showShortToast("密码不能为空不能为空");
         }
         showProgress("登录中...");
-        BmobUser.loginByAccount(account, password, new LogInListener<_User>() {
-
-            @Override
-            public void done(_User user, BmobException e) {
-                if(user!=null){
-                    hideProgress();
-                    Application.userInstance = user;
-                    ToastUtils.showShortToast("登录成功");
-                    //保存登录状态
-                    AppConfigure.saveLoginStatue(true);
-                    AppConfigure.saveUserName(account);
-                    AppConfigure.saveUserPassword(password);
-                    EventBus.getDefault().post(new LoginMsg(true));
-                    finish();
-                } else {
-                    hideProgress();
-                    ToastUtils.showShortToast("登录失败");
-                    LogUtils.e("登录失败：" + e);
-                }
-            }
-        });
+        AppHandlerService.startLogin(account,password);
     }
 
     /**
@@ -124,6 +100,25 @@ public class LoginActivity extends BaseActivityWithToolBar {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMainThread(String event) {
         Log.e("event MainThread", "消息： " + event + "  thread: " + Thread.currentThread().getName());
+    }
+
+    /**
+     * 用户登录状态处理
+     *
+     * @param result
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEventMainThread(LoginMsg result) {
+        hideProgress();
+        if (result.isSucceed()){
+            ToastUtils.showShortToast("登录成功");
+            //保存登录状态
+            AppConfigure.saveLoginStatue(true);
+            AppConfigure.saveUserName(account);
+            AppConfigure.saveUserPassword(password);
+            finish();
+        }
+        EventBus.getDefault().post(new WealthChangeMsg());
     }
 
 }

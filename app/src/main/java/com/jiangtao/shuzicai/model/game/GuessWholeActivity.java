@@ -15,17 +15,19 @@ import android.widget.TextView;
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
+import com.jiangtao.shuzicai.AppHandlerService;
 import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.BaseAdapterHelper;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_recyclerview.QuickAdapter;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
-import com.jiangtao.shuzicai.model.game.entry.GameInfo;
+import com.jiangtao.shuzicai.model.game.entry.Config;
 import com.jiangtao.shuzicai.model.game.entry.GuessWholeRecord;
-import com.jiangtao.shuzicai.model.game.entry.HuShenIndex;
+import com.jiangtao.shuzicai.model.game.entry.LondonGold;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
+import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -35,9 +37,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 public class GuessWholeActivity extends BaseActivityWithToolBar
         implements SwipeRefreshLayout.OnRefreshListener {
@@ -82,9 +85,10 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
     //开奖时间
     @BindView(R.id.guessWholeResultTime)
     TextView guessWholeResultTime;
-
     //押注的期数
-    private int NewestNum = 0;
+    private int NewestNum = -1;
+    //是否允许交易
+    private boolean isTread = false;
     //适配器
     private QuickAdapter<GuessWholeRecord> recordAdapter;
 
@@ -95,7 +99,7 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
 
             //提交
             case R.id.guessWholeSubmitBtn: {
-                submitValue();
+                startBet();
             }
             break;
         }
@@ -168,7 +172,12 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
             protected void convert(BaseAdapterHelper helper, final GuessWholeRecord item) {
 
                 helper.setText(R.id.guess_whole_period_count, "第" + item.getPeriodNum() + "期");
-                helper.setText(R.id.guessWholeActualResults, "实际结果:" + item.getIndexResult());
+                if (item.getHandlerFlag() == 0) {
+                    helper.setText(R.id.guessWholeActualResults, "实际结果: 待定");
+                } else {
+                    helper.setText(R.id.guessWholeActualResults, "实际结果:" + item.getIndexResult());
+                }
+
                 helper.setText(R.id.guessWholeItemResult, "预测结果：" + item.getGuessValue());
             }
         };
@@ -182,7 +191,7 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
 
     //获取数据
     private void getData() {
-        getNewest300Index();
+        getLondonIndex();
         getMantissaRecord();
         getPeriodsCount();
         guessWholeResultTime.setText("");
@@ -193,37 +202,36 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
      * 获取期数
      */
     private void getPeriodsCount() {
-        BmobQuery<GameInfo> query = new BmobQuery<GameInfo>();
-        query.addWhereEqualTo("gameType", GameInfo.type_quanshu);
-        query.findObjects(new FindListener<GameInfo>() {
+        BmobQuery<Config> query = new BmobQuery<Config>();
+        query.getObject(Config.objectId, new QueryListener<Config>() {
             @Override
-            public void done(List<GameInfo> list, BmobException e) {
-                if (e == null) {
-                    if (list != null && list.size() > 0) {
-                        NewestNum = list.get(0).getNewestNum();
-                        setCenterTitle("全数预测(" + NewestNum + "期)");
-                    }
+            public void done(Config gameInfo, BmobException e) {
+                if (e == null && gameInfo != null) {
+                    NewestNum = gameInfo.getNewestNum();
+                    setCenterTitle("全数预测(" + NewestNum + "期)");
+                    //记录是否可以交易
+                    isTread = gameInfo.isTread();
                 }
             }
         });
     }
 
     //获取最新的沪深300信息
-    private void getNewest300Index() {
+    private void getLondonIndex() {
         if (null == Application.userInstance) {
             return;
         }
-        BmobQuery<HuShenIndex> query = new BmobQuery<HuShenIndex>();
+        BmobQuery<LondonGold> query = new BmobQuery<LondonGold>();
         query.order("createdAt");
         //执行查询方法
-        query.findObjects(new FindListener<HuShenIndex>() {
+        query.findObjects(new FindListener<LondonGold>() {
             @Override
-            public void done(List<HuShenIndex> stockIndices, BmobException e) {
+            public void done(List<LondonGold> stockIndices, BmobException e) {
                 guessWholeRefreshWidget.setRefreshing(false);
                 if (e == null) {
                     //获取到最后的是10条黄金信息
                     if (null != stockIndices) {
-                        HuShenIndex stockIndex = stockIndices.get(0);
+                        LondonGold stockIndex = stockIndices.get(0);
                         bindIndex300Value(stockIndex);
                     }
                 } else {
@@ -235,27 +243,61 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
     }
 
     //绑定300数据
-    private void bindIndex300Value(HuShenIndex indexData) {
-        float price = Float.valueOf(indexData.getNowPrice());
+    private void bindIndex300Value(LondonGold indexData) {
+        float price = Float.valueOf(indexData.getLatestpri());
         float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
         guessWholeMainIndex.setText(String.valueOf(resultPrice));
 
-        guessWholeChange.setText(indexData.getDiff_money());
+        guessWholeChange.setText(indexData.getChange());
         //涨跌比率
-        String changePercent = indexData.getDiff_rate() + "%";
+        String changePercent = indexData.getLimit() + "%";
         guessWholeChangePercent.setText(changePercent);
 
         LogUtils.i("300数据：" + indexData.toString());
     }
 
-    //提交猜测的数据
-    private void submitValue() {
+    //开始参与游戏
+    public void startBet() {
         if (null == Application.userInstance) {
             Intent intent = new Intent(this, LoginActivity.class);
             ToastUtils.showShortToast("请先进行登录");
             startActivity(intent);
             return;
         }
+
+        if (-1 == NewestNum) {
+            ToastUtils.showShortToast("操作失败，请重试");
+            return;
+        }
+
+        if (!isTread) {
+            ToastUtils.showShortToast("当前时间不能交易");
+            return;
+        }
+
+        BmobQuery<GuessWholeRecord> query = new BmobQuery<GuessWholeRecord>();
+        query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
+        query.addWhereEqualTo("periodNum", NewestNum);
+        //查询数量
+        query.count(GuessWholeRecord.class, new CountListener() {
+            @Override
+            public void done(Integer integer, BmobException e) {
+                if (e == null) {
+                    if (0 == integer) {
+                        submitValue();
+                    } else {
+                        ToastUtils.showShortToast("不能重复参该期游戏");
+                    }
+                } else {
+                    ToastUtils.showShortToast("操作失败，请重试");
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
+    }
+
+    //提交猜测的数据
+    private void submitValue() {
 
         if (EditTextUtils.isEmpty(guessWholeFirstEdt) || EditTextUtils.isEmpty(guessWholeSecondEdt)
                 || EditTextUtils.isEmpty(guessWholeThirdEdt) || EditTextUtils.isEmpty(guessWholeFourthEdt) ||
@@ -274,11 +316,12 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
         //记录值
         final GuessWholeRecord record = new GuessWholeRecord();
         record.setUserId(Application.userInstance.getObjectId());
-        record.setReward(false);
+        record.setBetStatus(0);
         record.setPeriodNum(NewestNum);
         float value = firstValue * 1000 + secondValue * 100 +
                 thirdValue * 10 + fourthValue + fifthValue / 10f + sixthValue / 100f;
-        record.setGuessValue(value);
+        LogUtils.i("数据：" + value);
+        record.setGuessValue( new BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue());
 
         //弹出提示框
         LayoutInflater inflater = (LayoutInflater)
@@ -295,8 +338,10 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
                 if (EditTextUtils.isEmpty(convertEdt)) {
                     ToastUtils.showShortToast("币数不能空");
                 } else {
-                    final float value = Float.parseFloat(EditTextUtils.getContent(convertEdt));
-                    if (value > Application.userInstance.getGoldValue()) {
+                    final int value = Integer.parseInt(EditTextUtils.getContent(convertEdt));
+                    if (value <= 0) {
+                        ToastUtils.showShortToast("请输入正确的金币数");
+                    } else if (value > Application.userInstance.getGoldValue()) {
                         ToastUtils.showShortToast("金币不够，请充值");
                     } else if (value % 20 == 0) {
                         record.setGoldValue(value);
@@ -305,6 +350,12 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
                             public void done(String s, BmobException e) {
                                 if (e == null) {
                                     ToastUtils.showShortToast("操作成功");
+                                    guessWholeFirstEdt.setText("");
+                                    guessWholeSecondEdt.setText("");
+                                    guessWholeThirdEdt.setText("");
+                                    guessWholeFourthEdt.setText("");
+                                    guessWholeFifthEdt.setText("");
+                                    guessWholeSixthEdt.setText("");
                                     //更新用户的财富
                                     updateWealth(value);
                                     //更新游戏记录
@@ -354,18 +405,28 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
      *
      * @param value
      */
-    public void updateWealth(float value) {
-        Application.userInstance.setGoldValue(
-                Application.userInstance.getGoldValue() - value);
-        Application.userInstance.update(new UpdateListener() {
+    public void updateWealth(int value) {
+        final int afterValue = Application.userInstance.getGoldValue() - value;
+        //记录金币的操作状态
+        WealthDetail wealthDetail = new WealthDetail(
+                Application.userInstance.getObjectId(),
+                Application.userInstance.getGoldValue(),
+                afterValue,
+                WealthDetail.Currency_Type_Gold,
+                WealthDetail.Operation_Type_Game_Whole,
+                value, 1);
+
+        wealthDetail.save(new SaveListener<String>() {
             @Override
-            public void done(BmobException e) {
+            public void done(String s, BmobException e) {
                 if (e == null) {
-                    LogUtils.i("更新数据成功");
+                    Application.userInstance.setGoldValue(afterValue);
+                    AppHandlerService.updateWealth();
                 } else {
                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });
+
     }
 }

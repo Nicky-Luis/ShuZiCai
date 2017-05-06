@@ -110,10 +110,10 @@ public class TrendView extends RelativeLayout {
     /**
      * y轴样式设置
      */
-    private void initYAxisLine() {
+    private void initYAxisLine(int amplitude) {
         YAxis leftAxis = trendView.getAxisLeft();
-        leftAxis.setAxisMinimum(TrendDataTools.getMinData(trendModels));
-        leftAxis.setAxisMaximum(TrendDataTools.getMaxData(trendModels));
+        leftAxis.setAxisMinimum(TrendDataTools.getMinData(trendModels,amplitude));
+        leftAxis.setAxisMaximum(TrendDataTools.getMaxData(trendModels,amplitude));
         leftAxis.setSpaceTop(10f);
         leftAxis.setLabelCount(5, true);
         leftAxis.setDrawZeroLine(false);//不画轴
@@ -122,7 +122,6 @@ public class TrendView extends RelativeLayout {
         //隐藏右侧轴
         trendView.getAxisRight().setEnabled(false);
     }
-
 
     /**
      * 设置数据
@@ -154,9 +153,9 @@ public class TrendView extends RelativeLayout {
     }
 
     //初始化设置
-    private void setData(List<Entry> values) {
+    private void setData(List<Entry> values,int amplitude) {
         initXAxisLine();
-        initYAxisLine();
+        initYAxisLine(amplitude);
         initData(values);
     }
 
@@ -176,7 +175,7 @@ public class TrendView extends RelativeLayout {
      *
      * @param values
      */
-    public void bindTrendData(List<TrendModel> values) {
+    public void bindTrendData(List<TrendModel> values,int amplitude) {
         this.trendModels = values;
 
         List<Entry> datas = new ArrayList<>();
@@ -189,6 +188,6 @@ public class TrendView extends RelativeLayout {
                     }
                 }
         );
-        setData(datas);
+        setData(datas, amplitude);
     }
 }

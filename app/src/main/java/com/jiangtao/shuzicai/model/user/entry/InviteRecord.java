@@ -11,11 +11,11 @@ public class InviteRecord {
     //受邀者
     private String userName;
     //充值金额
-    private float rechargeValue;
+    private int rechargeValue;
     //奖励金额
-    private float rewardValue;
+    private int rewardValue;
 
-    public InviteRecord(String time, String name, float rechargeValue, float rewardValue) {
+    public InviteRecord(String time, String name, int rechargeValue, int rewardValue) {
         this.time = time;
         userName = name;
         this.rechargeValue = rechargeValue;
@@ -34,11 +34,11 @@ public class InviteRecord {
     }
 
 
-    public float getRechargeValue() {
+    public int getRechargeValue() {
         return rechargeValue;
     }
 
-    public float getRewardValue() {
+    public int getRewardValue() {
         return rewardValue;
     }
 
@@ -51,11 +51,11 @@ public class InviteRecord {
     }
 
 
-    public void setRechargeValue(float rechargeValue) {
+    public void setRechargeValue(int rechargeValue) {
         this.rechargeValue = rechargeValue;
     }
 
-    public void setRewardValue(float rewardValue) {
+    public void setRewardValue(int rewardValue) {
         this.rewardValue = rewardValue;
     }
 }

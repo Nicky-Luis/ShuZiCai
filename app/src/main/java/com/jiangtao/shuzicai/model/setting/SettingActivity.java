@@ -16,6 +16,7 @@ import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.common.event_message.LogoutMsg;
+import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -93,6 +94,7 @@ public class SettingActivity extends BaseActivityWithToolBar {
                         }
                         ToastUtils.showShortToast("退出成功");
                         EventBus.getDefault().post(new LogoutMsg());
+                        EventBus.getDefault().post(new WealthChangeMsg());
                         finish();
                     }
 

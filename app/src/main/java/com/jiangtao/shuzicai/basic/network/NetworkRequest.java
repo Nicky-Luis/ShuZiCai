@@ -5,7 +5,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jiangtao.shuzicai.Application;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,8 +49,7 @@ public class NetworkRequest {
     /**
      * 创建 RetrofitManage 服务
      */
-    public static <T> T getRetrofitClient(final Class<T> clss) {
-        String baseURL = Application.getUserURl() + "/";
+    public static <T> T getRetrofitClient(String baseURL,final Class<T> clss) {
         retrofit = new Retrofit.Builder()
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())

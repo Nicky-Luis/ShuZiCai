@@ -11,9 +11,9 @@ public class _User extends BmobUser {
 
     //昵称
     private String nickName;
-    //受邀请码
+    //受邀请码,谁邀请了用户
     private String InviteeCode;
-    //邀请码
+    //邀请码，给别填的
     private String InvitationCode;
     //头像
     private String headImageUrl;
@@ -22,15 +22,15 @@ public class _User extends BmobUser {
     //地址
     private String address;
     //金币值
-    private float goldValue;
+    private int goldValue;
     //银币值
-    private float silverValue;
+    private int silverValue;
 
     public _User() {
     }
 
     public _User(String nickName, String inviteeCode, String invitationCode, String headImageUrl, int gender, String
-            address, float goldValue, float silverValue) {
+            address, int goldValue, int silverValue) {
         this.nickName = nickName;
         InviteeCode = inviteeCode;
         InvitationCode = invitationCode;
@@ -65,11 +65,11 @@ public class _User extends BmobUser {
         return address;
     }
 
-    public float getGoldValue() {
+    public int getGoldValue() {
         return goldValue;
     }
 
-    public float getSilverValue() {
+    public int getSilverValue() {
         return silverValue;
     }
 
@@ -97,11 +97,11 @@ public class _User extends BmobUser {
         this.address = address;
     }
 
-    public void setGoldValue(float goldValue) {
+    public void setGoldValue(int goldValue) {
         this.goldValue = goldValue;
     }
 
-    public void setSilverValue(float silverValue) {
+    public void setSilverValue(int silverValue) {
         this.silverValue = silverValue;
     }
 }

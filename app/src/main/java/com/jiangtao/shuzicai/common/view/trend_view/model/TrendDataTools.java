@@ -1,6 +1,6 @@
 package com.jiangtao.shuzicai.common.view.trend_view.model;
 
-import com.jiangtao.shuzicai.model.game.entry.HuShenIndex;
+import com.jiangtao.shuzicai.model.game.entry.LondonGold;
 import com.jiangtao.shuzicai.model.home.entry.StockIndex;
 
 import java.math.BigDecimal;
@@ -25,7 +25,7 @@ public class TrendDataTools {
      * @param datas
      * @return
      */
-    public static float getMinData(List<TrendModel> datas) {
+    public static float getMinData(List<TrendModel> datas,int amplitude) {
         if (null == datas || datas.size() <= 0) {
             return 1000f;
         }
@@ -35,7 +35,7 @@ public class TrendDataTools {
             //LogUtils.i("-----:" + data.getYValue());
             nums.add(data.getYValue());
         }
-        return Collections.min(nums) - 10;
+        return Collections.min(nums) - amplitude;
     }
 
     /**
@@ -44,7 +44,7 @@ public class TrendDataTools {
      * @param datas
      * @return
      */
-    public static float getMaxData(List<TrendModel> datas) {
+    public static float getMaxData(List<TrendModel> datas,int amplitude) {
         if (null == datas || datas.size() <= 0) {
             return 2000f;
         }
@@ -52,7 +52,7 @@ public class TrendDataTools {
         for (TrendModel data : datas) {
             nums.add(data.getYValue());
         }
-        return Collections.max(nums) + 10;
+        return Collections.max(nums) + amplitude;
     }
 
     /**
@@ -106,17 +106,19 @@ public class TrendDataTools {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
-            //解析数据
-            for (StockIndex data : retList) {
-                if (data.getCode().equals(type)) {
-                    Calendar calendar = Calendar.getInstance();
-                    Date date = sdf.parse(data.getTime());
-                    calendar.setTime(date);
-                    float day = calendar.get(Calendar.DAY_OF_MONTH);
-                    float price = Float.valueOf(data.getNowPrice());
-                    float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                    TrendModel model = new TrendModel(calendar, day, resultPrice);
-                    trendModels.add(model);
+            if (null != retList) {
+                //解析数据
+                for (StockIndex data : retList) {
+                    if (data.getCode().equals(type)) {
+                        Calendar calendar = Calendar.getInstance();
+                        Date date = sdf.parse(data.getTime());
+                        calendar.setTime(date);
+                        float day = calendar.get(Calendar.DAY_OF_MONTH);
+                        float price = Float.valueOf(data.getNowPrice());
+                        float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                        TrendModel model = new TrendModel(calendar, day, resultPrice);
+                        trendModels.add(model);
+                    }
                 }
             }
         } catch (ParseException e) {
@@ -126,35 +128,21 @@ public class TrendDataTools {
     }
 
 
-
     /**
-     * 数据解析，将股票数据转化为图表数据
+     * 数据解析，将股票数据转化为图表数据 显示为伦敦金
      *
-     * @param type
+     * @param newestNum
      * @param retList
      * @return
      */
-    public static List<TrendModel> getTrendDatas2(String type, List<HuShenIndex> retList) {
+    public static List<TrendModel> getTrendDatas2(int newestNum, List<LondonGold> retList) {
         //交易数据
         List<TrendModel> trendModels = new ArrayList<>();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            //解析数据
-            for (HuShenIndex data : retList) {
-                if (data.getCode().equals(type)) {
-                    Calendar calendar = Calendar.getInstance();
-                    Date date = sdf.parse(data.getTime());
-                    calendar.setTime(date);
-                    float day = calendar.get(Calendar.DAY_OF_MONTH);
-                    float price = Float.valueOf(data.getNowPrice());
-                    float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                    TrendModel model = new TrendModel(calendar, day, resultPrice);
-                    trendModels.add(model);
-                }
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        //解析数据
+        for (LondonGold data : retList) {
+            float price = Float.valueOf(data.getLatestpri());
+            TrendModel model = new TrendModel(newestNum--, price);
+            trendModels.add(model);
         }
         return trendModels;
     }

@@ -74,78 +74,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/offset_48dp"
-                            android:text="沪深\n300"/>
-
-
-                        <TextView
-                            android:id="@+id/hushenMainIndex"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/offset_10dp"
-                            android:layout_weight="1"
-                            android:gravity="center|left"
-                            android:text="3100.15"
-                            android:textSize="@dimen/font_size_large"/>
-
-                        <TextView
-                            android:id="@+id/hushenChange"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/offset_10dp"
-                            android:text="+6.15"/>
-
-                        <TextView
-                            android:id="@+id/hushenChangePercent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/offset_10dp"
-                            android:text="15%"/>
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right|center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/offset_4dp">
-
-                        <EditText
-                            android:id="@+id/hushenIndexFirstEdt"
-                            style="@style/style_mantissa_index_EditText"
-                            android:inputType="number"
-                            android:maxLength="1"/>
-
-                        <EditText
-                            android:id="@+id/hushenIndexSecondEdt"
-                            style="@style/style_mantissa_index_EditText"
-                            android:inputType="number"
-                            android:maxLength="1"/>
-
-                        <TextView
-                            android:id="@+id/hushenSubmitBtn"
-                            android:layout_width="@dimen/offset_64dp"
-                            android:layout_height="@dimen/offset_36dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/offset_10dp"
-                            android:background="@color/white"
-                            android:gravity="center"
-                            android:text="提交"/>
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/offset_4dp"
-                        android:background="@color/white"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/offset_10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/offset_48dp"
                             android:text="伦敦\n金指"/>
 
                         <TextView
@@ -155,7 +83,7 @@
                             android:layout_margin="@dimen/offset_10dp"
                             android:layout_weight="1"
                             android:gravity="center|left"
-                            android:text="31400.15"
+                            android:text=""
                             android:textSize="@dimen/font_size_large"/>
 
                         <TextView
@@ -163,14 +91,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/offset_10dp"
-                            android:text="+6.15"/>
+                            android:text=""/>
 
                         <TextView
                             android:id="@+id/goldIndexChangePercent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/offset_10dp"
-                            android:text="15%"/>
+                            android:text=""/>
                     </LinearLayout>
 
 
@@ -185,6 +113,7 @@
                             android:id="@+id/goldIndexFirstEdt"
                             style="@style/style_mantissa_index_EditText"
                             android:inputType="number"
+                            android:visibility="gone"
                             android:maxLength="1"/>
 
                         <EditText
@@ -208,7 +137,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:padding="@dimen/offset_10dp">
 
                         <TextView
@@ -217,6 +146,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/offset_10dp"
                             android:text="本期与12月26日15:10分公布"/>
+
                     </LinearLayout>
 
 
@@ -226,18 +156,20 @@
                         android:layout_marginTop="@dimen/offset_10dp"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal"
-                        android:padding="@dimen/offset_4dp">
+                        android:padding="@dimen/offset_10dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="参与记录"/>
+                            android:text="期数"
+                            android:textColor="@color/gray"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="本期记录"/>
+                            android:text="参与记录"
+                            android:textColor="@color/gray"/>
                     </LinearLayout>
                 </LinearLayout>
             </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>

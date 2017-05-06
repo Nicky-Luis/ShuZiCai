@@ -12,12 +12,13 @@ import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
 import com.jiangtao.shuzicai.common.view.billboard_view.BillboardView;
 import com.jiangtao.shuzicai.common.view.billboard_view.model.BillboardMessage;
-import com.jiangtao.shuzicai.model.game.entry.GameInfo;
-import com.jiangtao.shuzicai.model.game.entry.HuShenIndex;
+import com.jiangtao.shuzicai.model.game.entry.Config;
+import com.jiangtao.shuzicai.model.game.entry.LondonGold;
 import com.jiangtao.shuzicai.model.game.interfaces.IGamePresenter;
 import com.jiangtao.shuzicai.model.game.presenter.GamePresenter;
 import com.jiangtao.shuzicai.model.game.view.IGameView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -29,6 +30,7 @@ import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 
 /***
  * 首页fragment
@@ -121,58 +123,49 @@ public class GameFragment extends BaseFragment implements IGameView {
         // textView.setText("第" + mPage + "页");
         presenter.getBillboardData();
         getPeriodsCount();
-        getIndexData();
+        getLondonData();
     }
 
     /***
      * 获取期数
      */
     private void getPeriodsCount() {
-        BmobQuery<GameInfo> query = new BmobQuery<GameInfo>();
-        query.findObjects(new FindListener<GameInfo>() {
+        BmobQuery<Config> query = new BmobQuery<Config>();
+        query.getObject(Config.objectId, new QueryListener<Config>() {
             @Override
-            public void done(List<GameInfo> list, BmobException e) {
-                if (e == null) {
-                    if (list != null && list.size() > 0) {
-                        for (GameInfo info : list) {
-                            if (GameInfo.type_quanshu == info.getGameType()) {
-                                guess_title_quanshu_txt.setText("第" + info.getNewestNum() + "期");
-                            } else if (GameInfo.type_weishu == info.getGameType()) {
-                                guess_title_weishu_txt.setText("第" + info.getNewestNum() + "期");
-                            } else if (GameInfo.type_zhangdie == info.getGameType()) {
-                                guess_title_zhangdie_txt.setText("第" + info.getNewestNum() + "期");
-                            }
-                        }
-                    }
+            public void done(Config gameInfo, BmobException e) {
+                if (e == null && gameInfo != null) {
+                    guess_title_quanshu_txt.setText("第" + gameInfo.getNewestNum() + "期");
+                    guess_title_weishu_txt.setText("第" + gameInfo.getNewestNum() + "期");
+                    guess_title_zhangdie_txt.setText("第" + gameInfo.getNewestNum() + "期");
                 }
             }
         });
     }
 
     //获取数据
-    public void getIndexData() {
-        BmobQuery<HuShenIndex> query = new BmobQuery<HuShenIndex>();
-        query.max(new String[]{"createdAt"});
+    public void getLondonData() {
+        BmobQuery<LondonGold> query = new BmobQuery<LondonGold>();
+        query.order("-createdAt");//按创建时期查询最新一期的数据
         //执行查询方法
-        query.findObjects(new FindListener<HuShenIndex>() {
+        query.findObjects(new FindListener<LondonGold>() {
             @Override
-            public void done(List<HuShenIndex> stockIndices, BmobException e) {
-                Log.i("bmob", "返回：" + stockIndices.size());
-                if (e == null) {
+            public void done(List<LondonGold> stockIndices, BmobException e) {
+                if (e == null && null != stockIndices) {
+                    Log.i("bmob", "返回：" + stockIndices.size());
                     if (stockIndices.size() > 0) {
                         //指数值
-                        HuShenIndex indexData =stockIndices.get(0);
-                        float price = Float.valueOf(indexData.getNowPrice());
+                        LondonGold indexData = stockIndices.get(0);
+                        float price = Float.valueOf(indexData.getLatestpri());
                         float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                         gameIndexMainData.setText(String.valueOf(resultPrice));
 
-                        gameIndexChange.setText(indexData.getDiff_money());
+                        gameIndexChange.setText(indexData.getChange());
                         //涨跌比率
-                        String changePercent = indexData.getDiff_rate() + "%";
+                        String changePercent = indexData.getLimit() + "%";
                         gameIndexChangePercent.setText(changePercent);
                     }
                 } else {
-                    ToastUtils.showShortToast("获取数据失败");
                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
@@ -188,6 +181,9 @@ public class GameFragment extends BaseFragment implements IGameView {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMainThread(String event) {
         Log.e("event MainThread", "消息： " + event + "  thread: " + Thread.currentThread().getName());
+        if (event.equals("11")) {
+            ToastUtils.showLongToast("获取数据失败");
+        }
     }
 
     @Override
@@ -197,5 +193,10 @@ public class GameFragment extends BaseFragment implements IGameView {
         billboardMessages = datas;
         //绑定数据
         gameBillboardView.setScrollDataList(datas).startScrollView();
+    }
+
+    @Override
+    public void getDataFail() {
+        EventBus.getDefault().post("11");
     }
 }

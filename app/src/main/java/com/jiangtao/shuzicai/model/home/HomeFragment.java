@@ -179,7 +179,7 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
                 break;
         }
         //交易数据
-        mainTrendView.bindTrendData(datas);
+        mainTrendView.bindTrendData(datas,10);
     }
 
     @Override
@@ -236,8 +236,8 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
         String gold = "金币：0";
         String silver = "银币：0";
         if (null != Application.userInstance) {
-            gold = "金币：" + String.valueOf((int) Application.userInstance.getGoldValue());
-            silver = "银币：" + String.valueOf((int) Application.userInstance.getSilverValue());
+            gold = "金币：" + String.valueOf(Application.userInstance.getGoldValue());
+            silver = "银币：" + String.valueOf(Application.userInstance.getSilverValue());
         }
         homeMyGold.setText(gold);
         homeMySilver.setText(silver);

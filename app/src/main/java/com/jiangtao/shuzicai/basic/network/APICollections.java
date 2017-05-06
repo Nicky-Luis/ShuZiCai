@@ -196,6 +196,7 @@ public interface APICollections {
 
     /**
      * 批量操作
+     *
      * @param bean
      * @return
      */
@@ -210,4 +211,18 @@ public interface APICollections {
      */
     @GET("1/classes/_User")
     Call<JsonObject> getUserInfo(@Query("where") String where);
+
+
+    /**
+     * 验证订单信息
+     *
+     * @param total_amount
+     * @param body
+     * @param subject
+     * @return
+     */
+    @GET("pay")
+    Call<JsonObject> authRecharge(@Query("total_amount") String total_amount,
+                                  @Query("body") String body,
+                                  @Query("subject") String subject);
 }

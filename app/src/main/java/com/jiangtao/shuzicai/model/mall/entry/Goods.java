@@ -9,39 +9,50 @@ import cn.bmob.v3.BmobObject;
  * 商品表
  */
 public class Goods extends BmobObject implements Serializable {
+
     private static final long serialVersionUID = -7060210544600464481L;
     //名称
     private String goodsName;
     //详细描述
     private String goodsDetail;
     //价格
-    private float goodsPrice;
+    private int goodsPrice;
     //图片地址
     private String goodsImgUrl;
     //库存数量
     private int inventory;
-    //总销售量
-    private int salesVolume;
+    //商品类型：0:实物商品，1：手机充值卡，2：Q币充值卡
+    private int type;
     //状态是否已经被下架，0：已下架，1：在线上
     private int isOnline;
+    //总销售量
+    private int salesVolume;
 
     public Goods() {
         this.setTableName("Goods");
     }
 
-    public Goods(String goodsName, String goodsDetail, float goodsPrice, String goodsImgUrl, int inventory, int
-            salesVolume, int isOnline) {
+    public Goods(String goodsName, String goodsDetail, int goodsPrice, String goodsImgUrl, int inventory, int type,
+                 int isOnline) {
         this.goodsName = goodsName;
         this.goodsDetail = goodsDetail;
         this.goodsPrice = goodsPrice;
         this.goodsImgUrl = goodsImgUrl;
         this.inventory = inventory;
-        this.salesVolume = salesVolume;
+        this.type = type;
         this.isOnline = isOnline;
     }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public int getSalesVolume() {
+        return salesVolume;
+    }
+
+    public void setSalesVolume(int salesVolume) {
+        this.salesVolume = salesVolume;
     }
 
     public String getGoodsName() {
@@ -52,7 +63,7 @@ public class Goods extends BmobObject implements Serializable {
         return goodsDetail;
     }
 
-    public float getGoodsPrice() {
+    public int getGoodsPrice() {
         return goodsPrice;
     }
 
@@ -64,8 +75,8 @@ public class Goods extends BmobObject implements Serializable {
         return inventory;
     }
 
-    public int getSalesVolume() {
-        return salesVolume;
+    public int getType() {
+        return type;
     }
 
     public int getIsOnline() {
@@ -80,7 +91,7 @@ public class Goods extends BmobObject implements Serializable {
         this.goodsDetail = goodsDetail;
     }
 
-    public void setGoodsPrice(float goodsPrice) {
+    public void setGoodsPrice(int goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
@@ -92,8 +103,8 @@ public class Goods extends BmobObject implements Serializable {
         this.inventory = inventory;
     }
 
-    public void setSalesVolume(int salesVolume) {
-        this.salesVolume = salesVolume;
+    public void setType(int type) {
+        this.type = type;
     }
 
     public void setIsOnline(int isOnline) {

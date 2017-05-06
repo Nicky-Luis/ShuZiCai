@@ -11,6 +11,7 @@
         android:padding="@dimen/offset_4dp"
         android:layout_height="@dimen/offset_48dp"
         android:inputType="number"
+        android:digits="0123456789"
         android:background="@color/main_thin_white"
         android:hint="输入要兑换的金币数..."/>
 

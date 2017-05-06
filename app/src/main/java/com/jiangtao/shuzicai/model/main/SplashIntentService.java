@@ -6,8 +6,12 @@ import android.content.Intent;
 import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.jiangtao.shuzicai.AppConfigure;
+import com.jiangtao.shuzicai.AppHandlerService;
 import com.jiangtao.shuzicai.Application;
+import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
 import com.jiangtao.shuzicai.model.user.entry._User;
+
+import org.greenrobot.eventbus.EventBus;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -39,7 +43,7 @@ public class SplashIntentService extends IntentService {
             String name = AppConfigure.getUserName();
             String password = AppConfigure.getUserPassword();
             LogUtils.i("-----开始登录,name:" + name);
-            startLogin(name, password);
+            AppHandlerService.startLogin(name, password);
         } else {
             LogUtils.i("-----不需要自动登录----");
         }
@@ -67,9 +71,11 @@ public class SplashIntentService extends IntentService {
                     Application.userInstance = user;
                     LogUtils.i("SplashIntentService 登录成功");
                 } else {
+                    Application.userInstance = null;
                     ToastUtils.showShortToast("登录失败");
                     LogUtils.e("SplashIntentService 登录失败：" + e);
                 }
+                EventBus.getDefault().post(new WealthChangeMsg());
             }
         });
     }

@@ -12,4 +12,6 @@ public interface IGameView {
 
     //绑定公告数据
     void bindBillboardData(List<BillboardMessage> datas);
+
+    void getDataFail();
 }

@@ -4,6 +4,7 @@ package com.jiangtao.shuzicai.basic.network;
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.model.mall.entry.GoodsOrder;
 import com.jiangtao.shuzicai.model.user.entry.RegisterBean;
 import com.jiangtao.shuzicai.model.user.entry.SmsCodeVerifyBean;
@@ -29,9 +30,17 @@ public class APIInteractive {
     private static APICollections request = null;
 
     //初始化
+    public static void initRetrofit(String baseURL) {
+        if (null == request) {
+            request = NetworkRequest.getRetrofitClient(baseURL, APICollections.class);
+        }
+    }
+
+    //初始化
     public static void initRetrofit() {
         if (null == request) {
-            request = NetworkRequest.getRetrofitClient(APICollections.class);
+            String baseURL = Application.getUserURl() + "/";
+            request = NetworkRequest.getRetrofitClient(baseURL, APICollections.class);
         }
     }
 
@@ -290,6 +299,7 @@ public class APIInteractive {
 
     /**
      * 批量操作
+     *
      * @param bean
      * @param callback
      */
@@ -316,6 +326,21 @@ public class APIInteractive {
         NetworkRequest.netRequest(call, callback);
     }
 
+    /**
+     * 验证充值信息
+     *
+     * @param total_amount
+     * @param body
+     * @param subject
+     * @param callbak
+     */
+    public static void authRecharge(String total_amount, String body,
+                                    String subject, final INetworkResponse callbak) {
+        request = null;
+        initRetrofit("http://192.168.1.102:8080/");
+        Call<JsonObject> call = request.authRecharge(total_amount, body, subject);
+        NetworkRequest.netRequest(call, callbak);
+    }
 
     /**
      * 上传文件

@@ -196,13 +196,14 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/offset_10dp"
         android:text="游戏记录"
+        android:visibility="gone"
         android:textColor="@color/main_deep_black"/>
 
     <TextView
         android:id="@+id/myInviteTxt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/offset_48dp"
-        android:layout_marginTop="@dimen/offset_1dp"
+        android:layout_marginTop="@dimen/offset_10dp"
         android:background="@color/white"
         android:drawablePadding="@dimen/offset_4dp"
         android:drawableRight="@mipmap/right_more"

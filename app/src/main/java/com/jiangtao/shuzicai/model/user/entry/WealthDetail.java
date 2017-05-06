@@ -12,42 +12,61 @@ public class WealthDetail extends BmobObject {
     public final static int Currency_Type_Gold = 0;
     public final static int Currency_Type_Silver = 1;
     //操作类型
-    public final static int Operation_Type_Recharge = 0;
-    public final static int Operation_Type_Exchange = 1;
-    public final static int Operation_Type_Reward = 2;
-    public final static int Operation_Type_Game = 3;
-    public final static int Operation_Type_Conversion = 4;
+    public final static int Operation_Type_Recharge = 0;//充值
+    public final static int Operation_Type_Wealth_Exchange = 1;//兑换成银元
+    public final static int Operation_Type_Good_Exchange = 2;//兑换成商品
+    public final static int Operation_Type_Forecast_Reward = 3;//涨跌中奖
+    public final static int Operation_Type_Mantisssa_Reward = 4;//尾数中奖
+    public final static int Operation_Type_Whole_Reward = 5;//全数中奖
+    public final static int Operation_Type_Game_Forecast = 6;//涨跌消耗
+    public final static int Operation_Type_Game_Mantisssa = 7;//尾数消耗
+    public final static int Operation_Type_Game_Whole = 8;//全数消耗
+    public final static int Operation_Type_Invite_First = 9;//初级奖励
+    public final static int Operation_Type_Invite_Second = 10;//次级奖励
+    public final static int Operation_Type_Invite_Third = 11;//三级奖励
+
     //用户id
     private String userId;
     //变化之前的值
-    private float beforeValue;
+    private int beforeValue;
     //变化之后的值
-    private float afterValue;
+    private int afterValue;
     //操作的货币类型,0:金币，1：银币
     private int currencyType;
     //操作的类型，0：充值，1：兑换消耗，2，中奖，3：游戏消耗，4：转换
     private int operationType;
     //操作的数值
-    private float operationValue;
+    private int operationValue;
+    //用户是否已经同步更新
+    private int flag;
 
-    public WealthDetail(float beforeValue, float afterValue, int currencyType, int operationType, float
-            operationValue, String userId) {
+    public WealthDetail(String userId, int beforeValue, int afterValue, int currencyType, int operationType, int
+            operationValue, int flag) {
+        this.userId = userId;
         this.beforeValue = beforeValue;
         this.afterValue = afterValue;
         this.currencyType = currencyType;
         this.operationType = operationType;
         this.operationValue = operationValue;
-        this.userId = userId;
+        this.flag = flag;
     }
 
     public WealthDetail() {
     }
 
-    public float getBeforeValue() {
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    public int getBeforeValue() {
         return beforeValue;
     }
 
-    public float getAfterValue() {
+    public int getAfterValue() {
         return afterValue;
     }
 
@@ -59,7 +78,7 @@ public class WealthDetail extends BmobObject {
         return operationType;
     }
 
-    public float getOperationValue() {
+    public int getOperationValue() {
         return operationValue;
     }
 
@@ -67,11 +86,11 @@ public class WealthDetail extends BmobObject {
         return userId;
     }
 
-    public void setBeforeValue(float beforeValue) {
+    public void setBeforeValue(int beforeValue) {
         this.beforeValue = beforeValue;
     }
 
-    public void setAfterValue(float afterValue) {
+    public void setAfterValue(int afterValue) {
         this.afterValue = afterValue;
     }
 
@@ -83,7 +102,7 @@ public class WealthDetail extends BmobObject {
         this.operationType = operationType;
     }
 
-    public void setOperationValue(float operationValue) {
+    public void setOperationValue(int operationValue) {
         this.operationValue = operationValue;
     }
 

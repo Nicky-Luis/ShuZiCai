@@ -14,6 +14,7 @@ public class StockIndex extends BmobObject {
     public final static String Type_ShenZheng = "sz399001";
     public final static String Type_chuangYe = "sz399006";
     public final static String Type_HuShen = "sz399300";
+    public final static String Type_London = "London";
     //sh000001,sz399001,sz399006,sz399300
     //昨日关盘日期
     private String yestodayClosePrice;

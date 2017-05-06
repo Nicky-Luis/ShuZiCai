@@ -26,28 +26,12 @@ public class GuessForecastRecord extends BmobObject {
     //实际的指数
     private float indexResult;
     //获取的奖励数量
-    private float rewardValue;
+    private int rewardValue;
     //奖励是否已经同步：0：未同步，1：已经同步
     private int rewardFlag;
     //预测是否已经处理：0：未处理，1：已经处理
     private int handlerFlag;
 
-    public GuessForecastRecord(){
-    }
-
-    public GuessForecastRecord(String userId, float betSilverValue, int betValue, int periodNum, int betStatus, int
-            betResult, float indexResult, float rewardValue, int rewardFlag, int handlerFlag) {
-        this.userId = userId;
-        this.betSilverValue = betSilverValue;
-        this.betValue = betValue;
-        this.periodNum = periodNum;
-        this.betStatus = betStatus;
-        this.betResult = betResult;
-        this.indexResult = indexResult;
-        this.rewardValue = rewardValue;
-        this.rewardFlag = rewardFlag;
-        this.handlerFlag = handlerFlag;
-    }
 
 
     public String getUserId() {
@@ -78,7 +62,7 @@ public class GuessForecastRecord extends BmobObject {
         return indexResult;
     }
 
-    public float getRewardValue() {
+    public int getRewardValue() {
         return rewardValue;
     }
 
@@ -89,6 +73,7 @@ public class GuessForecastRecord extends BmobObject {
     public int getHandlerFlag() {
         return handlerFlag;
     }
+
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -118,7 +103,7 @@ public class GuessForecastRecord extends BmobObject {
         this.indexResult = indexResult;
     }
 
-    public void setRewardValue(float rewardValue) {
+    public void setRewardValue(int rewardValue) {
         this.rewardValue = rewardValue;
     }
 

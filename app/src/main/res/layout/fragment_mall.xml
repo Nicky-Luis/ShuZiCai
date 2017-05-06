@@ -80,7 +80,7 @@
                     android:drawableRight="@mipmap/right_more"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/offset_10dp"
-                    android:text="兑奖记录"
+                    android:text="兑换记录"
                     android:textColor="@color/main_deep_black"/>
             </LinearLayout>
         </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>

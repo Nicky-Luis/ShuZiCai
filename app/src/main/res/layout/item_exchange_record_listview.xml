@@ -2,15 +2,15 @@
               xmlns:fresco="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:padding="@dimen/offset_2dp">
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/offset_4dp"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/offset_6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -105,10 +105,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:background="@color/white"
         android:layout_marginTop="@dimen/offset_1dp"
-        android:orientation="horizontal">
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/offset_6dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/orders_goods_img"
@@ -134,17 +135,17 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="商品名称"
-                android:textSize="@dimen/font_size_middle"
-                android:textColor="@color/main_light_black"/>
+                android:textColor="@color/main_light_black"
+                android:textSize="@dimen/font_size_middle"/>
 
             <TextView
                 android:id="@+id/orders_goods_price_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:text="53金币"
                 android:textColor="@color/darkorange"
-                android:textSize="@dimen/font_size_large"
-                android:text="53金币"/>
+                android:textSize="@dimen/font_size_large"/>
 
         </LinearLayout>
     </LinearLayout>

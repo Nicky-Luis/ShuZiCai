@@ -4,146 +4,132 @@ import cn.bmob.v3.BmobObject;
 
 /**
  * Created by Nicky on 2017/3/25.
+ * 伦敦金
  */
 public class LondonGold extends BmobObject {
 
     private int periodsNum;//期数
-    private String type;// 黄金美元
-    private String price;// 1243.80
-    private String changepercent;// -0.15%
-    private String changequantity;// -1.5
-    private String openingprice;// 1245.61
-    private String maxprice;// 1251.86
-    private String minprice;// 1240.35
-    private String lastclosingprice;// 1245.30
-    private String amplitude;// .93
-    private String buyprice;// 1244.55
-    private String sellprice;// 1243.80
-    private String updatetime;// 2017-03-25 4:59:00 
+    private String name;//现货黄金 ,
+    private String latestpri;//1228.4最新价
+    private String change;//-9.41 ,
+    private String limit;//-0.77 ,
+    private String buypri;//1228.4 ,
+    private String sellpri;//1229.2 ,
+    private String openpri;//1237.88 ,
+    private String yespri;//1237.81 ,
+    private String maxpri;//1241.27 ,
+    private String minpri;//1228.4 ,
+    private String time;//2017-05-04 23:34:57
 
-    public LondonGold(int newestNum, String type, String price, String changepercent, String changequantity, String
-            openingprice, String maxprice, String minprice, String lastclosingprice, String amplitude, String
-                              buyprice, String sellprice, String updatetime) {
-        this.periodsNum = newestNum;
-        this.type = type;
-        this.price = price;
-        this.changepercent = changepercent;
-        this.changequantity = changequantity;
-        this.openingprice = openingprice;
-        this.maxprice = maxprice;
-        this.minprice = minprice;
-        this.lastclosingprice = lastclosingprice;
-        this.amplitude = amplitude;
-        this.buyprice = buyprice;
-        this.sellprice = sellprice;
-        this.updatetime = updatetime;
-    }
-
-    public LondonGold() {
+    public LondonGold(int periodsNum, String name, String latestpri, String change, String limit, String buypri,
+                      String sellpri, String openpri, String yespri, String maxpri, String minpri, String time) {
+        this.periodsNum = periodsNum;
+        this.name = name;
+        this.latestpri = latestpri;
+        this.change = change;
+        this.limit = limit;
+        this.buypri = buypri;
+        this.sellpri = sellpri;
+        this.openpri = openpri;
+        this.yespri = yespri;
+        this.maxpri = maxpri;
+        this.minpri = minpri;
+        this.time = time;
     }
 
     public int getPeriodsNum() {
         return periodsNum;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public String getPrice() {
-        return price;
+    public String getLatestpri() {
+        return latestpri;
     }
 
-    public String getChangepercent() {
-        return changepercent;
+    public String getChange() {
+        return change;
     }
 
-    public String getChangequantity() {
-        return changequantity;
+    public String getLimit() {
+        return limit;
     }
 
-    public String getOpeningprice() {
-        return openingprice;
+    public String getBuypri() {
+        return buypri;
     }
 
-    public String getMaxprice() {
-        return maxprice;
+    public String getSellpri() {
+        return sellpri;
     }
 
-    public String getMinprice() {
-        return minprice;
+    public String getOpenpri() {
+        return openpri;
     }
 
-    public String getLastclosingprice() {
-        return lastclosingprice;
+    public String getYespri() {
+        return yespri;
     }
 
-    public String getAmplitude() {
-        return amplitude;
+    public String getMaxpri() {
+        return maxpri;
     }
 
-    public String getBuyprice() {
-        return buyprice;
+    public String getMinpri() {
+        return minpri;
     }
 
-    public String getSellprice() {
-        return sellprice;
+    public String getTime() {
+        return time;
     }
-
-    public String getUpdatetime() {
-        return updatetime;
-    }
-
 
     public void setPeriodsNum(int periodsNum) {
         this.periodsNum = periodsNum;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setLatestpri(String latestpri) {
+        this.latestpri = latestpri;
     }
 
-    public void setChangepercent(String changepercent) {
-        this.changepercent = changepercent;
+    public void setChange(String change) {
+        this.change = change;
     }
 
-    public void setChangequantity(String changequantity) {
-        this.changequantity = changequantity;
+    public void setLimit(String limit) {
+        this.limit = limit;
     }
 
-    public void setOpeningprice(String openingprice) {
-        this.openingprice = openingprice;
+    public void setBuypri(String buypri) {
+        this.buypri = buypri;
     }
 
-    public void setMaxprice(String maxprice) {
-        this.maxprice = maxprice;
+    public void setSellpri(String sellpri) {
+        this.sellpri = sellpri;
     }
 
-    public void setMinprice(String minprice) {
-        this.minprice = minprice;
+    public void setOpenpri(String openpri) {
+        this.openpri = openpri;
     }
 
-    public void setLastclosingprice(String lastclosingprice) {
-        this.lastclosingprice = lastclosingprice;
+    public void setYespri(String yespri) {
+        this.yespri = yespri;
     }
 
-    public void setAmplitude(String amplitude) {
-        this.amplitude = amplitude;
+    public void setMaxpri(String maxpri) {
+        this.maxpri = maxpri;
     }
 
-    public void setBuyprice(String buyprice) {
-        this.buyprice = buyprice;
+    public void setMinpri(String minpri) {
+        this.minpri = minpri;
     }
 
-    public void setSellprice(String sellprice) {
-        this.sellprice = sellprice;
-    }
-
-    public void setUpdatetime(String updatetime) {
-        this.updatetime = updatetime;
+    public void setTime(String time) {
+        this.time = time;
     }
 }

@@ -2,32 +2,28 @@ package com.jiangtao.shuzicai.model.mall;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
-import com.google.gson.Gson;
 import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.BaseAdapterHelper;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.QuickAdapter;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
-import com.jiangtao.shuzicai.basic.network.APIInteractive;
-import com.jiangtao.shuzicai.basic.network.BmobQueryUtils;
-import com.jiangtao.shuzicai.basic.network.INetworkResponse;
-import com.jiangtao.shuzicai.model.mall.entry.Goods;
 import com.jiangtao.shuzicai.model.mall.entry.GoodsOrder;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
+//兑换记录
 public class ExchangeRecordActivity extends BaseActivityWithToolBar implements SwipeRefreshLayout.OnRefreshListener {
 
 
@@ -87,7 +83,7 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
                 new ArrayList<GoodsOrder>()) {
             @Override
             protected void convert(BaseAdapterHelper helper, GoodsOrder item) {
-                helper.setText(R.id.view_orders_time,item.getOrderTime().getIso());
+                helper.setText(R.id.view_orders_time,item.getCreatedAt());
                 helper.setText(R.id.view_orders_address,item.getAddress());
                 helper.setText(R.id.view_orders_phone,item.getReceivingPhone());
                 helper.setText(R.id.view_orders_people,item.getContacts());
@@ -108,38 +104,23 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
             return;
         }
 
-        BmobQueryUtils utils = BmobQueryUtils.newInstance();
-        String where = utils.setValue("userId").equal(Application.userInstance.getObjectId());
-
-        APIInteractive.getExchangeRecord(where,"goods", new INetworkResponse() {
+        BmobQuery<GoodsOrder> query = new BmobQuery<GoodsOrder>();
+        query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
+        query.order("createdAt");
+        query.include("goodObj");
+        query.setLimit(50);
+        //执行查询方法
+        query.findObjects(new FindListener<GoodsOrder>() {
             @Override
-            public void onFailure(int code) {
+            public void done(List<GoodsOrder> orders, BmobException e) {
+                Log.i("bmob", "返回：" + orders.size());
                 mSwipeRefreshWidget.setRefreshing(false);
-                ToastUtils.showShortToast("获取数据失败");
-            }
-
-            @Override
-            public void onSucceed(JSONObject result) {
-                mSwipeRefreshWidget.setRefreshing(false);
-                LogUtils.i("result = " + result);
-                List<GoodsOrder> orders =new ArrayList<>();
-                try {
-                    JSONArray jArray = result.optJSONArray("results");
-                    for (int i = 0; i < jArray.length(); i++) {
-                        JSONObject object = (JSONObject) jArray.get(i);
-                        Gson gson = new Gson();
-                        GoodsOrder order= gson.fromJson(object.toString(),GoodsOrder.class);
-
-                        JSONObject goodsObject = object.optJSONObject("goods");
-                        Gson goodsGson = new Gson();
-                        Goods good = goodsGson.fromJson(goodsObject.toString(),Goods.class);
-                        order.setGoodObj(good);
-                        orders.add(order);
-                    }
+                if (e == null) {
                     adapter.clear();
                     adapter.addAll(orders);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } else {
+                    ToastUtils.showShortToast("获取数据失败");
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });

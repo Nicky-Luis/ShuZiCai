@@ -29,11 +29,11 @@ public class GuessMantissaRecord extends BmobObject {
     //押注的数据
     private int guessValue;
     //实际的指数
-    private float indexResult;
-    //是否中奖
-    private boolean isReward;
+    private int indexResult;
+    //状态,0:未开奖，1：中奖，2：未中奖
+    private int betStatus;
     //获取的奖励数量
-    private float rewardCount;
+    private int rewardCount;
     //奖励是否已经同步：0：未同步，1：已经同步
     private int rewardFlag;
     //预测是否已经处理：0：未处理，1：已经处理
@@ -42,20 +42,12 @@ public class GuessMantissaRecord extends BmobObject {
     public GuessMantissaRecord() {
     }
 
-    public GuessMantissaRecord(String userId, float goldValue, int guessType, int indexType, int
-            periodNum, int guessValue, float indexResult, boolean isReward, float rewardCount, int rewardFlag, int
-            handlerFlag) {
-        this.userId = userId;
-        this.goldValue = goldValue;
-        this.guessType = guessType;
-        this.indexType = indexType;
-        this.periodNum = periodNum;
-        this.guessValue = guessValue;
-        this.indexResult = indexResult;
-        this.isReward = isReward;
-        this.rewardCount = rewardCount;
-        this.rewardFlag = rewardFlag;
-        this.handlerFlag = handlerFlag;
+    public int getBetStatus() {
+        return betStatus;
+    }
+
+    public void setBetStatus(int betStatus) {
+        this.betStatus = betStatus;
     }
 
     public String getUserId() {
@@ -82,15 +74,12 @@ public class GuessMantissaRecord extends BmobObject {
         return guessValue;
     }
 
-    public float getIndexResult() {
+    public int getIndexResult() {
         return indexResult;
     }
 
-    public boolean isReward() {
-        return isReward;
-    }
 
-    public float getRewardCount() {
+    public int getRewardCount() {
         return rewardCount;
     }
 
@@ -126,15 +115,12 @@ public class GuessMantissaRecord extends BmobObject {
         this.guessValue = guessValue;
     }
 
-    public void setIndexResult(float indexResult) {
+    public void setIndexResult(int indexResult) {
         this.indexResult = indexResult;
     }
 
-    public void setReward(boolean reward) {
-        isReward = reward;
-    }
 
-    public void setRewardCount(float rewardCount) {
+    public void setRewardCount(int rewardCount) {
         this.rewardCount = rewardCount;
     }
 
