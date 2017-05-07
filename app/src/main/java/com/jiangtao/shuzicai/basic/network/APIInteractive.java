@@ -337,7 +337,7 @@ public class APIInteractive {
     public static void authRecharge(String total_amount, String body,
                                     String subject, final INetworkResponse callbak) {
         request = null;
-        initRetrofit("http://192.168.1.102:8080/");
+        initRetrofit("http://120.77.86.193:8080/");
         Call<JsonObject> call = request.authRecharge(total_amount, body, subject);
         NetworkRequest.netRequest(call, callbak);
     }

@@ -49,9 +49,22 @@ public class SettingActivity extends BaseActivityWithToolBar {
 
 
     //退出登录
-    @OnClick({R.id.logoutBtn, R.id.feedbackTxt, R.id.helpTxt, R.id.aboutTxt})
+    @OnClick({R.id.logoutBtn, R.id.feedbackTxt, R.id.helpTxt,
+            R.id.aboutTxt, R.id.findPasswordTxt, R.id.modifyPasswordTxt})
     public void OnClick(View view) {
         switch (view.getId()) {
+
+            case R.id.findPasswordTxt: {
+                Intent intent = new Intent(SettingActivity.this, FindPasswordActivity.class);
+                startActivity(intent);
+            }
+            break;
+
+            case R.id.modifyPasswordTxt: {
+                Intent intent = new Intent(SettingActivity.this, ModifyPasswordActivity.class);
+                startActivity(intent);
+            }
+            break;
 
             case R.id.logoutBtn:
                 startLogout();

@@ -10,7 +10,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.blankj.utilcode.utils.StringUtils;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.BaseAdapterHelper;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.QuickAdapter;
@@ -23,12 +25,16 @@ public class CustomListViewDialog extends Dialog {
     private Context mContext;
     // layout
     private ListView itemListView;
+    //title
+    private TextView dialog_title;
     // item 列表
     private List<String> listContent = new ArrayList<String>();
     // 回调监听事件
     private IClickCallBack clickCallBack;
     // 适配器
     private QuickAdapter<String> itemAdapter;
+    //
+    String mTitle;
 
     public CustomListViewDialog(Context context, List<String> list) {
         super(context, R.style.item_dialog);
@@ -36,15 +42,27 @@ public class CustomListViewDialog extends Dialog {
         this.mContext = context;
     }
 
+    public CustomListViewDialog(Context context, List<String> list, String title) {
+        super(context, R.style.item_dialog);
+        this.listContent = list;
+        this.mContext = context;
+        this.mTitle = title;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View rootView = inflater.inflate(R.layout.dialog_custom_list_layout, null);
-        itemListView = (ListView) rootView
-                .findViewById(R.id.listView_dialog_item);
+        itemListView = (ListView) rootView.findViewById(R.id.listView_dialog_item);
+        dialog_title = (TextView) rootView.findViewById(R.id.dialog_title);
+        if (StringUtils.isEmpty(mTitle)) {
+            dialog_title.setVisibility(View.GONE);
+        } else {
+            dialog_title.setVisibility(View.VISIBLE);
+            dialog_title.setText(mTitle);
+        }
         dialogItemSet();
-        DisplayMetrics displayMet = this.getContext().getResources()
-                .getDisplayMetrics();
+        DisplayMetrics displayMet = this.getContext().getResources().getDisplayMetrics();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 displayMet.widthPixels * 2 / 3,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -81,4 +99,5 @@ public class CustomListViewDialog extends Dialog {
     public interface IClickCallBack {
         public void Onclick(View view, int which);
     }
+
 }

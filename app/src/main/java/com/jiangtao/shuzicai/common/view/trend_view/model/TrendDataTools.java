@@ -100,7 +100,7 @@ public class TrendDataTools {
      * @param retList
      * @return
      */
-    public static List<TrendModel> getTrendDatas(String type, List<StockIndex> retList) {
+    public static List<TrendModel> getTrendIndexData(String type, List<StockIndex> retList) {
         //交易数据
         List<TrendModel> trendModels = new ArrayList<>();
 
@@ -135,7 +135,7 @@ public class TrendDataTools {
      * @param retList
      * @return
      */
-    public static List<TrendModel> getTrendDatas2(int newestNum, List<LondonGold> retList) {
+    public static List<TrendModel> getTrendLondonData(int newestNum, List<LondonGold> retList) {
         //交易数据
         List<TrendModel> trendModels = new ArrayList<>();
         //解析数据
@@ -169,7 +169,7 @@ public class TrendDataTools {
 
 
     //测试数据数据
-    public static List<TrendModel> getTrendDatas() {
+    public static List<TrendModel> getTrendIndexData() {
 
         List<TrendModel> trendDatas = new ArrayList<>();
        /* Calendar date1 = Calendar.getInstance();

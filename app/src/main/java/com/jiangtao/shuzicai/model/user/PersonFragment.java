@@ -2,10 +2,8 @@ package com.jiangtao.shuzicai.model.user;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,11 +15,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,7 +34,6 @@ import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
 import com.jiangtao.shuzicai.basic.network.APIInteractive;
 import com.jiangtao.shuzicai.basic.network.INetworkResponse;
-import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.basic.widget.CustomListViewDialog;
 import com.jiangtao.shuzicai.common.event_message.EditUserInfoMsg;
 import com.jiangtao.shuzicai.common.event_message.LoginMsg;
@@ -67,8 +62,6 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
-
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 /***
  * 个人中心fragment
@@ -178,7 +171,7 @@ public class PersonFragment extends BaseFragment {
      * @param value
      */
     public void startAlibabaPay(final int value) {
-        APIInteractive.authRecharge("0.01", "金币充值", "数字连连猜金币充值",
+        APIInteractive.authRecharge(String.valueOf(value), "金币充值", "数字连连猜金币充值",
                 new INetworkResponse() {
                     @Override
                     public void onFailure(int code) {
@@ -232,9 +225,10 @@ public class PersonFragment extends BaseFragment {
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        int value = msg.arg1 * 10;//一元等于10金币
                         LogUtils.i("充值额为：" + msg.arg1);
-                        onPaySucceed(100);
-                        startCalculateInvite(100);
+                        onPaySucceed(value);
+                        startCalculateInvite(value);
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         ToastUtils.showLongToast("支付失败");
@@ -397,28 +391,36 @@ public class PersonFragment extends BaseFragment {
 
     //充值的金额
     private void rechargeInput() {
-        LayoutInflater inflater = (LayoutInflater)
-                getActivity().getSystemService(LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.dialog_exchange_layout, null);
-        final EditText convertEdt = (EditText) layout.findViewById(R.id.convertEdt);
-        convertEdt.setHint("输入充值金币数");
 
-        new AlertDialog.Builder(getActivity()).setTitle("1元可兑换1个金币").setView(
-                layout).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        final List<String> datas = new ArrayList<>();
+        datas.add("100金币");
+        datas.add("200金币");
+        datas.add("300金币");
+        datas.add("500金币");
+        datas.add("800金币");
+        datas.add("1000金币");
+        final CustomListViewDialog dialog = new CustomListViewDialog(getActivity(),
+                datas, "选择充值数额(1元=10金币)");
+        dialog.setClickCallBack(new CustomListViewDialog.IClickCallBack() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (EditTextUtils.isEmpty(convertEdt)) {
-                    ToastUtils.showShortToast("金币数不能空");
-                } else {
-                    int value = Integer.valueOf(EditTextUtils.getContent(convertEdt));
-                    if (value <= 0) {
-                        ToastUtils.showShortToast("请输入正确的金币值");
-                    } else {
-                        startAlibabaPay(value);
-                    }
+            public void Onclick(View view, int which) {
+                int value = 10;
+                if (1 == which) {
+                    value = 20;
+                } else if (2 == which) {
+                    value = 30;
+                } else if (3 == which) {
+                    value = 50;
+                } else if (4 == which) {
+                    value = 80;
+                } else if (5 == which) {
+                    value = 100;
                 }
+                startAlibabaPay(value);
+                dialog.dismiss();
             }
-        }).setNegativeButton("取消", null).show();
+        });
+        dialog.show();
     }
 
     /**

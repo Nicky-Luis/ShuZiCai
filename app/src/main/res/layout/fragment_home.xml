@@ -52,7 +52,7 @@
                 android:id="@+id/homeIndexTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2017-01-04"
+                android:text=""
                 android:textSize="@dimen/font_size_small"
                 android:textColor="@color/main_light_white"/>
 
@@ -63,7 +63,7 @@
                 android:layout_below="@+id/homeIndexTime"
                 android:layout_marginLeft="@dimen/offset_4dp"
                 android:layout_marginTop="@dimen/offset_6dp"
-                android:text="3110.15"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_size_huge"
                 android:textStyle="bold"/>
@@ -75,7 +75,7 @@
                 android:layout_alignBaseline="@+id/homeIndexMainData"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/offset_4dp"
-                android:text="成交量"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_size_small"/>
 
@@ -86,7 +86,7 @@
                 android:layout_alignRight="@+id/homeIndexMainData"
                 android:layout_below="@+id/homeIndexMainData"
                 android:layout_marginTop="@dimen/offset_4dp"
-                android:text="-29.4    -2%"
+                android:text=""
                 android:textSize="@dimen/font_size_small"
                 android:textColor="@color/white"/>
 
@@ -97,7 +97,7 @@
                 android:layout_alignBaseline="@+id/homeIndexChange"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/offset_4dp"
-                android:text="成交额"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_size_small"/>
         </RelativeLayout>
@@ -134,7 +134,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:text="金币 300"/>
+                android:text="金币"/>
 
             <TextView
                 android:id="@+id/homeMySilver"
@@ -143,7 +143,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:text="银币 300"/>
+                android:text="银币"/>
         </LinearLayout>
 
         <!--公布栏-->

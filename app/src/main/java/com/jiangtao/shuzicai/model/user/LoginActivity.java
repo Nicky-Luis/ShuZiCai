@@ -14,6 +14,7 @@ import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.common.event_message.LoginMsg;
 import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
+import com.jiangtao.shuzicai.model.setting.FindPasswordActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,19 +40,25 @@ public class LoginActivity extends BaseActivityWithToolBar {
     private String password;
 
     //设置点击事件
-    @OnClick({R.id.loginToRegisterTxt, R.id.loginBtn})
+    @OnClick({R.id.loginToRegisterTxt, R.id.loginBtn, R.id.findPasswordTxt})
     public void OnClick(View view) {
         switch (view.getId()) {
 
-            case R.id.loginToRegisterTxt:
+            case R.id.loginToRegisterTxt: {
                 Intent intent = new Intent(LoginActivity.this, RegisterSetPhoneActivity.class);
                 startActivity(intent);
-                break;
+            }
+            break;
 
             case R.id.loginBtn:
                 startLogin();
                 break;
 
+            case R.id.findPasswordTxt: {
+                Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);
+                startActivity(intent);
+            }
+            break;
         }
     }
 
@@ -89,7 +96,7 @@ public class LoginActivity extends BaseActivityWithToolBar {
             ToastUtils.showShortToast("密码不能为空不能为空");
         }
         showProgress("登录中...");
-        AppHandlerService.startLogin(account,password);
+        AppHandlerService.startLogin(account, password);
     }
 
     /**
@@ -110,7 +117,7 @@ public class LoginActivity extends BaseActivityWithToolBar {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMainThread(LoginMsg result) {
         hideProgress();
-        if (result.isSucceed()){
+        if (result.isSucceed()) {
             ToastUtils.showShortToast("登录成功");
             //保存登录状态
             AppConfigure.saveLoginStatue(true);

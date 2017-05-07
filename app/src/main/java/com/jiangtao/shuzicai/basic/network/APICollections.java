@@ -221,7 +221,7 @@ public interface APICollections {
      * @param subject
      * @return
      */
-    @GET("pay")
+    @GET("shuzicai/pay")
     Call<JsonObject> authRecharge(@Query("total_amount") String total_amount,
                                   @Query("body") String body,
                                   @Query("subject") String subject);

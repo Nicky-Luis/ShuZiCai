@@ -15,11 +15,14 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendDataTools;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -112,12 +115,20 @@ public class TrendView extends RelativeLayout {
      */
     private void initYAxisLine(int amplitude) {
         YAxis leftAxis = trendView.getAxisLeft();
-        leftAxis.setAxisMinimum(TrendDataTools.getMinData(trendModels,amplitude));
-        leftAxis.setAxisMaximum(TrendDataTools.getMaxData(trendModels,amplitude));
+        leftAxis.setAxisMinimum(TrendDataTools.getMinData(trendModels, amplitude));
+        leftAxis.setAxisMaximum(TrendDataTools.getMaxData(trendModels, amplitude));
         leftAxis.setSpaceTop(10f);
         leftAxis.setLabelCount(5, true);
         leftAxis.setDrawZeroLine(false);//不画轴
         leftAxis.setDrawAxisLine(false);//是否绘制轴线
+        //数据的格式
+        leftAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                DecimalFormat df = new DecimalFormat("#.00");
+                return "" + df.format(value);
+            }
+        });
 
         //隐藏右侧轴
         trendView.getAxisRight().setEnabled(false);
@@ -143,7 +154,18 @@ public class TrendView extends RelativeLayout {
         set1.setLineWidth(2f);
         set1.setCircleRadius(3f);//关键点的半径
         set1.setDrawCircleHole(false);//空心的孔
-        set1.setValueTextSize(9f);//字体大小
+        set1.setValueTextSize(11f);//字体大小
+
+        //设置显示的样式
+        set1.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+                                            ViewPortHandler viewPortHandler) {
+                DecimalFormat df = new DecimalFormat("#.00");
+                return "" + df.format(value);
+            }
+        });
+
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
@@ -153,7 +175,7 @@ public class TrendView extends RelativeLayout {
     }
 
     //初始化设置
-    private void setData(List<Entry> values,int amplitude) {
+    private void setData(List<Entry> values, int amplitude) {
         initXAxisLine();
         initYAxisLine(amplitude);
         initData(values);
@@ -175,7 +197,7 @@ public class TrendView extends RelativeLayout {
      *
      * @param values
      */
-    public void bindTrendData(List<TrendModel> values,int amplitude) {
+    public void bindTrendData(List<TrendModel> values, int amplitude) {
         this.trendModels = values;
 
         List<Entry> datas = new ArrayList<>();

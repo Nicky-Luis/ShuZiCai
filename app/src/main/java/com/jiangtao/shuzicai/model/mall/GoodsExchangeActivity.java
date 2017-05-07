@@ -151,33 +151,25 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
         }
 
         if (goods.getGoodsPrice() > Application.userInstance.getGoldValue()) {
-            StytledDialog.showMdAlert(this, "系统提示", "剩余的金币不足以兑换该商品",
-                    "确认", "取消", null, false, true, new MyDialogListener() {
-
-                        @Override
-                        public void onFirst(DialogInterface dialogInterface) {
-                        }
-
-                        @Override
-                        public void onSecond(DialogInterface dialogInterface) {
-                        }
-                    }).show();
-        } else {
-            StytledDialog.showMdAlert(this, "系统提示", "提交订单将消费" + goods.getGoodsPrice() +
-                            "金币，是否确认？",
-                    "确认", "取消", null, false, true, new MyDialogListener() {
-
-                        @Override
-                        public void onFirst(DialogInterface dialogInterface) {
-                            startSubmitOrder();
-                        }
-
-                        @Override
-                        public void onSecond(DialogInterface dialogInterface) {
-
-                        }
-                    }).show();
+            ToastUtils.showShortToast("剩余的金币不足以兑换该商品,请充值");
+            return;
         }
+
+        StytledDialog.showMdAlert(this, "系统提示", "提交订单将消费" + goods.getGoodsPrice() +
+                        "金币，是否确认？",
+                "确认", "取消", null, false, true, new MyDialogListener() {
+
+                    @Override
+                    public void onFirst(DialogInterface dialogInterface) {
+                        startSubmitOrder();
+                    }
+
+                    @Override
+                    public void onSecond(DialogInterface dialogInterface) {
+
+                    }
+                }).show();
+
     }
 
     //提交订单
@@ -276,7 +268,6 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
             saveWealthDetailOrder(order);
         } else {
             hideProgress();
-            ToastUtils.showShortToast("订单提交失败");
         }
     }
 

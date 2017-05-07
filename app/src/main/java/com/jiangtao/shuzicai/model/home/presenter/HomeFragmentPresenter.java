@@ -65,7 +65,7 @@ public class HomeFragmentPresenter {
                                 stockIndices = datas;
                                 String type = StockIndex.Type_ShangZheng;
                                 //获取数据返回,显示上证指数
-                                homeFragmentView.onUpdateIndexData(TrendDataTools.getTrendDatas(
+                                homeFragmentView.onUpdateIndexData(TrendDataTools.getTrendIndexData(
                                         type, stockIndices), type);
                                 //获取今日的数据
                                 homeFragmentView.bindIndexData(TrendDataTools.getNewestDatas(
@@ -109,7 +109,7 @@ public class HomeFragmentPresenter {
     //筛选类型
     public void setIndexType(String type) {
         //获取数据返回
-        List<TrendModel> trendModels = TrendDataTools.getTrendDatas(type, stockIndices);
+        List<TrendModel> trendModels = TrendDataTools.getTrendIndexData(type, stockIndices);
         homeFragmentView.onUpdateIndexData(trendModels, type);
         //获取今日的股票数据
         homeFragmentView.bindIndexData(TrendDataTools.getNewestDatas(type, stockIndices));

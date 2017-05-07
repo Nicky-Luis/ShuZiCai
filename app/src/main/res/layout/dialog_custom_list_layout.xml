@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_dialog_root_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+<LinearLayout android:id="@+id/layout_dialog_root_view"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/white"
+        android:padding="@dimen/offset_6dp"/>
 
     <ListView
         android:id="@+id/listView_dialog_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF" >
+        android:background="#FFFFFF">
     </ListView>
 
 </LinearLayout>

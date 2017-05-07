@@ -24,6 +24,7 @@ import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.basic.utils.EditTextUtils;
 import com.jiangtao.shuzicai.common.view.trend_view.TrendView;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendDataTools;
+import com.jiangtao.shuzicai.common.view.trend_view.model.TrendModel;
 import com.jiangtao.shuzicai.model.game.entry.Config;
 import com.jiangtao.shuzicai.model.game.entry.GuessForecastRecord;
 import com.jiangtao.shuzicai.model.game.entry.LondonGold;
@@ -344,9 +345,10 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
                 mForecastRefreshWidget.setRefreshing(false);
                 if (e == null && null != stockIndices) {
                     LogUtils.i("bmob", "返回：" + stockIndices.size());
+                    List<TrendModel> modelList = TrendDataTools.getTrendLondonData(newestNum,
+                            stockIndices);
                     gameTrendView.setName("伦敦金");
-                    gameTrendView.bindTrendData(TrendDataTools.getTrendDatas2(newestNum,
-                            stockIndices), 1);
+                    gameTrendView.bindTrendData(modelList, 1);
                     if (stockIndices.size() > 0) {
                         bindIndexValue(stockIndices.get(0));
                     }

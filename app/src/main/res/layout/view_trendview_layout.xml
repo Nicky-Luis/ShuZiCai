@@ -6,6 +6,7 @@
     <!--折线图,layout的背景色为 #bdbdbd 灰-->
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/trend_line_chart"
+        android:padding="@dimen/offset_10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"/>

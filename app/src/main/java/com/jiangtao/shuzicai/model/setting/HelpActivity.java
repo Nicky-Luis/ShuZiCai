@@ -34,7 +34,7 @@ public class HelpActivity extends BaseActivityWithToolBar {
             }
         });
 
-        setCenterTitle("意见反馈");
+        setCenterTitle("帮助");
     }
 
 }
