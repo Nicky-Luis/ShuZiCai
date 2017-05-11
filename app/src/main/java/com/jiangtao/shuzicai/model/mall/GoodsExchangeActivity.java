@@ -127,7 +127,7 @@ public class GoodsExchangeActivity extends BaseActivityWithToolBar {
             ToastUtils.showShortToast("地址不能为空");
             return null;
         }
-        String address = EditTextUtils.getContent(phoneEdt);
+        String address = EditTextUtils.getContent(addressEdt);
         order.setAddress(addressPre + address);
         //联系人
         if (EditTextUtils.isEmpty(contactsEdt)) {

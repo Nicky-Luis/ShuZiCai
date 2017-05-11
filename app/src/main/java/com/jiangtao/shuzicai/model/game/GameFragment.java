@@ -22,7 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -123,7 +123,6 @@ public class GameFragment extends BaseFragment implements IGameView {
         // textView.setText("第" + mPage + "页");
         presenter.getBillboardData();
         getPeriodsCount();
-        getLondonData();
     }
 
     /***
@@ -139,27 +138,29 @@ public class GameFragment extends BaseFragment implements IGameView {
                     guess_title_weishu_txt.setText("第" + gameInfo.getNewestNum() + "期");
                     guess_title_zhangdie_txt.setText("第" + gameInfo.getNewestNum() + "期");
                 }
+                getLondonData(gameInfo.getNewestNum() - 1);
             }
         });
     }
 
     //获取数据
-    public void getLondonData() {
+    public void getLondonData(int periodsNum) {
         BmobQuery<LondonGold> query = new BmobQuery<LondonGold>();
-        query.order("-createdAt");//按创建时期查询最新一期的数据
+        query.addWhereEqualTo("periodsNum", periodsNum);
         //执行查询方法
         query.findObjects(new FindListener<LondonGold>() {
             @Override
             public void done(List<LondonGold> stockIndices, BmobException e) {
                 if (e == null && null != stockIndices) {
-                    Log.i("bmob", "返回：" + stockIndices.size());
                     if (stockIndices.size() > 0) {
                         //指数值
                         LondonGold indexData = stockIndices.get(0);
                         float price = Float.valueOf(indexData.getLatestpri());
-                        float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                        gameIndexMainData.setText(String.valueOf(resultPrice));
-
+                        //构造方法的字符格式这里如果小数不足2位,会以0补足.
+                        DecimalFormat decimalFormat = new DecimalFormat(".00");
+                        String resultPrice = decimalFormat.format(price);
+                        gameIndexMainData.setText(resultPrice);
+                        //变化值
                         gameIndexChange.setText(indexData.getChange());
                         //涨跌比率
                         String changePercent = indexData.getLimit() + "%";

@@ -32,7 +32,7 @@ import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
 import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 
-import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,13 +108,16 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
     @Override
     protected void onInitialize() {
         initTitleBar();
+        initSwipeRefresh();
+        initRecyclerView();
+        gameTrendView.setName("伦敦金");
+        showProgress("正在加载数据");
+        getPeriodsCount();
     }
 
     @Override
     public void initPresenter() {
-        initSwipeRefresh();
-        initRecyclerView();
-        initData();
+
     }
 
     //初始化swipe
@@ -169,8 +172,9 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
         }
         //指数值
         float price = Float.valueOf(indexData.getLatestpri());
-        float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-        forecastMainIndex.setText(String.valueOf(resultPrice));
+        DecimalFormat decimalFormat = new DecimalFormat(".00");
+        String resultPrice = decimalFormat.format(price);
+        forecastMainIndex.setText(resultPrice);
 
         //涨跌比率
         indexChange.setText(indexData.getChange());
@@ -203,12 +207,7 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
 
     @Override
     public void onRefresh() {
-        initData();
-    }
-
-    private void initData() {
         getPeriodsCount();
-        getForecastRecord();
     }
 
     //////////////////////////////////////////////////////
@@ -228,6 +227,9 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
                     getShowLondonData(NewestNum - 1);
                     //记录是否可以交易
                     isTread = gameInfo.isTread();
+                }else {
+                    hideProgress();
+                    ToastUtils.showShortToast("获取数据失败");
                 }
             }
         });
@@ -342,16 +344,17 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
         query.findObjects(new FindListener<LondonGold>() {
             @Override
             public void done(List<LondonGold> stockIndices, BmobException e) {
+                hideProgress();
                 mForecastRefreshWidget.setRefreshing(false);
                 if (e == null && null != stockIndices) {
                     LogUtils.i("bmob", "返回：" + stockIndices.size());
                     List<TrendModel> modelList = TrendDataTools.getTrendLondonData(newestNum,
                             stockIndices);
-                    gameTrendView.setName("伦敦金");
                     gameTrendView.bindTrendData(modelList, 1);
                     if (stockIndices.size() > 0) {
                         bindIndexValue(stockIndices.get(0));
                     }
+                    getForecastRecord();
                 } else {
                     ToastUtils.showShortToast("获取数据失败");
                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());

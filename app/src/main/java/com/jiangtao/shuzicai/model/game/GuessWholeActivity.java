@@ -30,6 +30,7 @@ import com.jiangtao.shuzicai.model.user.LoginActivity;
 import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -191,8 +192,6 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
 
     //获取数据
     private void getData() {
-        getLondonIndex();
-        getMantissaRecord();
         getPeriodsCount();
         guessWholeResultTime.setText("");
     }
@@ -211,18 +210,21 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
                     setCenterTitle("全数预测(" + NewestNum + "期)");
                     //记录是否可以交易
                     isTread = gameInfo.isTread();
+                    getLondonIndex(NewestNum - 1);
+                } else {
+                    ToastUtils.showShortToast("获取数据失败");
                 }
             }
         });
     }
 
     //获取最新的沪深300信息
-    private void getLondonIndex() {
+    private void getLondonIndex(int num) {
         if (null == Application.userInstance) {
             return;
         }
         BmobQuery<LondonGold> query = new BmobQuery<LondonGold>();
-        query.order("createdAt");
+        query.addWhereEqualTo("periodsNum", num);
         //执行查询方法
         query.findObjects(new FindListener<LondonGold>() {
             @Override
@@ -230,30 +232,29 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
                 guessWholeRefreshWidget.setRefreshing(false);
                 if (e == null) {
                     //获取到最后的是10条黄金信息
-                    if (null != stockIndices) {
-                        LondonGold stockIndex = stockIndices.get(0);
-                        bindIndex300Value(stockIndex);
+                    if (null != stockIndices && stockIndices.size() > 0) {
+                        bindIndexValue(stockIndices.get(0));
                     }
+                    getMantissaRecord();
                 } else {
                     ToastUtils.showShortToast("获取数据失败");
-                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                    Log.e("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });
     }
 
     //绑定300数据
-    private void bindIndex300Value(LondonGold indexData) {
+    private void bindIndexValue(LondonGold indexData) {
         float price = Float.valueOf(indexData.getLatestpri());
-        float resultPrice = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-        guessWholeMainIndex.setText(String.valueOf(resultPrice));
+        DecimalFormat decimalFormat = new DecimalFormat(".00");
+        String resultPrice = decimalFormat.format(price);
+        guessWholeMainIndex.setText(resultPrice);
 
         guessWholeChange.setText(indexData.getChange());
         //涨跌比率
         String changePercent = indexData.getLimit() + "%";
         guessWholeChangePercent.setText(changePercent);
-
-        LogUtils.i("300数据：" + indexData.toString());
     }
 
     //开始参与游戏
@@ -321,7 +322,7 @@ public class GuessWholeActivity extends BaseActivityWithToolBar
         float value = firstValue * 1000 + secondValue * 100 +
                 thirdValue * 10 + fourthValue + fifthValue / 10f + sixthValue / 100f;
         LogUtils.i("数据：" + value);
-        record.setGuessValue( new BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue());
+        record.setGuessValue(new BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue());
 
         //弹出提示框
         LayoutInflater inflater = (LayoutInflater)

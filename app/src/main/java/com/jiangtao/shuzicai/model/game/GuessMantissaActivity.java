@@ -31,6 +31,7 @@ import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
 import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +120,8 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
         initSwipeRefresh();
         initRecyclerView();
         setViewValue();
-        getDate();
+        getPeriodsCount();
+        mantissaResultTime.setText("");
     }
 
     @Override
@@ -129,7 +131,7 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
 
     @Override
     public void onRefresh() {
-        getDate();
+        getPeriodsCount();
     }
 
     //////////////////////////////////////////////////////////////
@@ -208,14 +210,6 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
         mantissaRecyclerView.setAdapter(recordAdapter);
     }
 
-    //获取数据
-    private void getDate() {
-        getNewestGoldIndex();
-        getMantissaRecord();
-        getPeriodsCount();
-        mantissaResultTime.setText("");
-    }
-
     //设置view的值
     private void setViewValue() {
         //点击事件
@@ -255,10 +249,9 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
     }
 
     //获取最新的黄金信息
-    private void getNewestGoldIndex() {
+    private void getNewestGoldIndex(int num) {
         BmobQuery<LondonGold> query = new BmobQuery<LondonGold>();
-        query.max(new String[]{"createdAt"});
-        query.setLimit(1);
+        query.addWhereEqualTo("periodsNum", num);
         //执行查询方法
         query.findObjects(new FindListener<LondonGold>() {
             @Override
@@ -266,13 +259,13 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
                 mantissaRefreshWidget.setRefreshing(false);
                 if (e == null) {
                     //获取到最后的是1条黄金信息
-                    if (null != stockIndices) {
-                        LondonGold stockIndex = stockIndices.get(0);
-                        bindGoldValue(stockIndex);
+                    if (null != stockIndices && stockIndices.size() >= 0) {
+                        bindGoldValue(stockIndices.get(0));
                     }
+                    getMantissaRecord();
                 } else {
                     ToastUtils.showShortToast("获取数据失败");
-                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                    Log.e("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });
@@ -280,7 +273,11 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
 
     //绑定黄金数据
     private void bindGoldValue(LondonGold stockIndex) {
-        goldForecastMainIndex.setText(stockIndex.getLatestpri());
+        float price = Float.valueOf(stockIndex.getLatestpri());
+        DecimalFormat decimalFormat = new DecimalFormat(".00");
+        String resultPrice = decimalFormat.format(price);
+        goldForecastMainIndex.setText(resultPrice);
+
         goldIndexChange.setText(stockIndex.getChange());
         goldIndexChangePercent.setText(stockIndex.getLimit() + "%");
 
@@ -303,6 +300,9 @@ public class GuessMantissaActivity extends BaseActivityWithToolBar
                     setCenterTitle("尾数预测(" + NewestNum + "期)");
                     //记录是否可以交易
                     isTread = gameInfo.isTread();
+                    getNewestGoldIndex(NewestNum - 1);
+                } else {
+                    ToastUtils.showShortToast("获取数据失败");
                 }
             }
         });

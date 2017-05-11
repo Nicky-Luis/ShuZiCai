@@ -2,7 +2,6 @@ package com.jiangtao.shuzicai.model.home.presenter;
 
 
 import android.content.Context;
-import android.util.Log;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
@@ -12,15 +11,11 @@ import com.jiangtao.shuzicai.common.view.trend_view.model.TrendModel;
 import com.jiangtao.shuzicai.model.home.entry.StockIndex;
 import com.jiangtao.shuzicai.model.home.view.IHomeFragmentView;
 
-import java.util.Date;
 import java.util.List;
 
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.QueryListener;
 
 /**
  * Created by Nicky on 2017/1/16.
@@ -45,40 +40,26 @@ public class HomeFragmentPresenter {
 
     //获取数据
     public void getIndexData() {
-        //获取服务器时间
-        Bmob.getServerTime(new QueryListener<Long>() {
+        BmobQuery<StockIndex> query = new BmobQuery<StockIndex>();
+        query.order("-createdAt");
+        //返回5条数据
+        query.setLimit(4 * 5);
+        //执行查询方法
+        query.findObjects(new FindListener<StockIndex>() {
             @Override
-            public void done(Long aLong, BmobException e) {
+            public void done(List<StockIndex> datas, BmobException e) {
                 if (e == null) {
-                    int dayCount = 7;
-                    BmobDate date = new BmobDate(new Date(aLong - (dayCount * 24 * 60 * 60)));
-
-                    BmobQuery<StockIndex> query = new BmobQuery<StockIndex>();
-                    query.addWhereGreaterThan("createdAt",date);
-                    //返回50条数据
-                    query.setLimit(50);
-                    //执行查询方法
-                    query.findObjects(new FindListener<StockIndex>() {
-                        @Override
-                        public void done(List<StockIndex> datas, BmobException e) {
-                            if (e == null) {
-                                stockIndices = datas;
-                                String type = StockIndex.Type_ShangZheng;
-                                //获取数据返回,显示上证指数
-                                homeFragmentView.onUpdateIndexData(TrendDataTools.getTrendIndexData(
-                                        type, stockIndices), type);
-                                //获取今日的数据
-                                homeFragmentView.bindIndexData(TrendDataTools.getNewestDatas(
-                                        type, stockIndices));
-                            } else {
-                                LogUtils.e("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
-                                ToastUtils.showLongToast("获取股票数据失败");
-                            }
-                        }
-                    });
-                    Log.i("bmob", "当前服务器时间为:" + aLong);
+                    stockIndices = datas;
+                    String type = StockIndex.Type_ShangZheng;
+                    //获取数据返回,显示上证指数
+                    homeFragmentView.onUpdateIndexData(TrendDataTools.getTrendIndexData(
+                            type, stockIndices), type);
+                    //获取今日的数据
+                    homeFragmentView.bindIndexData(TrendDataTools.getNewestDatas(
+                            type, stockIndices));
                 } else {
-                    Log.i("bmob", "获取服务器时间失败:" + e.getMessage());
+                    LogUtils.e("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                    ToastUtils.showLongToast("获取股票数据失败");
                 }
             }
         });
