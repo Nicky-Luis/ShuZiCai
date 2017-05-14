@@ -2,11 +2,7 @@ package com.jiangtao.shuzicai.model.user;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +33,9 @@ public class WealthDetailActivity extends BaseActivityWithToolBar
     SwipeRefreshLayout wealthDetailSwipe;
     //适配器
     private QuickAdapter<WealthDetail> adapter;
+
+    @BindView(R.id.tishi_empty)
+    TextView tishi_empty;
 
     @Override
     public int setLayoutId() {
@@ -107,22 +106,9 @@ public class WealthDetailActivity extends BaseActivityWithToolBar
             }
         };
         wealthDetailRecordListView.setAdapter(adapter);
-        setEmptyView();
     }
 
 
-    //为空时的提示
-    private void setEmptyView(){
-        TextView emptyView = new TextView(WealthDetailActivity.this);
-        emptyView.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        emptyView.setText("没有数据信息");
-        emptyView.setGravity(Gravity.CENTER);
-        emptyView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        emptyView.setVisibility(View.GONE);
-        ((ViewGroup)wealthDetailRecordListView.getParent()).addView(emptyView);
-        wealthDetailRecordListView.setEmptyView(emptyView);
-    }
     //初始化标头栏
     private void initTitleBar() {
         //右键
@@ -153,11 +139,16 @@ public class WealthDetailActivity extends BaseActivityWithToolBar
         query.findObjects(new FindListener<WealthDetail>() {
             @Override
             public void done(List<WealthDetail> list, BmobException e) {
+                wealthDetailSwipe.setRefreshing(false);
                 hideProgress();
                 if (e == null) {
-                    if (null != list) {
+                    if (null != list && list.size() > 0) {
+                        tishi_empty.setVisibility(View.GONE);
                         adapter.clear();
                         adapter.addAll(list);
+                    } else {
+                        tishi_empty.setVisibility(View.VISIBLE);
+                        ToastUtils.showShortToast("没有数据记录");
                     }
                 } else {
                     ToastUtils.showShortToast("获取数据失败");

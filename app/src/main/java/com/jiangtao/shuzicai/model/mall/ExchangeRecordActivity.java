@@ -3,11 +3,7 @@ package com.jiangtao.shuzicai.model.mall;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,7 +15,6 @@ import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.QuickAdap
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.model.mall.entry.GoodsOrder;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
-import com.jiangtao.shuzicai.model.user.WealthDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +23,6 @@ import butterknife.BindView;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-
-import static com.jiangtao.shuzicai.R.id.wealthDetailRecordListView;
 
 //兑换记录
 public class ExchangeRecordActivity extends BaseActivityWithToolBar implements SwipeRefreshLayout.OnRefreshListener {
@@ -43,7 +36,9 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
     SwipeRefreshLayout mSwipeRefreshWidget;
     //适配器
     private QuickAdapter<GoodsOrder> adapter;
-
+    //
+    @BindView(R.id.tishi_empty)
+    TextView tishi_empty;
 
     @Override
     public int setLayoutId() {
@@ -91,32 +86,19 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
                 new ArrayList<GoodsOrder>()) {
             @Override
             protected void convert(BaseAdapterHelper helper, GoodsOrder item) {
-                helper.setText(R.id.view_orders_time,item.getCreatedAt());
-                helper.setText(R.id.view_orders_address,item.getAddress());
-                helper.setText(R.id.view_orders_phone,item.getReceivingPhone());
-                helper.setText(R.id.view_orders_people,item.getContacts());
-                helper.setImageUrl(R.id.orders_goods_img,item.getGoodObj().getGoodsImgUrl());
-                helper.setText(R.id.orders_goods_name_txt,item.getGoodObj().getGoodsName());
-                helper.setText(R.id.orders_goods_price_txt,item.getGoodObj().getGoodsPrice()+"金币");
+                helper.setText(R.id.view_orders_time, item.getCreatedAt());
+                helper.setText(R.id.view_orders_address, item.getAddress());
+                helper.setText(R.id.view_orders_phone, item.getReceivingPhone());
+                helper.setText(R.id.view_orders_people, item.getContacts());
+                helper.setImageUrl(R.id.orders_goods_img, item.getGoodObj().getGoodsImgUrl());
+                helper.setText(R.id.orders_goods_name_txt, item.getGoodObj().getGoodsName());
+                helper.setText(R.id.orders_goods_price_txt, item.getGoodObj().getGoodsPrice() + "金币");
             }
         };
         exchangeRecordListView.setAdapter(adapter);
 
-        setEmptyView();
     }
 
-    //为空时的提示
-    private void setEmptyView(){
-        TextView emptyView = new TextView(ExchangeRecordActivity.this);
-        emptyView.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        emptyView.setText("没有数据信息");
-        emptyView.setGravity(Gravity.CENTER);
-        emptyView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        emptyView.setVisibility(View.GONE);
-        ((ViewGroup)exchangeRecordListView.getParent()).addView(emptyView);
-        exchangeRecordListView.setEmptyView(emptyView);
-    }
 
     //获取数据
     private void getData() {
@@ -136,11 +118,16 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
         query.findObjects(new FindListener<GoodsOrder>() {
             @Override
             public void done(List<GoodsOrder> orders, BmobException e) {
-                Log.i("bmob", "返回：" + orders.size());
                 mSwipeRefreshWidget.setRefreshing(false);
                 if (e == null) {
                     adapter.clear();
-                    adapter.addAll(orders);
+                    if (orders != null && orders.size() > 0) {
+                        tishi_empty.setVisibility(View.GONE);
+                        adapter.addAll(orders);
+                    } else {
+                        tishi_empty.setVisibility(View.VISIBLE);
+                        ToastUtils.showShortToast("没有数据记录");
+                    }
                 } else {
                     ToastUtils.showShortToast("获取数据失败");
                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
