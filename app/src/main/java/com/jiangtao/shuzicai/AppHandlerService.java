@@ -3,9 +3,8 @@ package com.jiangtao.shuzicai;
 import com.blankj.utilcode.utils.LogUtils;
 import com.jiangtao.shuzicai.common.event_message.LoginMsg;
 import com.jiangtao.shuzicai.common.event_message.WealthChangeMsg;
-import com.jiangtao.shuzicai.model.game.entry.GuessForecastRecord;
-import com.jiangtao.shuzicai.model.game.entry.GuessMantissaRecord;
-import com.jiangtao.shuzicai.model.game.entry.GuessWholeRecord;
+import com.jiangtao.shuzicai.model.game.entry.Config;
+import com.jiangtao.shuzicai.model.game.entry.LondonGold;
 import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 import com.jiangtao.shuzicai.model.user.entry._User;
 
@@ -23,6 +22,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -49,10 +49,6 @@ public class AppHandlerService {
                     LogUtils.i("登录成功");
                     //同步财富数据
                     synchInviteWealth();
-                    //更新游戏预测的结果
-                    synchForecastWealth();
-                    synchMantissaWealth();
-                    synchWholeWealth();
                 } else {
                     Application.userInstance = null;
                     EventBus.getDefault().post(new LoginMsg(false));
@@ -79,255 +75,15 @@ public class AppHandlerService {
         });
     }
 
-    ///////////////////////////同步涨跌奖财富数据////////////////////////
-    //同步涨跌奖财富数据
-    public static void synchForecastWealth() {
-        //开始查询数据
-        BmobQuery<GuessForecastRecord> query = new BmobQuery<GuessForecastRecord>();
-        query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
-        query.addWhereEqualTo("rewardFlag", 0);
-        query.addWhereEqualTo("handlerFlag", 1);
-        query.addWhereEqualTo("betStatus", 1);
-        query.findObjects(new FindListener<GuessForecastRecord>() {
-            @Override
-            public void done(List<GuessForecastRecord> list, BmobException e) {
-                if (e == null) {
-                    if (list != null && list.size() > 0) {
-                        //如果上限对于50
-                        int num = list.size() / 50;
-                        for (int count = 0; count <= num; count++) {
-                            int endNum = (count * 50) + 49;
-                            int end = endNum > list.size() ? list.size() : endNum;
-                            startForecastUpdate(list.subList(count * 50, end));
-                        }
-                    } else {
-                        LogUtils.e("没有找到涨跌中奖信息");
-                    }
-                } else {
-                    LogUtils.e("找寻涨跌中奖信息异常" + e);
-                }
-            }
-        });
-    }
 
     /**
-     * 同步更新用户的财富
+     * 获取伦敦金数据
      *
-     * @param list
+     * @param callBack
      */
-    public static void startForecastUpdate(List<GuessForecastRecord> list) {
-        int totalValue = 0;
-        final List<BmobObject> datas = new ArrayList<BmobObject>();
-        for (GuessForecastRecord record : list) {
-            if (record.getBetStatus() == 1) {
-                totalValue = totalValue + record.getRewardValue();
-                record.setRewardFlag(1);
-                datas.add(record);
-            }
-        }
-        //先更新用户的财务数据
-        int afterValue = Application.userInstance.getGoldValue() + totalValue;
-        Application.userInstance.setGoldValue(afterValue);
-        Application.userInstance.update(new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    LogUtils.i("更新涨跌中奖信息数据成功");
-                    EventBus.getDefault().post(new WealthChangeMsg());
-
-                    //财务数据更新成功后再批量更新的方式
-                    new BmobBatch().updateBatch(datas).doBatch(new QueryListListener<BatchResult>() {
-
-                        @Override
-                        public void done(List<BatchResult> list, BmobException e) {
-                            if (e == null) {
-                                for (int i = 0; i < list.size(); i++) {
-                                    BatchResult result = list.get(i);
-                                    BmobException ex = result.getError();
-                                    if (ex == null) {
-                                        LogUtils.i("第" + i + "个数据批量更新成功：" + result.getUpdatedAt());
-                                    } else {
-                                        LogUtils.i("第" + i + "个数据批量更新失败：" + ex.getMessage() + "," + ex.getErrorCode());
-                                    }
-                                }
-                            } else {
-                                LogUtils.i("失败：" + e.getMessage() + "," + e.getErrorCode());
-                            }
-                        }
-                    });
-                } else {
-                    LogUtils.i("更新涨跌中奖数据失败:" + e);
-                }
-            }
-        });
-    }
-    ///////////////////////////同步尾数财富数据////////////////////////
-
-    //同步尾数中奖财富数据
-    public static void synchMantissaWealth() {
-        //开始查询数据
-        BmobQuery<GuessMantissaRecord> query = new BmobQuery<GuessMantissaRecord>();
-        query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
-        query.addWhereEqualTo("rewardFlag", 0);
-        query.addWhereEqualTo("handlerFlag", 1);
-        query.addWhereEqualTo("betStatus", 1);
-        query.findObjects(new FindListener<GuessMantissaRecord>() {
-            @Override
-            public void done(List<GuessMantissaRecord> list, BmobException e) {
-                if (e == null) {
-                    if (list != null && list.size() > 0) {
-                        //如果上限对于50
-                        int length = list.size();
-                        int num = length / 50;
-                        for (int count = 0; count <= num; count++) {
-                            int endNum = (count * 50) + 49;
-                            int end = endNum > length ? length : endNum;
-                            startMantissaUpdate(list.subList(count * 50, end));
-                        }
-                    } else {
-                        LogUtils.e("没有找到尾数中奖信息");
-                    }
-                } else {
-                    LogUtils.e("找寻尾数中奖信息异常" + e);
-                }
-            }
-        });
-    }
-
-    /**
-     * 同步更新用户的财富
-     *
-     * @param list
-     */
-    public static void startMantissaUpdate(List<GuessMantissaRecord> list) {
-        int totalValue = 0;
-        final List<BmobObject> datas = new ArrayList<BmobObject>();
-        for (GuessMantissaRecord record : list) {
-            if (record.getBetStatus() == 1) {
-                totalValue = totalValue + record.getRewardCount();
-                record.setRewardFlag(1);
-                datas.add(record);
-            }
-        }
-        //先更新用户的财务数据
-        int afterValue = Application.userInstance.getGoldValue() + totalValue;
-        Application.userInstance.setGoldValue(afterValue);
-        Application.userInstance.update(new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    LogUtils.i("更新用户信息数据成功");
-                    EventBus.getDefault().post(new WealthChangeMsg());
-
-                    //财务数据更新成功后再批量更新的方式
-                    new BmobBatch().updateBatch(datas).doBatch(new QueryListListener<BatchResult>() {
-
-                        @Override
-                        public void done(List<BatchResult> list, BmobException e) {
-                            if (e == null) {
-                                for (int i = 0; i < list.size(); i++) {
-                                    BatchResult result = list.get(i);
-                                    BmobException ex = result.getError();
-                                    if (ex == null) {
-                                        LogUtils.i("第" + i + "个数据批量更新成功：" + result.getUpdatedAt());
-                                    } else {
-                                        LogUtils.i("第" + i + "个数据批量更新失败：" + ex.getMessage() + "," + ex.getErrorCode());
-                                    }
-                                }
-                            } else {
-                                LogUtils.i("失败：" + e.getMessage() + "," + e.getErrorCode());
-                            }
-                        }
-                    });
-                } else {
-                    LogUtils.e("更新尾数信息数据失败:" + e);
-                }
-            }
-        });
-    }
-
-    ///////////////////////////同步全数财富数据////////////////////////
-
-    //同步尾数中奖财富数据
-    public static void synchWholeWealth() {
-        //开始查询数据
-        BmobQuery<GuessWholeRecord> query = new BmobQuery<GuessWholeRecord>();
-        query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
-        query.addWhereEqualTo("rewardFlag", 0);
-        query.addWhereEqualTo("handlerFlag", 1);
-        query.addWhereEqualTo("betStatus", 1);
-        query.findObjects(new FindListener<GuessWholeRecord>() {
-            @Override
-            public void done(List<GuessWholeRecord> list, BmobException e) {
-                if (e == null) {
-                    if (list != null && list.size() > 0) {
-                        //如果上限对于50
-                        int num = list.size() / 50;
-                        for (int count = 0; count <= num; count++) {
-                            int endNum = (count * 50) + 49;
-                            int end = endNum > list.size() ? list.size() : endNum;
-                            startWholeUpdate(list.subList(count * 50, end));
-                        }
-                    } else {
-                        LogUtils.e("没有找到全数中奖信息");
-                    }
-                } else {
-                    LogUtils.e("找寻全数中奖信息异常" + e);
-                }
-            }
-        });
-    }
-
-    /**
-     * 同步更新用户的财富
-     *
-     * @param list
-     */
-    public static void startWholeUpdate(List<GuessWholeRecord> list) {
-        int totalValue = 0;
-        final List<BmobObject> datas = new ArrayList<BmobObject>();
-        for (GuessWholeRecord record : list) {
-            if (record.getBetStatus() == 1) {
-                totalValue = totalValue + record.getRewardCount();
-                record.setRewardFlag(1);
-                datas.add(record);
-            }
-        }
-        //先更新用户的财务数据
-        int afterValue = Application.userInstance.getGoldValue() + totalValue;
-        Application.userInstance.setGoldValue(afterValue);
-        Application.userInstance.update(new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    LogUtils.i("更新全数中奖信息成功");
-                    EventBus.getDefault().post(new WealthChangeMsg());
-
-                    //财务数据更新成功后再批量更新的方式
-                    new BmobBatch().updateBatch(datas).doBatch(new QueryListListener<BatchResult>() {
-
-                        @Override
-                        public void done(List<BatchResult> list, BmobException e) {
-                            if (e == null) {
-                                for (int i = 0; i < list.size(); i++) {
-                                    BatchResult result = list.get(i);
-                                    BmobException ex = result.getError();
-                                    if (ex == null) {
-                                        LogUtils.i("第" + i + "个数据批量更新成功：" + result.getUpdatedAt());
-                                    } else {
-                                        LogUtils.i("第" + i + "个数据批量更新失败：" + ex.getMessage() + "," + ex.getErrorCode());
-                                    }
-                                }
-                            } else {
-                                LogUtils.i("失败：" + e.getMessage() + "," + e.getErrorCode());
-                            }
-                        }
-                    });
-                } else {
-                    LogUtils.e("更新用户信息数据失败:" + e);
-                }
-            }
-        });
+    public static void getLondonData(DataCallBack callBack) {
+        getPeriodsCount(callBack);
+        startGetLondon(callBack);
     }
 
     ////////////////////////////同步邀请财富数据///////////////////////////////
@@ -412,5 +168,69 @@ public class AppHandlerService {
                 }
             }
         });
+    }
+
+
+    /**
+     * 获取最新的期数
+     */
+    private static void getPeriodsCount(final DataCallBack callBack) {
+        if (null == callBack) {
+            return;
+        }
+        BmobQuery<Config> query = new BmobQuery<Config>();
+        query.getObject(Config.objectId, new QueryListener<Config>() {
+            @Override
+            public void done(Config gameInfo, BmobException e) {
+                LogUtils.i("获取期数完成：");
+                if (e == null && gameInfo != null) {
+                    callBack.onGetPeriodsCount(gameInfo.getNewestNum(),gameInfo.isTread());
+                } else {
+                    callBack.onGetDataFail();
+                    LogUtils.i("获取最新指数失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
+    }
+
+    /**
+     * 获取最新的伦敦金数据
+     */
+    private static void startGetLondon(final DataCallBack callBack) {
+        if (null == callBack) {
+            return;
+        }
+        BmobQuery<LondonGold> query = new BmobQuery<LondonGold>();
+        query.order("-createdAt");
+        query.setLimit(1);
+        //执行查询方法
+        query.findObjects(new FindListener<LondonGold>() {
+            @Override
+            public void done(List<LondonGold> list, BmobException e) {
+                if (e == null && null != list) {
+                    if (list.size() > 0) {
+                        //指数值
+                        LondonGold indexData = list.get(0);
+                        float price = Float.valueOf(indexData.getLatestpri());
+                        callBack.onGetGoldLondon(price, indexData.getChange(), indexData.getLimit());
+                    } else {
+                        callBack.onGetDataFail();
+                    }
+                } else {
+                    callBack.onGetDataFail();
+                    LogUtils.i("获取最新指数失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
+    }
+
+
+    //回调
+    public interface DataCallBack {
+        void onGetGoldLondon(float price, String change, String limit);
+
+        void onGetPeriodsCount(int periodsCount,boolean isTread);
+
+        void onGetDataFail();
     }
 }

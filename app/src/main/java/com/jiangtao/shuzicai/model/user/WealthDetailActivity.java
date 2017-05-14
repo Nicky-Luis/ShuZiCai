@@ -2,29 +2,29 @@ package com.jiangtao.shuzicai.model.user;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
-import com.google.gson.Gson;
 import com.jiangtao.shuzicai.Application;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.BaseAdapterHelper;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.QuickAdapter;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
-import com.jiangtao.shuzicai.basic.network.APIInteractive;
-import com.jiangtao.shuzicai.basic.network.BmobQueryUtils;
-import com.jiangtao.shuzicai.basic.network.INetworkResponse;
 import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 public class WealthDetailActivity extends BaseActivityWithToolBar
         implements SwipeRefreshLayout.OnRefreshListener {
@@ -107,9 +107,22 @@ public class WealthDetailActivity extends BaseActivityWithToolBar
             }
         };
         wealthDetailRecordListView.setAdapter(adapter);
+        setEmptyView();
     }
 
 
+    //为空时的提示
+    private void setEmptyView(){
+        TextView emptyView = new TextView(WealthDetailActivity.this);
+        emptyView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        emptyView.setText("没有数据信息");
+        emptyView.setGravity(Gravity.CENTER);
+        emptyView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        emptyView.setVisibility(View.GONE);
+        ((ViewGroup)wealthDetailRecordListView.getParent()).addView(emptyView);
+        wealthDetailRecordListView.setEmptyView(emptyView);
+    }
     //初始化标头栏
     private void initTitleBar() {
         //右键
@@ -132,36 +145,26 @@ public class WealthDetailActivity extends BaseActivityWithToolBar
             return;
         }
 
-        BmobQueryUtils utils = BmobQueryUtils.newInstance();
-        String where = utils.setValue("userId").equal(Application.userInstance.getObjectId());
-
-        APIInteractive.getWealthDetailRecord(where, new INetworkResponse() {
+        showProgress("正在加载数据");
+        BmobQuery<WealthDetail> query = new BmobQuery<WealthDetail>();
+        query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
+        query.setLimit(20);
+        query.order("-createdAt");
+        query.findObjects(new FindListener<WealthDetail>() {
             @Override
-            public void onFailure(int code) {
-                wealthDetailSwipe.setRefreshing(false);
-                ToastUtils.showShortToast("获取数据失败");
-            }
-
-            @Override
-            public void onSucceed(JSONObject result) {
-                wealthDetailSwipe.setRefreshing(false);
-                LogUtils.i("result = " + result);
-                List<WealthDetail> wealthDetails = new ArrayList<>();
-                try {
-                    JSONArray jArray = result.optJSONArray("results");
-                    for (int i = 0; i < jArray.length(); i++) {
-                        JSONObject object = (JSONObject) jArray.get(i);
-                        Gson gson = new Gson();
-                        WealthDetail wealthDetail = gson.fromJson(object.toString(), WealthDetail.class);
-                        wealthDetails.add(wealthDetail);
+            public void done(List<WealthDetail> list, BmobException e) {
+                hideProgress();
+                if (e == null) {
+                    if (null != list) {
+                        adapter.clear();
+                        adapter.addAll(list);
                     }
-                    adapter.clear();
-                    adapter.addAll(wealthDetails);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } else {
+                    ToastUtils.showShortToast("获取数据失败");
                 }
             }
         });
+
     }
 
     @Override

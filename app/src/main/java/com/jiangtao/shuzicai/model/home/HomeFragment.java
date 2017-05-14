@@ -211,7 +211,6 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView {
 
     @Override
     public void bindBillboardData(List<BillboardMessage> datas) {
-        LogUtils.i("---------绑定公告数据：" + datas.size());
         //广播数据
         billboardMessages = datas;
         //绑定数据

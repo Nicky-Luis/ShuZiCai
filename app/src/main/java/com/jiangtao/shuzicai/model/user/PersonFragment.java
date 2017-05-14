@@ -3,7 +3,6 @@ package com.jiangtao.shuzicai.model.user;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,8 +10,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -56,8 +53,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import c.b.BP;
-import c.b.PListener;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -171,7 +166,7 @@ public class PersonFragment extends BaseFragment {
      * @param value
      */
     public void startAlibabaPay(final int value) {
-        APIInteractive.authRecharge(String.valueOf(value), "金币充值", "数字连连猜金币充值",
+        APIInteractive.authRecharge(String.valueOf(value), "shu zi cai", "数字连连猜金币充值",
                 new INetworkResponse() {
                     @Override
                     public void onFailure(int code) {
@@ -552,153 +547,6 @@ public class PersonFragment extends BaseFragment {
     }
     //////////////////////////////////比目支付//////////////////////////////////////
 
-    /***
-     * 选择支付方式
-     */
-    private void selectPayType(final int value) {
-        final List<String> datas = new ArrayList<>();
-        datas.add("支付宝支付");
-        datas.add("微信支付");
-        final CustomListViewDialog dialog = new CustomListViewDialog(getActivity(), datas);
-        dialog.setClickCallBack(new CustomListViewDialog.IClickCallBack() {
-            @Override
-            public void Onclick(View view, int which) {
-                startPay(0 == which, value);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-    /**
-     * 检查某包名应用是否已经安装
-     *
-     * @param packageName 包名
-     * @param browserUrl  如果没有应用市场，去官网下载
-     * @return
-     */
-    private boolean checkPackageInstalled(String packageName, String browserUrl) {
-        try {
-            // 检查是否有支付宝客户端
-            getActivity().getPackageManager().getPackageInfo(packageName, 0);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            // 没有安装支付宝，跳转到应用市场
-            try {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("market://details?id=" + packageName));
-                startActivity(intent);
-            } catch (Exception ee) {
-                // 连应用市场都没有，用浏览器去支付宝官网下载
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(browserUrl));
-                    startActivity(intent);
-                } catch (Exception eee) {
-                    ToastUtils.showShortToast("请先安装支付宝/微信吧");
-                }
-            }
-        }
-        return false;
-    }
-
-
-    private void installApk(String s) {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED) {
-            //申请权限
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUESTPERMISSION);
-        } else {
-            installBmobPayPlugin(s);
-        }
-    }
-
-    /**
-     * 比目支付调用支付
-     *
-     * @param alipayOrWechatPay 支付类型，true为支付宝支付,false为微信支付
-     */
-    void startPay(final boolean alipayOrWechatPay, final int value) {
-        if (alipayOrWechatPay) {
-            if (!checkPackageInstalled("com.eg.android.AlipayGphone", "https://www.alipay.com")) {
-                // 支付宝支付要求用户已经安装支付宝客户端
-                ToastUtils.showShortToast("请安装支付宝客户端");
-                return;
-            }
-        } else {
-            if (checkPackageInstalled("com.tencent.mm", "http://weixin.qq.com")) {
-                // 需要用微信支付时，要安装微信客户端，然后需要插件
-                // 有微信客户端，看看有无微信支付插件
-                int pluginVersion = BP.getPluginVersion(getActivity());
-                if (pluginVersion < PLUGINVERSION) {
-                    // 为0说明未安装支付插件,
-                    // 否则就是支付插件的版本低于官方最新版
-                    ToastUtils.showLongToast(
-                            pluginVersion == 0 ? "监测到本机尚未安装支付插件,无法进行支付,请先安装插件(无流量消耗)"
-                                    : "监测到本机的支付插件不是最新版,最好进行更新,请先更新插件(无流量消耗)"
-                    );
-                    installApk("bp.db");
-                    return;
-                }
-            } else {
-                // 没有安装微信
-                ToastUtils.showShortToast("请安装微信客户端");
-                return;
-            }
-        }
-        showDialog("正在获取订单...\nSDK版本号:" + BP.getPaySdkVersion());
-        try {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            ComponentName cn = new ComponentName("com.bmob.app.sport",
-                    "com.bmob.app.sport.wxapi.BmobActivity");
-            intent.setComponent(cn);
-            this.startActivity(intent);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
-        BP.pay("金币充值", "金币充值", value, alipayOrWechatPay, new PListener() {
-
-            // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
-            @Override
-            public void unknow() {
-                ToastUtils.showShortToast("支付结果未知,请稍后手动查询");
-                hideDialog();
-            }
-
-            // 支付成功,如果金额较大请手动查询确认
-            @Override
-            public void succeed() {
-                onPaySucceed(value);
-            }
-
-            // 无论成功与否,返回订单号
-            @Override
-            public void orderId(String orderId) {
-                // 此处应该保存订单号,比如保存进数据库等,以便以后查询
-                LogUtils.i("订单号：" + orderId);
-                showDialog("获取订单成功!请等待跳转到支付页面~");
-            }
-
-            // 支付失败,原因可能是用户中断支付操作,也可能是网络原因
-            @Override
-            public void fail(int code, String reason) {
-                // 当code为-2,意味着用户中断了操作
-                // code为-3意味着没有安装BmobPlugin插件
-                if (code == -3) {
-                    ToastUtils.showShortToast("监测到你尚未安装支付插件,无法进行支付," +
-                            "请先安装插件(已打包在本地,无流量消耗),安装结束后重新支付");
-                    installApk("bp.db");
-                } else {
-                    ToastUtils.showShortToast("支付中断!");
-                }
-                hideDialog();
-            }
-        });
-    }
-
     /**
      * 支付成功后的操作
      *
@@ -744,19 +592,6 @@ public class PersonFragment extends BaseFragment {
         });
     }
 
-    void showDialog(String message) {
-        try {
-            if (dialog == null) {
-                dialog = new ProgressDialog(getActivity());
-                dialog.setCancelable(true);
-            }
-            dialog.setMessage(message);
-            dialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 在其他线程调用dialog会报错
-        }
-    }
 
     void hideDialog() {
         if (dialog != null && dialog.isShowing())

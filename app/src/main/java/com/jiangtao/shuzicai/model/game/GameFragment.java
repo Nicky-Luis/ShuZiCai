@@ -6,14 +6,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.ToastUtils;
+import com.jiangtao.shuzicai.AppHandlerService;
 import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.base.BaseFragment;
 import com.jiangtao.shuzicai.common.view.billboard_view.BillboardView;
 import com.jiangtao.shuzicai.common.view.billboard_view.model.BillboardMessage;
-import com.jiangtao.shuzicai.model.game.entry.Config;
-import com.jiangtao.shuzicai.model.game.entry.LondonGold;
 import com.jiangtao.shuzicai.model.game.interfaces.IGamePresenter;
 import com.jiangtao.shuzicai.model.game.presenter.GamePresenter;
 import com.jiangtao.shuzicai.model.game.view.IGameView;
@@ -27,15 +25,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.QueryListener;
 
 /***
  * 首页fragment
  */
 public class GameFragment extends BaseFragment implements IGameView {
+
     //参数
     public static final String ARGS_PAGE = "args_page";
     //页数
@@ -63,7 +58,6 @@ public class GameFragment extends BaseFragment implements IGameView {
     //百分比
     @BindView(R.id.gameIndexChangePercent)
     TextView gameIndexChangePercent;
-
     //presenter
     private IGamePresenter presenter;
 
@@ -102,7 +96,6 @@ public class GameFragment extends BaseFragment implements IGameView {
         }
     }
 
-
     @Override
     public void onGetArgument() {
         mPage = getArguments().getInt(ARGS_PAGE);
@@ -122,56 +115,10 @@ public class GameFragment extends BaseFragment implements IGameView {
     public void loadLayout(View rootView) {
         // textView.setText("第" + mPage + "页");
         presenter.getBillboardData();
-        getPeriodsCount();
-    }
-
-    /***
-     * 获取期数
-     */
-    private void getPeriodsCount() {
-        BmobQuery<Config> query = new BmobQuery<Config>();
-        query.getObject(Config.objectId, new QueryListener<Config>() {
-            @Override
-            public void done(Config gameInfo, BmobException e) {
-                if (e == null && gameInfo != null) {
-                    guess_title_quanshu_txt.setText("第" + gameInfo.getNewestNum() + "期");
-                    guess_title_weishu_txt.setText("第" + gameInfo.getNewestNum() + "期");
-                    guess_title_zhangdie_txt.setText("第" + gameInfo.getNewestNum() + "期");
-                }
-                getLondonData(gameInfo.getNewestNum() - 1);
-            }
-        });
+        getData();
     }
 
     //获取数据
-    public void getLondonData(int periodsNum) {
-        BmobQuery<LondonGold> query = new BmobQuery<LondonGold>();
-        query.addWhereEqualTo("periodsNum", periodsNum);
-        //执行查询方法
-        query.findObjects(new FindListener<LondonGold>() {
-            @Override
-            public void done(List<LondonGold> stockIndices, BmobException e) {
-                if (e == null && null != stockIndices) {
-                    if (stockIndices.size() > 0) {
-                        //指数值
-                        LondonGold indexData = stockIndices.get(0);
-                        float price = Float.valueOf(indexData.getLatestpri());
-                        //构造方法的字符格式这里如果小数不足2位,会以0补足.
-                        DecimalFormat decimalFormat = new DecimalFormat(".00");
-                        String resultPrice = decimalFormat.format(price);
-                        gameIndexMainData.setText(resultPrice);
-                        //变化值
-                        gameIndexChange.setText(indexData.getChange());
-                        //涨跌比率
-                        String changePercent = indexData.getLimit() + "%";
-                        gameIndexChangePercent.setText(changePercent);
-                    }
-                } else {
-                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
-                }
-            }
-        });
-    }
 
 
     /**
@@ -189,7 +136,6 @@ public class GameFragment extends BaseFragment implements IGameView {
 
     @Override
     public void bindBillboardData(List<BillboardMessage> datas) {
-        LogUtils.i("---------绑定公告数据：" + datas.size());
         //广播数据
         billboardMessages = datas;
         //绑定数据
@@ -199,5 +145,37 @@ public class GameFragment extends BaseFragment implements IGameView {
     @Override
     public void getDataFail() {
         EventBus.getDefault().post("11");
+    }
+
+
+    //获取数据
+    private void getData() {
+        AppHandlerService.getLondonData(new AppHandlerService.DataCallBack() {
+
+            @Override
+            public void onGetGoldLondon(float price, String change, String limit) {
+                //构造方法的字符格式这里如果小数不足2位,会以0补足.
+                DecimalFormat decimalFormat = new DecimalFormat(".00");
+                String resultPrice = decimalFormat.format(price);
+                gameIndexMainData.setText(resultPrice);
+                //变化值
+                gameIndexChange.setText(change);
+                //涨跌比率
+                String changePercent = limit + "%";
+                gameIndexChangePercent.setText(changePercent);
+            }
+
+            @Override
+            public void onGetPeriodsCount(int periodsCount,boolean isTread) {
+                guess_title_quanshu_txt.setText("第" + periodsCount + "期");
+                guess_title_weishu_txt.setText("第" + periodsCount + "期");
+                guess_title_zhangdie_txt.setText("第" + periodsCount + "期");
+            }
+
+            @Override
+            public void onGetDataFail() {
+                ToastUtils.showShortToast("获取数据失败");
+            }
+        });
     }
 }

@@ -68,6 +68,7 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
         return this;
     }
 
+
     /**
      * Will set the image of an ImageView from a resource id.
      *
@@ -132,8 +133,8 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
      * @return The BaseAdapterHelper for chaining.
      */
     public BaseAdapterHelper setTextColor(int viewId, int textColor) {
-        TextView view = retrieveView(viewId);
-        view.setTextColor(textColor);
+        TextView view = (TextView) getConvertView().findViewById(viewId);
+        view.setTextColor(getConvertView().getResources().getColor(textColor));
         return this;
     }
 

@@ -29,7 +29,7 @@ public class GuessMantissaRecord extends BmobObject {
     //押注的数据
     private int guessValue;
     //实际的指数
-    private int indexResult;
+    private float indexResult;
     //状态,0:未开奖，1：中奖，2：未中奖
     private int betStatus;
     //获取的奖励数量
@@ -74,7 +74,7 @@ public class GuessMantissaRecord extends BmobObject {
         return guessValue;
     }
 
-    public int getIndexResult() {
+    public float getIndexResult() {
         return indexResult;
     }
 
@@ -115,7 +115,7 @@ public class GuessMantissaRecord extends BmobObject {
         this.guessValue = guessValue;
     }
 
-    public void setIndexResult(int indexResult) {
+    public void setIndexResult(float indexResult) {
         this.indexResult = indexResult;
     }
 

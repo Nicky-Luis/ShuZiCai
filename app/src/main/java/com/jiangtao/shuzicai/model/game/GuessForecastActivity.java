@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
@@ -26,6 +27,7 @@ import com.jiangtao.shuzicai.common.view.trend_view.TrendView;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendDataTools;
 import com.jiangtao.shuzicai.common.view.trend_view.model.TrendModel;
 import com.jiangtao.shuzicai.model.game.entry.Config;
+import com.jiangtao.shuzicai.model.game.entry.ForecastStatistic;
 import com.jiangtao.shuzicai.model.game.entry.GuessForecastRecord;
 import com.jiangtao.shuzicai.model.game.entry.LondonGold;
 import com.jiangtao.shuzicai.model.mall.helper.SpacesItemDecoration;
@@ -34,14 +36,20 @@ import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobBatch;
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BatchResult;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -72,6 +80,9 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
     //开奖时间
     @BindView(R.id.forecastResultTime)
     TextView forecastResultTime;
+    //记录
+    @BindView(R.id.record_layout)
+    LinearLayout record_layout;
     //押注的期数
     private int NewestNum = -1;
     //是否允许交易
@@ -146,19 +157,24 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
             @Override
             protected void convert(BaseAdapterHelper helper, final GuessForecastRecord item) {
                 helper.setText(R.id.forecast_period_count, "第" + item.getPeriodNum() + "期");
-                if (item.getBetStatus() == 1) {
-                    helper.setText(R.id.forecastResult, "预测结果：看涨");
-                } else {
-                    helper.setText(R.id.forecastResult, "预测结果：看跌");
-                }
-                if (item.getHandlerFlag() == 1) {
-                    if (item.getBetResult() == 1) {
-                        helper.setText(R.id.actualResults, "实际结果: 上涨");
+                if (item.getBetStatus() != 1) {
+                    //未中奖的情况
+                    helper.setTextColor(R.id.forecastResult, R.color.gray);
+                    String betValue = (item.getBetValue() == 1) ? "看涨" : "看跌";
+                    helper.setText(R.id.forecastResult, "预测：" + betValue);
+
+                    if (item.getHandlerFlag() == 1) {
+                        helper.setTextColor(R.id.actualResults, R.color.green);
+                        String betResult = (item.getBetResult() == 1) ? "上涨" : "下跌";
+                        helper.setText(R.id.actualResults, "结果：" + betResult);
                     } else {
-                        helper.setText(R.id.actualResults, "实际结果: 下跌");
+                        helper.setTextColor(R.id.actualResults, R.color.gray);
+                        helper.setText(R.id.actualResults, "结果：待定");
                     }
                 } else {
-                    helper.setText(R.id.actualResults, "实际结果: 待定");
+                    helper.setTextColor(R.id.forecastResult, R.color.main_red);
+                    helper.setText(R.id.forecastResult, "已中奖");
+                    helper.setText(R.id.actualResults, "奖励" + item.getRewardValue() + "银币");
                 }
             }
         };
@@ -224,10 +240,10 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
                     NewestNum = gameInfo.getNewestNum();
                     setCenterTitle("涨跌预测(" + NewestNum + "期)");
                     //获取前面五期数据
-                    getShowLondonData(NewestNum - 1);
+                    getShowLondonData(NewestNum - 2);
                     //记录是否可以交易
                     isTread = gameInfo.isTread();
-                }else {
+                } else {
                     hideProgress();
                     ToastUtils.showShortToast("获取数据失败");
                 }
@@ -270,37 +286,11 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
                     if (value <= 0) {
                         ToastUtils.showShortToast("请输入正确的金币值");
                     } else {
-                        getIfJoined(value, type);
+                        submitForecastData(value, type);
                     }
                 }
             }
         }).setNegativeButton("取消", null).show();
-    }
-
-    //判断是否已经参与了游戏
-    public void getIfJoined(final int value, final int type) {
-        if (-1 == NewestNum) {
-            ToastUtils.showShortToast("操作失败，请重试");
-            return;
-        }
-        BmobQuery<GuessForecastRecord> query = new BmobQuery<GuessForecastRecord>();
-        query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
-        query.addWhereEqualTo("periodNum", NewestNum);
-        query.count(GuessForecastRecord.class, new CountListener() {
-            @Override
-            public void done(Integer integer, BmobException e) {
-                if (e == null) {
-                    if (0 == integer) {
-                        submitForecastData(value, type);
-                    } else {
-                        ToastUtils.showShortToast("不能重复参与同一期游戏");
-                    }
-                } else {
-                    ToastUtils.showShortToast("操作失败，请重试");
-                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
-                }
-            }
-        });
     }
 
     /**
@@ -317,18 +307,19 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
         GuessForecastRecord forecastRecord = new GuessForecastRecord();
         forecastRecord.setUserId(Application.userInstance.getObjectId());
         forecastRecord.setBetSilverValue(value);
-        forecastRecord.setBetStatus(type);
+        forecastRecord.setBetValue(type);
+        forecastRecord.setBetStatus(0);
         forecastRecord.setPeriodNum(NewestNum);
 
         forecastRecord.save(new SaveListener<String>() {
             @Override
             public void done(String objectId, BmobException e) {
                 if (e == null) {
-                    getForecastRecord();
+                    getGameRecord();
                     updateWealth(value);
                     ToastUtils.showShortToast("操作成功,请等待开奖");
                 } else {
-                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                    Log.e("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
                 LogUtils.i("objectId = " + objectId);
             }
@@ -354,7 +345,7 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
                     if (stockIndices.size() > 0) {
                         bindIndexValue(stockIndices.get(0));
                     }
-                    getForecastRecord();
+                    getGameRecord();
                 } else {
                     ToastUtils.showShortToast("获取数据失败");
                     Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
@@ -391,28 +382,197 @@ public class GuessForecastActivity extends BaseActivityWithToolBar
         });
     }
 
+    /**
+     * 预测结果处理
+     */
+    private void gameResultHandler(final List<GuessForecastRecord> recordList, List<Integer> periodNums) {
+        BmobQuery<ForecastStatistic> query = new BmobQuery<ForecastStatistic>();
+        query.addWhereContainedIn("periodNum", periodNums);
+        //执行查询方法
+        query.findObjects(new FindListener<ForecastStatistic>() {
+            @Override
+            public void done(List<ForecastStatistic> list, BmobException e) {
+                if (e == null ) {
+                    if (null != list) {
+                        final List<BmobObject> batchs = getGameBmobBatch(list, recordList);
+                        startBmobBatchUpdate(batchs);
+
+
+                        //按时间排序
+                        class ComparatorUser implements Comparator<GuessForecastRecord> {
+                            @Override
+                            public int compare(GuessForecastRecord u1, GuessForecastRecord u2) {
+                                return u2.getCreatedAt().compareTo(u1.getCreatedAt());
+                            }
+                        }
+                        Comparator<GuessForecastRecord> cmp = new ComparatorUser();
+                        Collections.sort(recordList, cmp);
+                    }
+                    forecastAdapter.clear();
+                    forecastAdapter.addAll(recordList);
+                } else {
+                    ToastUtils.showShortToast("获取数据失败");
+                    LogUtils.e("查询涨跌统计信息失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
+    }
+
+    /**
+     * 批量更新
+     *
+     * @param datas
+     * @return
+     */
+    public boolean startBmobBatchUpdate(List<BmobObject> datas) {
+        if (datas.size() <= 0) {
+            return true;
+        }
+        //批量更新中奖信息
+        new BmobBatch().updateBatch(datas).doBatch(new QueryListListener<BatchResult>() {
+
+            @Override
+            public void done(List<BatchResult> list, BmobException e) {
+                if (e == null) {
+                    for (int i = 0; i < list.size(); i++) {
+                        BatchResult result = list.get(i);
+                        BmobException ex = result.getError();
+                        if (ex == null) {
+                            LogUtils.i("第" + i + "个数据批量更新成功：" + result.getUpdatedAt());
+                        } else {
+                            LogUtils.i("第" + i + "个数据批量更新失败：" + ex.getMessage() + "," + ex.getErrorCode());
+                        }
+                    }
+                } else {
+                    LogUtils.i("失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
+        return false;
+    }
+
+    /**
+     * 获取更新的数据
+     *
+     * @param list
+     * @param recordList
+     * @return
+     */
+    public List<BmobObject> getGameBmobBatch(List<ForecastStatistic> list, List<GuessForecastRecord> recordList) {
+        final List<BmobObject> datas = new ArrayList<BmobObject>();
+        for (ForecastStatistic statistic : list) {
+            for (GuessForecastRecord forecastRecord : recordList) {
+                if (forecastRecord.getHandlerFlag() == 0 &&forecastRecord.getPeriodNum() == statistic.getPeriodNum()) {
+                    forecastRecord.setRewardFlag(1);//标记为已经同步奖励
+                    forecastRecord.setHandlerFlag(1);//标记为已经处理了结果
+                    forecastRecord.setBetResult(statistic.getResult());//中奖的实际结果
+                    forecastRecord.setIndexResult(statistic.getPrice());//这一期的数据
+                    if (forecastRecord.getBetValue() == statistic.getResult()) {
+                        forecastRecord.setBetStatus(1);
+                        if (statistic.getRewardSum() > 0) {
+                            float reword = forecastRecord.getBetSilverValue()
+                                    * statistic.getLoserSum() / statistic.getRewardSum();
+                            forecastRecord.setRewardValue((int) reword);
+                            //更新中奖的数据
+                            saveWealthValue((int) reword);
+                        }
+                    } else {
+                        //未处理
+                        forecastRecord.setBetStatus(2);
+                        forecastRecord.setRewardValue(0);
+                    }
+                    datas.add(forecastRecord);
+                }
+            }
+        }
+        return datas;
+    }
+
+    /**
+     * 获奖成功后的操作
+     *
+     * @param value
+     */
+    public void saveWealthValue(int value) {
+        LogUtils.i("奖励的银币数为：" + value);
+        final int beforeValue = Application.userInstance.getSilverValue();
+        final int afterValue = beforeValue + value;
+        //记录银币数
+        Application.userInstance.setSilverValue(afterValue);
+        AppHandlerService.updateWealth();
+
+        //记录充值的数据
+        WealthDetail wealthDetail = new WealthDetail(
+                Application.userInstance.getObjectId(),
+                beforeValue,
+                afterValue,
+                WealthDetail.Currency_Type_Silver,
+                WealthDetail.Operation_Type_Forecast_Reward,
+                value, 1);
+        saveWealthRecord(wealthDetail);
+    }
+
+    /***
+     * 记录金币的操作状态
+     *
+     * @param wealthDetail
+     */
+    public void saveWealthRecord(WealthDetail wealthDetail) {
+        //记录金币的操作状态
+        wealthDetail.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    LogUtils.i("奖励财富记录更新成功");
+                } else {
+                    LogUtils.e("奖励财富记录更新失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
+    }
+
+
     //获取预测的记录
-    private void getForecastRecord() {
+    private void getGameRecord() {
         if (null == Application.userInstance) {
             return;
         }
         BmobQuery<GuessForecastRecord> query = new BmobQuery<>();
         //查询playerName叫“比目”的数据
         query.addWhereEqualTo("userId", Application.userInstance.getObjectId());
-        query.setLimit(10);
+        query.setLimit(20);
         //执行查询方法
         query.findObjects(new FindListener<GuessForecastRecord>() {
             @Override
-            public void done(List<GuessForecastRecord> object, BmobException e) {
+            public void done(List<GuessForecastRecord> list, BmobException e) {
                 mForecastRefreshWidget.setRefreshing(false);
                 if (e == null) {
-                    forecastAdapter.clear();
-                    forecastAdapter.addAll(object);
+                    if (null != list && list.size() > 0) {
+                        record_layout.setVisibility(View.VISIBLE);
+                        List<Integer> numList = new ArrayList<>();
+                        for (GuessForecastRecord forecastRecord : list) {
+                            if (forecastRecord.getHandlerFlag() == 0) {
+                                numList.add(forecastRecord.getPeriodNum());
+                            }
+                        }
+                        List<Integer> integerList = removeDuplicate(numList);
+                        gameResultHandler(list, integerList);
+                    }else {
+                        record_layout.setVisibility(View.GONE);
+                    }
                 } else {
                     ToastUtils.showShortToast("获取数据失败");
-                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                    LogUtils.e("查询游戏记录信息失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });
+    }
+
+    //去掉重复的数据
+    public static List<Integer> removeDuplicate(List<Integer> list) {
+        HashSet<Integer> h = new HashSet<Integer>(list);
+        list.clear();
+        list.addAll(h);
+        return list;
     }
 }

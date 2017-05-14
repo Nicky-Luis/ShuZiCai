@@ -1,7 +1,11 @@
 package com.jiangtao.shuzicai.model.user;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -11,7 +15,7 @@ import com.jiangtao.shuzicai.R;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.BaseAdapterHelper;
 import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.QuickAdapter;
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
-import com.jiangtao.shuzicai.model.share.onekeyshare.OnekeyShare;
+import com.jiangtao.shuzicai.model.share.OnekeyShare;
 import com.jiangtao.shuzicai.model.user.entry.InviteRecord;
 import com.jiangtao.shuzicai.model.user.entry.WealthDetail;
 import com.jiangtao.shuzicai.model.user.entry._User;
@@ -95,8 +99,23 @@ public class InviteDetailActivity extends BaseActivityWithToolBar implements Swi
             }
         };
         inviteListView.setAdapter(inviteAdapter);
+
+        setEmptyView();
     }
 
+
+    //为空时的提示
+    private void setEmptyView(){
+        TextView emptyView = new TextView(InviteDetailActivity.this);
+        emptyView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        emptyView.setText("暂时没有邀请信息");
+        emptyView.setGravity(Gravity.CENTER);
+        emptyView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        emptyView.setVisibility(View.GONE);
+        ((ViewGroup)inviteListView.getParent()).addView(emptyView);
+        inviteListView.setEmptyView(emptyView);
+    }
 
     //初始化数据
     private void initData() {
@@ -107,31 +126,31 @@ public class InviteDetailActivity extends BaseActivityWithToolBar implements Swi
     }
 
     //////////////////////////////////////////////////////////////////
-
+    //分享代码
     private void showShare() {
         OnekeyShare oks = new OnekeyShare();
         //关闭sso授权
         oks.disableSSOWhenAuthorize();
         // title标题，印象笔记、邮箱、信息、微信、人人网、QQ和QQ空间使用
-        oks.setTitle("标题");
+        oks.setTitle("我正在玩数字连连猜");
         // titleUrl是标题的网络链接，仅在Linked-in,QQ和QQ空间使用
-        oks.setTitleUrl("http://sharesdk.cn");
+        oks.setTitleUrl("http://sj.qq.com/myapp/detail.htm?apkName=com.tencent.mm");
         // text是分享文本，所有平台都需要这个字段
-        oks.setText("我是分享文本");
+        oks.setText("我正在玩数字连连猜，一起来玩吧");
         //分享网络图片，新浪微博分享网络图片需要通过审核后申请高级写入接口，否则请注释掉测试新浪微博
-        oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+        oks.setImageUrl("http://bmob-cdn-8867.b0.upaiyun.com/2017/05/13/a959fdba8902463a926cf07d80506afa.jpg");
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
         // url仅在微信（包括好友和朋友圈）中使用
-        oks.setUrl("http://sharesdk.cn");
+        oks.setUrl("http://sj.qq.com/myapp/detail.htm?apkName=com.tencent.mm");
         // comment是我对这条分享的评论，仅在人人网和QQ空间使用
-        oks.setComment("我是测试评论文本");
+        oks.setComment("数字连连猜是一款股票类休闲软件");
         // site是分享此内容的网站名称，仅在QQ空间使用
         oks.setSite("ShareSDK");
         // siteUrl是分享此内容的网站地址，仅在QQ空间使用
         oks.setSiteUrl("http://sharesdk.cn");
 
-// 启动分享GUI
+        // 启动分享GUI
         oks.show(this);
     }
 

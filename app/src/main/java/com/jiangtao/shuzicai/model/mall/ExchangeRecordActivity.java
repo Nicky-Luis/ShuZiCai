@@ -3,8 +3,13 @@ package com.jiangtao.shuzicai.model.mall;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.blankj.utilcode.utils.ToastUtils;
 import com.jiangtao.shuzicai.Application;
@@ -14,6 +19,7 @@ import com.jiangtao.shuzicai.basic.adpter.base_adapter_helper_listview.QuickAdap
 import com.jiangtao.shuzicai.basic.base.BaseActivityWithToolBar;
 import com.jiangtao.shuzicai.model.mall.entry.GoodsOrder;
 import com.jiangtao.shuzicai.model.user.LoginActivity;
+import com.jiangtao.shuzicai.model.user.WealthDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +28,8 @@ import butterknife.BindView;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+
+import static com.jiangtao.shuzicai.R.id.wealthDetailRecordListView;
 
 //兑换记录
 public class ExchangeRecordActivity extends BaseActivityWithToolBar implements SwipeRefreshLayout.OnRefreshListener {
@@ -93,6 +101,21 @@ public class ExchangeRecordActivity extends BaseActivityWithToolBar implements S
             }
         };
         exchangeRecordListView.setAdapter(adapter);
+
+        setEmptyView();
+    }
+
+    //为空时的提示
+    private void setEmptyView(){
+        TextView emptyView = new TextView(ExchangeRecordActivity.this);
+        emptyView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        emptyView.setText("没有数据信息");
+        emptyView.setGravity(Gravity.CENTER);
+        emptyView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        emptyView.setVisibility(View.GONE);
+        ((ViewGroup)exchangeRecordListView.getParent()).addView(emptyView);
+        exchangeRecordListView.setEmptyView(emptyView);
     }
 
     //获取数据
